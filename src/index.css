@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Reset css */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 100%;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src:
+    local('Inter'),
+    url('./assets/fonts/Inter/Inter-Regular.ttf') format('truetype'),
+    url('./assets/fonts/Inter/Inter-SemiBold.ttf') format('truetype'),
+    url('./assets/fonts/Inter/Inter-Medium.ttf') format('truetype'),
+    url('./assets/fonts/Inter/Inter-Bold.ttf') format('truetype');
+}
+
+html,
+body {
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Tùy chỉnh thanh cuộn cho WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 6px; /* Độ rộng của thanh cuộn dọc */
+  height: 6px; /* Độ cao của thanh cuộn ngang */
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff; /* Màu nền của track (đường ray) */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9cccf; /* Màu của thumb (thanh cuộn) */
+  border-radius: 180px; /* Bo góc của thanh cuộn */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9cccf; /* Màu của thumb khi hover */
+}
+
+.mapboxgl-compact {
+  display: none;
+}
+
+.mapboxgl-control-container {
+  display: none;
+}
+
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  /* -webkit-text-fill-color: var(--text-primary) !important; */
+  -webkit-box-shadow: 0 0 0px 1000px var(--background-primary) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.imageUploadContainer {
+  width: calc(100vw - 340px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 670px;
+  border: 1px dashed var(--primary-500) !important;
+  border-radius: 8px !important;
+}
+.previewWrapper {
+  position: relative;
+}
+
+.previewWrapper .preview {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  object-fit: 'contain';
+  height: 150px;
+  cursor: pointer;
+}
+
+.card-diagram {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.card-diagram img {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  object-fit: cover;
+}
+
+.card-diagram-alone {
+  position: relative;
+  width: 100%;
+  height: 900px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.card-diagram-alone img {
+  position: relative;
+  width: 100%;
+  height: 900px;
+  object-fit: cover;
+}
+
+.card-diagram .img-vitural,
+.card-diagram-alone .img-vitural {
+  position: absolute;
+  object-fit: fill;
+  top: 0;
+  left: 0;
+  z-index: -10;
+}
+
+/* .MuiFormControl-root.MuiTextField-root .MuiOutlinedInput-root input:-webkit-autofill,
+.MuiFormControl-root.MuiTextField-root .MuiOutlinedInput-root input:-webkit-autofill:focus,
+.MuiFormControl-root.MuiTextField-root .MuiOutlinedInput-root input:-webkit-autofill:hover,
+.MuiFormControl-root.MuiTextField-root .MuiOutlinedInput-root input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+} */

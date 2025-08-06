@@ -1,0 +1,121 @@
+.details-panel {
+  background: transparent;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+  width: 340px;
+  min-height: 412px;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  position: relative;
+  overflow: hidden;
+  text-wrap: nowrap;
+  padding: 14px;
+  color: #fff;
+  .details-id-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+
+  .details-id {
+    color: #7cd4fd;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .details-status-badge {
+    border-radius: 16px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 0;
+    gap: 4px;
+    box-shadow: 0 0 6px #95aeb166;
+    &.status-active {
+      background: #5fe9d0;
+      color: #001;
+    }
+    &.status-error {
+      background: #f97066;
+      color: #fff;
+    }
+    &.status-maintenance {
+      background: #fac515;
+      color: #001;
+    }
+    &.status-offline {
+      background: #d0d5dd;
+      color: #001;
+    }
+  }
+
+  .details-location {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 28px;
+    margin-top: 2px;
+  }
+
+  .details-row {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .details-label {
+    color: #36bffa;
+    font-weight: 400;
+    font-size: 12px;
+    margin-bottom: 0;
+    text-transform: uppercase;
+  }
+
+  .details-value {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .details-feature-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 4px;
+    li {
+      margin-bottom: 2px;
+      list-style-type: disc;
+    }
+  }
+}
+
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+}
+
+.livestream {
+  background-image: url('~/assets/images/png/Button Maintenance.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  color: #fec84b;
+}
+
+.clear-alarm {
+  background-image: url('~/assets/images/png/Button View details.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+  color: #7cd4fd;
+}

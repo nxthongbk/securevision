@@ -1,0 +1,21 @@
+.login-page {
+  @apply min-h-screen backdrop-blur-md bg-gradient-to-br from-slate-900 via-blue-900 to-emerald-900 flex items-center justify-center;
+}
+
+.login-form {
+  @apply flex flex-col rounded-2xl shadow-xl items-center justify-center bg-white/10 backdrop-blur-md p-6 transition-all duration-200;
+}
+
+.login-btn {
+  transition:
+    background 0.3s,
+    transform 0.3s;
+  background: linear-gradient(90deg, #1e40af 0%, #2563eb 100%);
+  color: #fff;
+  border: none;
+  &:hover {
+    background: linear-gradient(90deg, #007fe0 0%, #007fe0 100%);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px #0794ff44;
+  }
+}
