@@ -54,7 +54,7 @@ export default function CamerasPage() {
               </div>
             ) : (
               // <img src={cam.image} alt={cam.name} className="object-cover w-full h-full" />
-              <a href="/cameras/camera116">
+              <a href={`/cameras/${cam.id}`}>
                 <div className="relative w-full">
                   <canvas data-testid="cameraimage-canvas" height="298" width="530"></canvas>
                 </div>
