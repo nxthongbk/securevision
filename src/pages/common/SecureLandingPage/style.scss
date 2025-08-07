@@ -1,5 +1,4 @@
-.energy-flatform {
-  overflow-y: auto;
+.secure-landing-page {
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
   -moz-tab-size: 4;
@@ -16,12 +15,4 @@
   font-feature-settings: normal;
   font-variation-settings: normal;
   -webkit-tap-highlight-color: transparent;
-}
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(16px);}
-  to { opacity: 1; transform: none;}
-}
-.animate-fade-in {
-  animation: fade-in 0.5s cubic-bezier(.4,0,.2,1);
 }
