@@ -13,6 +13,7 @@ import {
   TwitterLogo,
   LinkedinLogo,
   YoutubeLogo,
+  User,
 } from '@phosphor-icons/react';
 import Header from './Header';
 import Icons from '../../SecureVision/common/Icons';
@@ -136,7 +137,7 @@ const testimonials = [
     position: 'Giám Đốc An Ninh',
     company: 'Tập Đoàn ABC',
     companyUrl: '#',
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+    avatar: '',
   },
   {
     rating: 5,
@@ -146,7 +147,7 @@ const testimonials = [
     position: 'Quản Lý Vận Hành',
     company: 'Nhà Máy XYZ',
     companyUrl: '#',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    avatar: '',
   },
   {
     rating: 5,
@@ -156,7 +157,7 @@ const testimonials = [
     position: 'CEO',
     company: 'Tech Solutions Ltd',
     companyUrl: '#',
-    avatar: 'https://randomuser.me/api/portraits/men/85.jpg',
+    avatar: '',
   },
 ];
 
@@ -206,16 +207,7 @@ const solutions = [
 ];
 
 export default function SecureLandingPage() {
-  // const navigate = useNavigate();
-  // const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  // const handleSignIn = (e: React.MouseEvent) => {
-  //   e.preventDefault();
-  //   setMenuOpen(false);
-  //   navigate('/login');
-  // };
-
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -249,9 +241,13 @@ export default function SecureLandingPage() {
               <Icons.Zap className="w-4 h-4 mr-2" />
               Công Nghệ AI Tiên Tiến
             </div>
-            <h1 className="text-3xl tablet:text-5xl smallLaptop:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-3xl tablet:text-3xl smallLaptop:text-6xl font-extrabold text-white mb-6 leading-tight">
               Giải Pháp Giám Sát
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">
+              <br />
+              <span
+                className="block text-4xl tablet:text-5xl smallLaptop:text-7xl font-extrabold font-mono text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400 mt-2"
+                style={{ letterSpacing: '-0.03em', lineHeight: 1.175 }}
+              >
                 An Ninh Thông Minh
               </span>
             </h1>
@@ -485,11 +481,17 @@ export default function SecureLandingPage() {
                 </div>
                 <p className="text-gray-700 mb-6 leading-relaxed italic">"{t.quote}"</p>
                 <div className="flex items-center mt-auto pt-4">
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-blue-100"
-                  />
+                  {t.avatar ? (
+                    <img
+                      src={t.avatar}
+                      alt={t.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-blue-100"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center mr-4 border-2 border-blue-100">
+                      <User className="w-7 h-7 text-gray-400" />
+                    </div>
+                  )}
                   <div>
                     <div className="font-semibold text-gray-900">{t.name}</div>
                     <div className="text-gray-600 text-sm">{t.position}</div>
@@ -634,9 +636,9 @@ export default function SecureLandingPage() {
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold flex items-center justify-center gap-2 text-lg shadow-lg transition-all"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 flex items-center justify-center"
                 >
-                  <Icons.PaperPlaneTilt className="w-5 h-5" />
+                  <Icons.PaperPlaneTilt className="lucide lucide-send w-5 h-5 mr-2" />
                   Gửi Yêu Cầu Tư Vấn
                 </button>
                 <div className="text-sm text-gray-500 text-center mt-2">

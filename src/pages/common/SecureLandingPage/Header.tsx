@@ -6,19 +6,19 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // const handleSignIn = (e: React.MouseEvent) => {
-  //   e.preventDefault();
-  //   setMenuOpen(false);
-  //   navigate('/login');
-  // };
+  const handleSignIn = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    navigate('/login');
+  };
 
-	const navItems = [
-		{ label: 'Tính Năng', href: '#features' },
-		{ label: 'Giải Pháp', href: '#solutions' },
-		{ label: 'Lợi Ích', href: '#benefits' },
-		{ label: 'Khách Hàng', href: '#customers' },
-		{ label: 'Liên Hệ', href: '#contact' },
-	];
+  const navItems = [
+    { label: 'Tính Năng', href: '#features' },
+    { label: 'Giải Pháp', href: '#solutions' },
+    { label: 'Lợi Ích', href: '#benefits' },
+    { label: 'Khách Hàng', href: '#testimonials' },
+    { label: 'Liên Hệ', href: '#contact' },
+  ];
 
   return (
     <>
@@ -32,7 +32,11 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
               <Icons.Shield className="w-6 h-6 text-white" />
             </div>
-            <span className={`${scrolled ? 'text-gray-900' : 'text-white'}`}>SecureVision</span>
+            <span
+              className={` text-xl font-bold transition-colors ${scrolled ? 'text-gray-900 ' : 'text-white'}`}
+            >
+              SecureVision
+            </span>
           </div>
 
           <nav className="hidden smallLaptop:flex space-x-8">
@@ -50,8 +54,7 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
           <div className="hidden smallLaptop:flex items-center space-x-4">
             <button
               onClick={() => {
-                setMenuOpen(false);
-                navigate('/login');
+                handleSignIn;
               }}
               className="px-4 py-2 rounded-lg font-medium text-inherit hover:bg-gray-100 transition-colors duration-300"
             >
@@ -87,32 +90,58 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 bg-white z-40 flex flex-col items-center justify-center space-y-6 p-6 smallLaptop:hidden">
-          <button
+        <div className="fixed inset-0 z-50 pointer-events-auto">
+          <div
+            className="absolute inset-0 bg-black bg-opacity-30 transition-opacity"
             onClick={() => setMenuOpen(false)}
-            className="absolute top-4 right-4 text-gray-600 text-2xl"
+            tabIndex={-1}
+            aria-hidden="true"
           >
-            ✕
-          </button>
-          {navItems.map((item, idx) => (
-            <a
-              key={idx}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
-              className="text-lg font-semibold text-gray-800"
-            >
-              {item.label}
-            </a>
-          ))}
-          <button
-            onClick={() => {
-              setMenuOpen(false);
-              navigate('/login');
-            }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg mt-4"
-          >
-            Đăng Nhập
-          </button>
+            <div className="relative w-full bg-white border-b border-gray-200 max-h-screen overflow-y-auto">
+              <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
+                    <Icons.Shield className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-xl font-bold text-gray-900">SecureVision</span>
+                </div>
+                <button
+                  className="text-2xl text-gray-600 hover:text-blue-600"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                >
+                  &times;
+                </button>
+              </div>
+              <nav className="flex flex-col gap-4 px-4 py-2">
+                {navItems.map((item, idx) => (
+                  <a
+                    key={idx}
+                    href={item.href}
+                    className="text-gray-700 hover:text-blue-600 text-base text-left py-2"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <hr className="my-2" />
+                <button
+                  className="text-gray-700 hover:text-blue-600 text-base text-left py-2"
+                  onClick={handleSignIn}
+                >
+                  Đăng Nhập
+                </button>
+                <a
+                  className="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700 transition"
+                  onClick={() => {
+                    setMenuOpen(false);
+                  }}
+                >
+                  Tư Vấn Miễn Phí{' '}
+                </a>
+              </nav>
+            </div>
+          </div>
         </div>
       )}
     </>
