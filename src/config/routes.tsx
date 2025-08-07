@@ -4,6 +4,8 @@ import NotFoundPage from '~/pages/common/404Page';
 import { useContext } from 'react';
 import LogInPage from '~/pages/common/LogInPage';
 import SecureLandingPage from '~/pages/common/SecureLandingPage/Index';
+import SecureSystemMain from '~/pages/SecureVision';
+import CamerasPage from '~/pages/SecureVision/CamerasPage';
 
 const Guard = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -33,17 +35,21 @@ const useRoutes = () => {
       path: '/login',
       element: <LogInPage />,
     },
-    // {
-    //   path: '',
-    //   element: <Guard />,
-    //   children: [
-    //     {
-    //       path: '',
-    //       element: <MesSystemMain />,
-    //       children: [{ path: '', element: <Navigate to="dashboard" replace /> }],
-    //     },
-    //   ],
-    // },
+    {
+      path: '',
+      element: <Guard />,
+      children: [
+        {
+          path: '',
+          element: <SecureSystemMain />,
+          children: [
+            { path: '', element: <Navigate to="cameras" replace /> },
+            { path: 'cameras', element: <CamerasPage /> },
+          ],
+        },
+        ,
+      ],
+    },
     {
       path: '*',
       element: <NotFoundPage />,
