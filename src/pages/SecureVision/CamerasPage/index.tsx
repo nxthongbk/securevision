@@ -1,5 +1,4 @@
 import { FilmStrip, ImageSquare, PersonSimpleRun } from '@phosphor-icons/react';
-import CameraGrid from './CameraGrid';
 
 const cameras = [
   {
@@ -55,7 +54,7 @@ export default function CamerasPage() {
               </div>
             ) : (
               // <img src={cam.image} alt={cam.name} className="object-cover w-full h-full" />
-              <a href="/cameras/camera116">
+              <a href={`/cameras/${cam.id}`}>
                 <div className="relative w-full">
                   <canvas data-testid="cameraimage-canvas" height="298" width="530"></canvas>
                 </div>
@@ -93,8 +92,6 @@ export default function CamerasPage() {
           </div>
         </div>
       ))}
-			{/* <CameraGrid/> */}
-
     </div>
   );
 }

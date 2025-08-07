@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { SignOut, Bird, SunDim, Moon, ArrowsClockwise, Sparkle } from '@phosphor-icons/react';
+import { SignOut, SunDim, Moon, ArrowsClockwise, Sparkle } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '~/contexts/app.context';
 import { useMutation } from '@tanstack/react-query';
