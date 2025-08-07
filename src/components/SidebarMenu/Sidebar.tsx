@@ -1,124 +1,59 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Package, Users, Factory, ClipboardText, GitBranch, Shield } from '@phosphor-icons/react';
-import BarChart3Icon from '~/pages/MesSystem/CommonComponents/CustomIcons/BarChart3Icon';
+import { Package, Users, Factory, ClipboardText, GitBranch, Shield, Bird } from '@phosphor-icons/react';
 
 const navItems = [
   {
-    label: 'Dashboard',
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="lucide lucide-layout-dashboard h-5 w-5 text-blue-600"
-      >
-        <rect width="7" height="9" x="3" y="3" rx="1"></rect>
-        <rect width="7" height="5" x="14" y="3" rx="1"></rect>
-        <rect width="7" height="9" x="14" y="12" rx="1"></rect>
-        <rect width="7" height="5" x="3" y="16" rx="1"></rect>
-      </svg>
-    ),
-    to: '/dashboard',
+    label: 'Cameras',
+    icon: <ClipboardText size={20} className="" />,
+    to: '/cameras',
   },
-  {
-    label: 'Đơn hàng SX',
-    icon: <ClipboardText size={24} className="text-green-600" />,
-    to: '/orders',
-  },
-  {
-    label: 'Quy trình SX',
-    icon: <GitBranch size={24} className="text-purple-600" />,
-    to: '/processing',
-  },
-  {
-    label: 'Nhân viên',
-    icon: <Users size={24} className="text-indigo-600" />,
-    to: '/employees',
-  },
-  {
-    label: 'Nguyên liệu',
-    icon: <Package size={24} className="text-orange-600" />,
-    to: '/materials',
-  },
-  {
-    label: 'Thiết bị',
-    icon: <Factory mirrored size={24} className="text-gray-600" />,
-    to: '/devices',
-  },
-  {
-    label: 'Kiểm tra CL',
-    icon: <Shield size={24} className="text-red-600" />,
-    to: '/quality-control',
-  },
-  {
-    label: 'Báo cáo',
-    icon: <BarChart3Icon className="text-teal-600 h-6 w-6" />,
-    to: '/reports',
-  },
+  { label: 'Birdseye', icon: <GitBranch size={20} />, to: '/birdseye' },
+  { label: 'Events', icon: <Shield size={20} />, to: '/events' },
+  { label: 'Exports', icon: <Package size={20} />, to: '/exports' },
+  { label: 'Storage', icon: <Factory size={20} />, to: '/storage' },
+  { label: 'System', icon: <Users size={20} />, to: '/system' },
+  { label: 'Config', icon: <ClipboardText size={20} />, to: '/config' },
+  { label: 'Logs', icon: <GitBranch size={20} />, to: '/logs' },
 ];
 
-interface SidebarProps {
-  open: boolean;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ open }) => {
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 1024 && open) {
-        // Optionally, you can handle responsive logic elsewhere
-      }
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [open]);
-
+const Sidebar: React.FC = () => {
   return (
-    <aside
-      className={`h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ${open ? 'w-64' : 'w-16'}`}
-    >
-      <div
-        className={`flex items-center py-5 border-b border-gray-100 transition-all duration-300 ${open ? 'px-6 gap-2' : 'px-0 justify-center'}`}
-      >
-        <div className={`w-9 h-9}`}>
-          <Factory mirrored size={34} className={`text-blue-600 `} />
+    <aside className="h-screen w-56 bg-white border-r border-gray-200 flex flex-col justify-between">
+      <div>
+        <div className="flex items-center h-16 px-4 border-b border-gray-100">
+          <Bird size={32} className="text-blue-900 mr-2" />
+          <span className="text-lg font-bold tracking-wide text-blue-900">FRIGATE</span>
         </div>
-
-        {open && (
-          <div className="ml-2">
-            <div className="text-lg font-bold text-gray-900leading-tight">MES</div>
-            <div className="text-sm text-gray-500">Poseidon</div>
-          </div>
-        )}
+        <nav className="flex-1 py-4">
+          <ul className="space-y-1">
+            {navItems.map(item => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-4 py-2 rounded-md font-medium transition-all duration-150 ${
+                      isActive ? 'bg-blue-100 text-blue-700' : 'text-gray-700 hover:bg-gray-100'
+                    }`
+                  }
+                  end
+                >
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
-      <nav className="flex-1 py-4">
-        <ul className="space-y-1">
-          {navItems.map(item => (
-            <li key={item.to}>
-              <NavLink
-                to={item.to}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-6 py-3 font-mediumtransition-all duration-150 ${
-                    isActive
-                      ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'
-                  } ${open ? '' : 'justify-center px-0'}`
-                }
-                end
-              >
-                <span className={open ? '' : 'w-6 h-6 '}>{item.icon}</span>
-                {open && <span>{item.label}</span>}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <div className="px-4 pb-4 text-sm text-gray-500 space-y-1">
+        <a href="#" className="block hover:underline">
+          Documentation
+        </a>
+        <a href="#" className="block hover:underline">
+          GitHub
+        </a>
+      </div>
     </aside>
   );
 };
