@@ -53,9 +53,7 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
 
           <div className="hidden smallLaptop:flex items-center space-x-4">
             <button
-              onClick={() => {
-                handleSignIn;
-              }}
+              onClick={handleSignIn}
               className="px-4 py-2 rounded-lg font-medium text-inherit hover:bg-gray-100 transition-colors duration-300"
             >
               Đăng Nhập

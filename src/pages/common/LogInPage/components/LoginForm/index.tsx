@@ -1,18 +1,13 @@
 import * as yup from 'yup';
-
 import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
 import { translation, translationCapitalFirst } from '~/utils/translate';
 import { AppContext } from '~/contexts/app.context';
-import InputCustom from '~/components/InputCustom';
 import authService from '~/services/auth.service';
 import { useContext } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Typography } from '@mui/material';
-import { Factory } from '@phosphor-icons/react';
-
-import '../../style.scss';
+import Logo from '~/assets/images/jpg/logo-login.jpg';
 
 interface IFormInput {
   username: string;
@@ -83,77 +78,73 @@ export default function LoginForm({ setResetMode }: IProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center mobile:py-12">
-      <div className="relative py-3 mobile:max-w-xl mobile:mx-auto min-w-[460px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1e40af] to-[#2563eb] backdrop-blur-lg shadow-lg transform -skew-y-6 mobile:skew-y-0 mobile:-rotate-6 mobile:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-white shadow-lg mobile:rounded-3xl mobile:p-20">
-          <div className="max-w-md mx-auto">
-            <div className="flex justify-center items-center space-x-2">
-              <Factory size={50} className="text-blue-700" mirrored />
-              <span className="text-2xl font-semibold text-blue-700">TMA MES</span>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-2 py-8">
+      <div
+        className="w-full max-w-5xl min-w-[320px] bg-white border border-[#e5e7eb] rounded-xl shadow-[0_2px_8px_0_rgba(16,30,54,0.08)] flex flex-row overflow-hidden"
+        style={{ boxSizing: 'border-box' }}
+      >
+        <div className="flex-1 bg-blue-900 text-center hidden smallLaptop:flex items-center justify-center border-r-2 border-[#e5e7eb] p-0">
+          <div
+            className="w-full h-full min-h-[520px] bg-center bg-cover bg-no-repeat"
+            style={{
+              backgroundImage: `url(${Logo})`,
+            }}
+          ></div>
+        </div>
+        <div className="w-full miniLaptop:w-5/12 flex items-center justify-center px-8 py-12">
+          <div className="w-full max-w-sm flex flex-col items-center">
+            <div className="text-center">
+              <h1
+                className="text-2xl smallLaptop:text-4xl font-bold text-blue-900"
+                style={{ fontFamily: 'Montserrat, sans-serif' }}
+              >
+                Sign In
+              </h1>
             </div>
-            <div className="divide-y divide-gray-200">
-              <div className="py-8 text-base leading-6 space-y-4 text-gray-700 mobile:text-lg mobile:leading-7">
-                <form onSubmit={handleSubmit(onSubmit, onInvalid)} style={{ width: '100%' }}>
-                  <InputCustom
-                    type="text"
-                    classNameContainer="font-normal"
-                    label={translation('Tên đăng nhập')}
-                    isRequired={true}
-                    control={control}
-                    name="username"
-                    isError={Boolean(errors.username)}
-                    variant="outlined"
-                    size="small"
-                    placeholder={translation('Nhập tên đăng nhập')}
-                    helperText={translation(errors.username?.message)}
-                    isSpacingHelperText={true}
-                  />
-                  <InputCustom
-                    type="password"
-                    label={translation('Mật khẩu')}
-                    classNameContainer=" font-normal"
-                    isRequired={true}
-                    control={control}
-                    name="password"
-                    isError={Boolean(errors.password)}
-                    variant="outlined"
-                    size="small"
-                    placeholder={translation('Nhập mật khẩu')}
-                    helperText={translation(errors.username?.message)}
-                    isSpacingHelperText={true}
-                  />
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
-                    <Typography
-                      variant="button3"
-                      sx={{ color: '#2563eb', fontSize: 14, cursor: 'pointer' }}
-                      onClick={() => setResetMode(true)}
-                    >
-                      {translation('Quên mật khẩu?')}
-                    </Typography>
-                  </Box>
-                  <Button
-                    className="login-btn"
-                    type="submit"
-                    variant="contained"
-                    fullWidth
-                    sx={{
-                      bgcolor: '#0794ff',
-                      color: '#fff',
-                      fontWeight: 400,
-                      fontSize: 18,
-                      borderRadius: 2,
-                      py: 1,
-                      mt: 1,
-                      textTransform: 'none',
-                      boxShadow: 'none',
-                      transition: 'background 0.3s, transform 0.3s',
-                    }}
+            <div className="w-full flex-1 mt-8">
+              <form
+                onSubmit={handleSubmit(onSubmit, onInvalid)}
+                className="mx-auto max-w-xs flex flex-col gap-4"
+              >
+                <input
+                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  type="text"
+                  placeholder="Enter your username"
+                  {...control.register('username')}
+                />
+                {errors.username && (
+                  <div className="text-xs text-red-500 mt-1">
+                    {translation(errors.username.message)}
+                  </div>
+                )}
+                <input
+                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  type="password"
+                  placeholder="Enter your password"
+                  {...control.register('password')}
+                />
+                {errors.password && (
+                  <div className="text-xs text-red-500 mt-1">
+                    {translation(errors.password.message)}
+                  </div>
+                )}
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    className="text-sm text-blue-900 hover:underline mt-2"
+                    onClick={() => setResetMode(true)}
                   >
-                    {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
-                  </Button>
-                </form>
-              </div>
+                    Forgot password?
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-blue-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                  disabled={loginMutation.isPending}
+                >
+                  {loginMutation.isPending ? 'Signing in...' : 'Sign In'}
+                </button>
+              </form>
             </div>
           </div>
         </div>
