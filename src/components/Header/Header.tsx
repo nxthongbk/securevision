@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import authService from '~/services/auth.service';
 import { clearCookie, getRefreshTokenFromCookie } from '~/utils/auth';
 import { Menu, MenuItem } from '@mui/material';
+import Icons from '~/pages/SecureVision/common/Icons';
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -105,8 +106,8 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
           </svg>
         </button>
         <div className=" smallLaptop:hidden flex items-center h-16 px-4 border-b border-gray-100">
-          <Bird size={32} className="text-blue-900 mr-2" />
-          <span className="text-lg font-bold tracking-wide text-blue-900">FRIGATE</span>
+          <Icons.Shield size={32} className="text-blue-900 mr-2" />
+          <span className="text-lg font-bold tracking-wide text-blue-900">SECURE SYSTEM</span>
         </div>
         <span className="hidden smallLaptop:block"></span>
       </div>
