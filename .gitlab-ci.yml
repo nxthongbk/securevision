@@ -1,0 +1,33 @@
+image: docker:20.10.7
+
+stages:
+  - build-deploy-aiot
+
+variables:
+  DOCKER_TLS_CERTDIR: ''
+  DOCKER_HUB_USERNAME: 'iotteam'
+  DOCKER_HUB_PASSWORD: 'dckr_pat_P3GakRsDaXMy8eLVXZXuLwUursw'
+  DOCKER_IMAGE_NAME: 'iotteam/scity'
+  DOCKER_IMAGE_TAG: 'latest'
+
+services:
+  - name: docker:20.10.7-dind
+    alias: docker
+
+build_aiot:
+  stage: build-deploy-aiot
+  script:
+    - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+    - cp .env.aiot .env
+    - docker build -t $DOCKER_IMAGE_NAME:aiot .
+    - docker push $DOCKER_IMAGE_NAME:aiot
+  only:
+    - develop
+
+deploy_aiot:
+  stage: build-deploy-aiot
+  image: appleboy/drone-ssh
+  script:
+    - sshpass -p $SERVER_PASSWORD_AIOT ssh -o StrictHostKeyChecking=no $SERVER_USERNAME_AIOT@$SERVER_HOST_AIOT "cd /home/administrator/scity && echo '$SERVER_PASSWORD_AIOT' | sudo -S docker-compose pull scity-ui && echo '$SERVER_PASSWORD_AIOT' | sudo -S docker-compose up -d scity-ui"
+  only:
+    - develop

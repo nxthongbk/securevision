@@ -1,0 +1,33 @@
+.pulse {
+  width: 40px;
+  height: 40px;
+  background: #ff1f1f;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: #ff1f1f;
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.4;
+  }
+  &:before {
+    animation: pulse 2s ease-out infinite;
+  }
+  &:after {
+    animation: pulse 2s 1s ease-out infinite;
+  }
+}
+
+@keyframes pulse {
+  100% {
+    transform: scale(2);
+  }
+}
