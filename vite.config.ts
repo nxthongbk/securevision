@@ -11,7 +11,7 @@ export default defineConfig({
   preview: {
     host: true,
     port: 3000,
-    allowedHosts: ['wulu.innovation.com.vn']
+    allowedHosts: ['securevision.innovation.com.vn']
   },
   css: {
     devSourcemap: true
