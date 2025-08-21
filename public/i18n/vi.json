@@ -231,7 +231,7 @@
     "update-location": "Cập nhật địa điểm",
     "device-management": "Quản lý thiết bị",
     "human-resource-management": "Quản lý nhân sự",
-    "fire-alert-management": "Quản lý báo cháy",
+    "fire-alert-management": "Quản lý cảnh báo",
     "add-new": "Thêm mới",
     "update": "Cập nhật",
     "address-capitalize": "Địa chỉ",
@@ -326,7 +326,7 @@
     "reset-password-success": "Đặt lại mật khẩu mặc định thành công"
   },
   "fire-alerts-page": {
-    "management": "Quản lý báo cháy",
+    "management": "Quản lý cảnh báo",
     "location": "Địa điểm",
     "address": "Địa chỉ",
     "start-time": "Thời gian bắt đầu",
@@ -398,7 +398,7 @@
     "reset-password-message": "Tài khoản nhân sự sẽ được đặt lại mật khẩu là số điện thoại đã đăng ký.",
     "update": "Cập nhật",
     "permission-setting": "Cài đặt quyền",
-    "fire-alert-management": "Quản lý báo cháy",
+    "fire-alert-management": "Quản lý cảnh báo",
     "location-management": "Quản lý địa điểm",
     "device-management": "Quản lý thiết bị",
     "hr-management": "Quản lý nhân sự",
