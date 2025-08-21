@@ -1,0 +1,208 @@
+{
+  "secureLandingPage": {
+		 "languages": {
+      "en": "English",
+      "vi": "Vietnamese(ベトナム語)",
+      "ja": "Japanese(日本語)"
+    },
+    "header": {
+      "signIn": "サインイン",
+      "freeConsultation": "無料相談"
+    },
+    "menuItems": {
+      "features": "特徴",
+      "solutions": "ソリューション",
+      "benefits": "利点",
+      "testimonials": "お客様の声",
+      "contact": "お問い合わせ"
+    },
+    "features": {
+      "title": "優れた機能",
+      "subtitle": "資産と人々を保護するための最先端技術を搭載した包括的なソリューション",
+      "learnMore": "もっと詳しく知る",
+
+      "cameraAI": {
+        "title": "スマートAIカメラ",
+        "description": "顔認識、異常行動検出、リアルタイムの動き追跡機能を備えたAIカメラシステム。"
+      },
+      "sensorNetwork": {
+        "title": "高度なセンサーネットワーク",
+        "description": "モーション、温度、煙、振動センサーが施設全体を包括的に保護するネットワークを形成します。"
+      },
+      "brain": {
+        "title": "行動AI分析",
+        "description": "ユーザーの行動を分析し、異常な行動を検出すると警告を発するAIシステム。"
+      },
+      "smartPhone": {
+        "title": "モバイルアプリケーション",
+        "description": "直感的なインターフェースとリアルタイム通知で、スマートフォンからシステムをリモートで監視および制御できます。"
+      },
+      "instantAlert": {
+        "title": "即時アラート",
+        "description": "インシデントが検出されると、メール、SMS、プッシュ通知ですぐに通知を受け取ります。"
+      },
+      "security": {
+        "title": "絶対的なセキュリティ",
+        "description": "エンドツーエンドの暗号化、多要素認証、国際的なセキュリティ基準に準拠しています。"
+      }
+    },
+    "hero": {
+      "tag": "先進的なAI技術",
+      "titlePart1": "監視ソリューション",
+      "titlePart2": "スマートセキュリティ",
+      "subtitle": "包括的でスマートなセキュリティシステムが、あなたのビジネスに絶対的な安心をもたらします。",
+      "cta": {
+        "freeConsultation": "無料相談",
+        "watchDemo": "デモを見る"
+      },
+      "stats": {
+        "projects": "導入プロジェクト",
+        "accuracy": "精度",
+        "monitoring": "継続監視",
+        "responseTime": "応答時間"
+      }
+    },
+    "solutions": {
+      "title": "包括的なソリューション",
+      "subtitle": "あらゆる種類のビジネスにカスタマイズされたセキュリティソリューションを提供します。",
+      "learnMore": "詳しくはこちら",
+      "office": {
+        "title": "オフィスビル",
+        "description": "スマートな入退室管理と24時間体制の監視を備えたオフィスビル向けの包括的なセキュリティソリューション。",
+        "features": [
+          "スマートカードと顔認識による入退室管理",
+          "廊下、エレベーター、公共エリアの監視",
+          "勤務時間外の侵入検知",
+          "火災報知システムとの連携"
+        ],
+        "alt": "オフィスビルのセキュリティ"
+      },
+      "factory": {
+        "title": "製造工場",
+        "description": "専門的な産業監視システムで資産を保護し、労働者の安全を確保します。",
+        "features": [
+          "生産エリアと倉庫の監視",
+          "労働安全規則違反の検出",
+          "有毒ガス漏れ、火災、爆発の警告",
+          "プロセスの最適化とリスクの低減"
+        ],
+        "alt": "製造工場のセキュリティ"
+      }
+    },
+    "benefits": {
+      "title": "圧倒的なメリット",
+      "subtitle": "導入済みのお客様からの実際の数値データ",
+      "cta": "プロジェクトのROIを計算する",
+      "riskReduction": {
+        "title": "セキュリティリスクを85%削減",
+        "description": "被害が発生する前に脅威を早期に検出し、防止します。"
+      },
+      "timeSaving": {
+        "title": "時間を60%節約",
+        "description": "監視とレポート作成を自動化し、手作業を最小限に抑えます。"
+      },
+      "staffEfficiency": {
+        "title": "従業員の効率を40%向上",
+        "description": "警備員やセキュリティスタッフの配置を最適化します。"
+      },
+      "costSaving": {
+        "title": "コストを50%削減",
+        "description": "従来のシステムと比較して、運用および保守コストを削減します。"
+      }
+    },
+    "testimonials": {
+      "title": "お客様の声",
+      "subtitle": "500社以上のお客様が私たちのサービスに信頼と満足を寄せています。",
+      "cta": "事例をもっと見る",
+      "quote1": "SecureVisionのシステムは、過去6ヶ月間で15件の不正侵入を検出し、防止するのに役立ちました。AIの精度には本当に感銘を受けています。",
+      "name1": "グエン・ヴァン・ミン",
+      "position1": "セキュリティディレクター",
+      "company1": "ABC Corporation",
+      "quote2": "導入以来、警備員の人件費を40%節約でき、24時間体制のセキュリティで完全に安心しています。サポートチームは非常にプロフェッショナルです。",
+      "name2": "トラン・ティ・ラン",
+      "position2": "オペレーションマネージャー",
+      "company2": "XYZ Factory",
+      "quote3": "アプリケーションのインターフェースは非常に直感的で使いやすいです。詳細なレポートにより、セキュリティ状況を全体的に把握し、タイムリーな意思決定を行うことができます。",
+      "name3": "レ・ホアン・ナム",
+      "position3": "CEO",
+      "company3": "Tech Solutions Ltd"
+    },
+    "contact": {
+      "title": "お問い合わせ・ご相談",
+      "subtitle": "無料相談・詳細なお見積りをご希望の方は、情報をご入力ください。",
+      "infoTitle": "連絡先情報",
+      "hotline": "ホットライン",
+      "email": "メール",
+      "address": "住所",
+      "addressValues": ["Secureビル10階、1区、ホーチミン市", "ベトナム"],
+      "commitmentsTitle": "私たちのコミットメント",
+      "commitments": ["24時間365日無料相談", "現地調査無料", "3年間の包括的な保証", "24時間技術サポート"],
+      "form": {
+        "fullName": "氏名",
+        "fullNamePlaceholder": "お名前をご入力ください",
+        "phone": "電話番号",
+        "phonePlaceholder": "電話番号をご入力ください",
+        "email": "メールアドレス",
+        "emailPlaceholder": "メールアドレスをご入力ください",
+        "company": "会社名",
+        "companyPlaceholder": "会社名をご入力ください",
+        "projectDescription": "プロジェクト内容",
+        "projectDescriptionPlaceholder": "プロジェクトの簡単な説明、監視が必要なエリア、特別な要件などを記入してください。",
+        "cta": "相談を申し込む"
+      },
+      "privacyNotice": "このフォームを送信することで、",
+      "privacyPolicy": "プライバシーポリシー",
+      "ofUs": " に同意したことになります。"
+    },
+    "footer": {
+      "description": "AI技術を活用したスマートなセキュリティ監視ソリューションで、資産と人々を24時間守ります。",
+			"address": "Secureビル10階、1区、ホーチミン市、ベトナム",
+      "links": [
+        {
+          "title": "製品",
+          "links": [
+            { "label": "セキュリティカメラ", "href": "#" },
+            { "label": "センサーシステム", "href": "#" },
+            { "label": "監視ソフトウェア", "href": "#" },
+            { "label": "モバイルアプリ", "href": "#" },
+            { "label": "分析レポート", "href": "#" }
+          ]
+        },
+        {
+          "title": "ソリューション",
+          "links": [
+            { "label": "オフィスビル", "href": "#" },
+            { "label": "製造工場", "href": "#" },
+            { "label": "住宅エリア", "href": "#" },
+            { "label": "商業施設", "href": "#" },
+            { "label": "倉庫", "href": "#" }
+          ]
+        },
+        {
+          "title": "サポート",
+          "links": [
+            { "label": "技術資料", "href": "#" },
+            { "label": "動画ガイド", "href": "#" },
+            { "label": "FAQ", "href": "#" },
+            { "label": "サポート連絡", "href": "#" },
+            { "label": "相談予約", "href": "#" }
+          ]
+        },
+        {
+          "title": "会社情報",
+          "links": [
+            { "label": "会社概要", "href": "#" },
+            { "label": "ニュース", "href": "#" },
+            { "label": "採用情報", "href": "#" },
+            { "label": "パートナー", "href": "#" },
+            { "label": "プライバシーポリシー", "href": "#" }
+          ]
+        }
+      ],
+      "copyright": "© 2025 SecureVision. 全著作権所有。",
+			"termOfUse": "利用規約",
+			"privacyPolicy": "プライバシーポリシー",
+			"cookiePolicy": "クッキーポリシー"
+    }
+  }
+}

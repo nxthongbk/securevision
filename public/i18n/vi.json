@@ -556,5 +556,215 @@
   "apply": "Áp dụng",
   "Đặt lại": "Đặt lại",
   "list-location": "Danh sách địa điểm",
-  "set-alarm-successfully": "Cài cảnh báo thành công"
+  "set-alarm-successfully": "Cài cảnh báo thành công",
+  "secureLandingPage": {
+    "languages": {
+      "en": "English",
+      "vi": "Tiếng Việt",
+      "ja": "Japanese(日本語)"
+    },
+    "header": {
+      "signIn": "Đăng Nhập",
+      "freeConsultation": "Tư Vấn Miễn Phí"
+    },
+    "menuItems": {
+      "features": "Tính Năng",
+      "solutions": "Giải Pháp",
+      "benefits": "Lợi Ích",
+      "testimonials": "Khách Hàng",
+      "contact": "Liên Hệ"
+    },
+    "features": {
+      "title": "Tính Năng Vượt Trội",
+      "subtitle": "Giải pháp toàn diện với công nghệ tiên tiến nhất để bảo vệ tài sản và con người",
+      "learnMore": "Tìm hiểu thêm",
+      "cameraAI": {
+        "title": "Camera AI Thông Minh",
+        "description": "Hệ thống camera với AI nhận diện khuôn mặt, phát hiện hành vi bất thường và theo dõi chuyển động trong thời gian thực."
+      },
+      "sensorNetwork": {
+        "title": "Mạng Cảm Biến Tiên Tiến",
+        "description": "Cảm biến chuyển động, nhiệt độ, khói, và rung động tạo thành mạng lưới bảo vệ toàn diện cho cơ sở của bạn."
+      },
+      "brain": {
+        "title": "AI Phân Tích Hành Vi",
+        "description": "Hệ thống AI phân tích hành vi người dùng và đưa ra cảnh báo khi phát hiện hành vi bất thường."
+      },
+      "smartPhone": {
+        "title": "Ứng Dụng Di Động",
+        "description": "Theo dõi và điều khiển hệ thống từ xa qua smartphone với giao diện trực quan và thông báo real-time."
+      },
+      "instantAlert": {
+        "title": "Cảnh Báo Tức Thời",
+        "description": "Nhận thông báo ngay lập tức qua email, SMS và push notification khi phát hiện sự cố."
+      },
+      "security": {
+        "title": "Bảo Mật Tuyệt Đối",
+        "description": "Mã hóa end-to-end, xác thực đa lớp và tuân thủ các tiêu chuẩn bảo mật quốc tế."
+      }
+    },
+    "hero": {
+      "tag": "Công Nghệ AI Tiên Tiến",
+      "titlePart1": "Giải Pháp Giám Sát",
+      "titlePart2": "An Ninh Thông Minh",
+      "subtitle": "Hệ thống an ninh toàn diện và thông minh, mang đến sự an tâm tuyệt đối cho doanh nghiệp của bạn.",
+      "cta": {
+        "freeConsultation": "Tư vấn miễn phí",
+        "watchDemo": "Xem demo"
+      },
+      "stats": {
+        "projects": "Dự Án Triển Khai",
+        "accuracy": "Độ Chính Xác",
+        "monitoring": "Giám Sát Liên Tục",
+        "responseTime": "Thời Gian Phản Hồi"
+      }
+    },
+    "solutions": {
+      "title": "Giải Pháp Toàn Diện",
+      "subtitle": "Cung cấp các giải pháp an ninh tùy chỉnh cho mọi loại hình doanh nghiệp",
+      "learnMore": "Tìm hiểu chi tiết",
+      "office": {
+        "title": "Tòa Nhà Văn Phòng",
+        "description": "Giải pháp an ninh toàn diện cho các tòa nhà văn phòng với kiểm soát ra vào thông minh và giám sát 24/7.",
+        "features": [
+          "Kiểm soát ra vào bằng thẻ từ và nhận diện khuôn mặt",
+          "Giám sát hành lang, thang máy và khu vực công cộng",
+          "Phát hiện xâm nhập sau giờ làm việc",
+          "Tích hợp với hệ thống báo cháy"
+        ],
+        "alt": "An ninh Tòa nhà Văn phòng"
+      },
+      "factory": {
+        "title": "Nhà Máy Sản Xuất",
+        "description": "Bảo vệ tài sản và đảm bảo an toàn lao động với hệ thống giám sát công nghiệp chuyên biệt",
+        "features": [
+          "Giám sát khu vực sản xuất và kho bãi",
+          "Phát hiện vi phạm an toàn lao động",
+          "Cảnh báo rò rỉ khí độc, cháy nổ",
+          "Tối ưu quy trình và giảm thiểu rủi ro"
+        ],
+        "alt": "An ninh Nhà máy Sản xuất"
+      }
+    },
+    "benefits": {
+      "title": "Lợi Ích Vượt Trội",
+      "subtitle": "Những con số thực tế từ khách hàng đã triển khai hệ thống",
+      "cta": "Tính Toán ROI Cho Dự Án",
+      "riskReduction": {
+        "title": "Giảm 85% Rủi Ro An Ninh",
+        "description": "Phát hiện sớm và ngăn chặn các mối đe dọa trước khi chúng gây thiệt hại"
+      },
+      "timeSaving": {
+        "title": "Tiết Kiệm 60% Thời Gian",
+        "description": "Tự động hóa giám sát và báo cáo, giảm thiểu công việc thủ công"
+      },
+      "staffEfficiency": {
+        "title": "Tăng 40% Hiệu Quả Nhân Sự",
+        "description": "Tối ưu hóa việc phân bố bảo vệ và nhân viên an ninh"
+      },
+      "costSaving": {
+        "title": "Tiết Kiệm Chi Phí 50%",
+        "description": "Giảm chi phí vận hành và bảo trì so với hệ thống truyền thống"
+      }
+    },
+    "testimonials": {
+      "title": "Khách Hàng Nói Gì",
+      "subtitle": "Hơn 500 khách hàng tin tưởng và hài lòng với dịch vụ của chúng tôi",
+      "cta": "Xem Thêm Case Study",
+      "quote1": "Hệ thống SecureVision đã giúp chúng tôi phát hiện và ngăn chặn 15 vụ xâm nhập bất hợp pháp trong 6 tháng qua. Độ chính xác của AI thật sự ấn tượng.",
+      "name1": "Nguyễn Văn Minh",
+      "position1": "Giám Đốc An Ninh",
+      "company1": "Tập Đoàn ABC",
+      "quote2": "Từ khi triển khai, chúng tôi tiết kiệm được 40% chi phí nhân sự bảo vệ và hoàn toàn yên tâm về an ninh 24/7. Đội ngũ hỗ trợ rất chuyên nghiệp.",
+      "name2": "Trần Thị Lan",
+      "position2": "Quản Lý Vận Hành",
+      "company2": "Nhà Máy XYZ",
+      "quote3": "Giao diện ứng dụng rất trực quan, dễ sử dụng. Báo cáo chi tiết giúp chúng tôi có cái nhìn tổng quan về tình hình an ninh và đưa ra quyết định kịp thời.",
+      "name3": "Lê Hoàng Nam",
+      "position3": "CEO",
+      "company3": "Tech Solutions Ltd"
+    },
+    "contact": {
+      "title": "Liên Hệ Tư Vấn",
+      "subtitle": "Để lại thông tin để nhận tư vấn miễn phí và báo giá chi tiết",
+      "infoTitle": "Thông Tin Liên Hệ",
+      "hotline": "Hotline",
+      "email": "Email",
+      "address": "Địa Chỉ",
+      "addressValues": ["Tầng 10, Tòa nhà Secure, Quận 1, TP. Hồ Chí Minh", "Việt Nam"],
+      "commitmentsTitle": "Cam Kết Của Chúng Tôi",
+      "commitments": [
+        "Tư vấn miễn phí 24/7",
+        "Khảo sát hiện trường miễn phí",
+        "Bảo hành 3 năm toàn diện",
+        "Hỗ trợ kỹ thuật 24/7"
+      ],
+      "form": {
+        "fullName": "Họ và tên",
+        "fullNamePlaceholder": "Nhập họ tên của bạn",
+        "phone": "Số điện thoại",
+        "phonePlaceholder": "Nhập số điện thoại",
+        "email": "Email",
+        "emailPlaceholder": "Nhập email",
+        "company": "Công ty",
+        "companyPlaceholder": "Nhập tên công ty",
+        "projectDescription": "Mô tả dự án",
+        "projectDescriptionPlaceholder": "Mô tả ngắn gọn về dự án, diện tích cần giám sát, yêu cầu đặc biệt...",
+        "cta": "Gửi yêu cầu tư vấn"
+      },
+      "privacyNotice": "Bằng cách gửi biểu mẫu này, bạn đồng ý với ",
+      "privacyPolicy": "Chính sách Bảo mật",
+      "ofUs": " của chúng tôi."
+    },
+    "footer": {
+      "description": "Chuyên cung cấp giải pháp giám sát an ninh thông minh với công nghệ AI tiên tiến, bảo vệ tài sản và con người 24/7.",
+      "address": "Tầng 10, Tòa nhà Secure, Quận 1, TP. Hồ Chí Minh, Việt Nam",
+      "links": [
+        {
+          "title": "Sản Phẩm",
+          "links": [
+            { "label": "Camera An Ninh", "href": "#" },
+            { "label": "Hệ Thống Cảm Biến", "href": "#" },
+            { "label": "Phần Mềm Giám Sát", "href": "#" },
+            { "label": "Ứng Dụng Di Động", "href": "#" },
+            { "label": "Báo Cáo Phân Tích", "href": "#" }
+          ]
+        },
+        {
+          "title": "Giải Pháp",
+          "links": [
+            { "label": "Tòa Nhà Văn Phòng", "href": "#" },
+            { "label": "Nhà Máy Sản Xuất", "href": "#" },
+            { "label": "Khu Dân Cư", "href": "#" },
+            { "label": "Trung Tâm Thương Mại", "href": "#" },
+            { "label": "Kho Bãi", "href": "#" }
+          ]
+        },
+        {
+          "title": "Hỗ trợ",
+          "links": [
+            { "label": "Tài Liệu Kỹ Thuật", "href": "#" },
+            { "label": "Video Hướng Dẫn", "href": "#" },
+            { "label": "FAQ", "href": "#" },
+            { "label": "Liên Hệ Hỗ Trợ", "href": "#" },
+            { "label": "Đặt Lịch Tư Vấn", "href": "#" }
+          ]
+        },
+        {
+          "title": "Công Ty",
+          "links": [
+            { "label": "Giới Thiệu", "href": "#" },
+            { "label": "Tin Tức", "href": "#" },
+            { "label": "Tuyển Dụng", "href": "#" },
+            { "label": "Đối Tác", "href": "#" },
+            { "label": "Chính Sách Bảo Mật", "href": "#" }
+          ]
+        }
+      ],
+      "copyright": "© 2025 SecureVision. Tất cả quyền được bảo lưu.",
+      "termOfUse": "Điều khoản sử dụng",
+      "privacyPolicy": "Chính sách bảo mật",
+      "cookiePolicy": "Cookie Policy"
+    }
+  }
 }
