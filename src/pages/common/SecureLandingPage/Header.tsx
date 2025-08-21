@@ -1,10 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icons from './Icons';
+import { useTranslation } from 'react-i18next';
 
-export default function Header({ scrolled }: { scrolled: boolean }) {
+export default function Header({
+  scrolled,
+  lang,
+  handleChangeLang
+}: {
+  scrolled: boolean;
+  lang?: string;
+  handleChangeLang?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   const handleSignIn = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -13,11 +23,11 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
   };
 
   const navItems = [
-    { label: 'Tính Năng', href: '#features' },
-    { label: 'Giải Pháp', href: '#solutions' },
-    { label: 'Lợi Ích', href: '#benefits' },
-    { label: 'Khách Hàng', href: '#testimonials' },
-    { label: 'Liên Hệ', href: '#contact' }
+    { label: t('secureLandingPage.menuItems.features'), href: '#features' },
+    { label: t('secureLandingPage.menuItems.solutions'), href: '#solutions' },
+    { label: t('secureLandingPage.menuItems.benefits'), href: '#benefits' },
+    { label: t('secureLandingPage.menuItems.testimonials'), href: '#testimonials' },
+    { label: t('secureLandingPage.menuItems.contact'), href: '#contact' }
   ];
 
   return (
@@ -50,11 +60,23 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
               onClick={handleSignIn}
               className='px-4 py-2 rounded-lg font-medium text-inherit hover:bg-gray-100 transition-colors duration-300'
             >
-              Đăng Nhập
+              {t('secureLandingPage.header.signIn')}
             </button>
             <button className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'>
-              Tư Vấn Miễn Phí
+              {t('secureLandingPage.header.freeConsultation')}
             </button>
+            {lang && handleChangeLang && (
+              <select
+                value={lang}
+                onChange={handleChangeLang}
+                className='py-2 rounded-lg border text-blue-900 border-gray-300  shadow text-sm font-medium focus:outline-none'
+                style={{ minWidth: 90 }}
+              >
+                <option value='en'>{t('secureLandingPage.languages.en')}</option>
+                <option value='vi'>{t('secureLandingPage.languages.vi')}</option>
+                <option value='ja'>{t('secureLandingPage.languages.ja')}</option>
+              </select>
+            )}
           </div>
 
           <button
@@ -118,7 +140,7 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
                 ))}
                 <hr className='my-2' />
                 <button className='text-gray-700 hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
-                  Đăng Nhập
+                  {t('secureLandingPage.header.signIn')}
                 </button>
                 <a
                   className='mt-2 w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700 transition'
@@ -126,7 +148,7 @@ export default function Header({ scrolled }: { scrolled: boolean }) {
                     setMenuOpen(false);
                   }}
                 >
-                  Tư Vấn Miễn Phí{' '}
+                  {t('secureLandingPage.header.freeConsultation')}
                 </a>
               </nav>
             </div>

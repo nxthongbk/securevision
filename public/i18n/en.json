@@ -520,5 +520,216 @@
   "apply": "Apply",
   "Đặt lại": "Refresh",
   "list-location": "List location",
-  "set-alarm-successfully": "Set alarm configuration successfully"
+  "set-alarm-successfully": "Set alarm configuration successfully",
+  "secureLandingPage": {
+		 "languages": {
+      "en": "English",
+      "vi": "Vietnamese",
+      "ja": "Japanese(日本語)"
+    },
+    "header": {
+      "signIn": "Sign In",
+      "freeConsultation": "Free Consultation"
+    },
+    "menuItems": {
+      "features": "Features",
+      "solutions": "Solutions",
+      "benefits": "Benefits",
+      "testimonials": "Testimonials",
+      "contact": "Contact"
+    },
+    "features": {
+      "title": "Outstanding Features",
+      "subtitle": "Comprehensive solutions with the most advanced technology to protect assets and people.",
+      "learnMore": "Learn More",
+      "cameraAI": {
+        "title": "Smart Camera AI",
+        "description": "A camera system with AI for facial recognition, abnormal behavior detection, and real-time motion tracking."
+      },
+      "sensorNetwork": {
+        "title": "Advanced Sensor Network",
+        "description": "Motion, temperature, smoke, and vibration sensors create a comprehensive protective network for your facility."
+      },
+      "brain": {
+        "title": "AI Behavior Analysis",
+        "description": "An AI system analyzes user behavior and issues alerts when abnormal behavior is detected."
+      },
+      "smartPhone": {
+        "title": "Mobile App",
+        "description": "Monitor and control the system remotely via smartphone with an intuitive interface and real-time notifications."
+      },
+      "instantAlert": {
+        "title": "Instant Alert",
+        "description": "Receive immediate notifications via email, SMS, and push notifications when an incident is detected."
+      },
+      "security": {
+        "title": "Absolute Security",
+        "description": "End-to-end encryption, multi-layer authentication, and compliance with international security standards."
+      }
+    },
+    "hero": {
+      "tag": "Advanced AI Technology",
+      "titlePart1": "Smart Surveillance Solution",
+      "titlePart2": "Intelligent Security",
+      "subtitle": "A comprehensive and intelligent security system that provides absolute peace of mind for your business.",
+      "cta": {
+        "freeConsultation": "Free Consultation",
+        "watchDemo": "Watch Demo"
+      },
+      "stats": {
+        "projects": "Projects Deployed",
+        "accuracy": "Accuracy Rate",
+        "monitoring": "Continuous Monitoring",
+        "responseTime": "Response Time"
+      }
+    },
+    "solutions": {
+      "title": "Comprehensive Solutions",
+      "subtitle": "Providing customized security solutions for all types of businesses.",
+      "learnMore": "Find out the details",
+      "office": {
+        "title": "Office Buildings",
+        "description": "A comprehensive security solution for office buildings with smart access control and 24/7 monitoring.",
+        "features": [
+          "Access control with smart cards and facial recognition",
+          "Monitoring of hallways, elevators, and public areas",
+          "Intrusion detection after business hours",
+          "Integration with fire alarm systems"
+        ],
+        "alt": "Office Building Security"
+      },
+      "factory": {
+        "title": "Manufacturing Plants",
+        "description": "Protecting assets and ensuring workplace safety with specialized industrial monitoring systems.",
+        "features": [
+          "Monitoring of production areas and warehouses",
+          "Detection of safety protocol violations",
+          "Alerts for toxic gas leaks, fires, and explosions",
+          "Process optimization and risk reduction"
+        ],
+        "alt": "Manufacturing Plant Security"
+      }
+    },
+    "benefits": {
+      "title": "Breakthrough Benefits",
+      "subtitle": "Real numbers from customers who have implemented the system",
+      "cta": "Calculate ROI for Project",
+      "riskReduction": {
+        "title": "85% Reduction in Security Risks",
+        "description": "Early detection and prevention of threats before they can cause damage."
+      },
+      "timeSaving": {
+        "title": "60% Time Savings",
+        "description": "Automated monitoring and reporting, minimizing manual work."
+      },
+      "staffEfficiency": {
+        "title": "40% Increase in Staff Efficiency",
+        "description": "Optimizing the deployment of security guards and staff."
+      },
+      "costSaving": {
+        "title": "50% Cost Savings",
+        "description": "Reduced operational and maintenance costs compared to traditional systems."
+      }
+    },
+    "testimonials": {
+      "title": "What Customers Say",
+      "subtitle": "Over 500 customers trust and are satisfied with our services",
+      "cta": "See More Case Studies",
+      "quote1": "SecureVision's system has helped us detect and prevent 15 unauthorized intrusions in the past 6 months. The accuracy of the AI is truly impressive.",
+      "name1": "Nguyen Van Minh",
+      "position1": "Security Director",
+      "company1": "ABC Corporation",
+      "quote2": "Since implementation, we have saved 40% on security personnel costs and have complete peace of mind with 24/7 security. The support team is very professional.",
+      "name2": "Tran Thi Lan",
+      "position2": "Operations Manager",
+      "company2": "XYZ Factory",
+      "quote3": "The app interface is very intuitive and easy to use. The detailed reports give us an overview of our security situation and help us make timely decisions.",
+      "name3": "Le Hoang Nam",
+      "position3": "CEO",
+      "company3": "Tech Solutions Ltd"
+    },
+    "contact": {
+      "title": "Contact Consultation",
+      "subtitle": "Leave your information to receive free consultation and detailed quotation",
+      "infoTitle": "Contact Information",
+      "hotline": "Hotline",
+      "email": "Email",
+      "address": "Address",
+      "addressValues": ["10th Floor, Secure Building, District 1, Ho Chi Minh City", "Vietnam"],
+      "commitmentsTitle": "Our Commitments",
+      "commitments": [
+        "Free consultation 24/7",
+        "Free on-site survey",
+        "3-year comprehensive warranty",
+        "24/7 technical support"
+      ],
+      "form": {
+        "fullName": "Full Name",
+        "fullNamePlaceholder": "Enter your full name",
+        "phone": "Phone Number",
+        "phonePlaceholder": "Enter your phone number",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "company": "Company",
+        "companyPlaceholder": "Enter your company name",
+        "projectDescription": "Project Description",
+        "projectDescriptionPlaceholder": "Please provide a brief description of the project, the area to be monitored, and any special requirements.",
+        "cta": "Send Consultation Request"
+      },
+      "privacyNotice": "By submitting this form, you agree to our ",
+      "privacyPolicy": "Privacy Policy",
+      "ofUs": "."
+    },
+    "footer": {
+      "description": "Specializing in providing smart security monitoring solutions with advanced AI technology, protecting assets and people 24/7.",
+      "address": "10th Floor, Secure Building, District 1, Ho Chi Minh City, Vietnam",
+
+      "links": [
+        {
+          "title": "Products",
+          "links": [
+            { "label": "Security Camera", "href": "#" },
+            { "label": "Sensor System", "href": "#" },
+            { "label": "Monitoring Software", "href": "#" },
+            { "label": "Mobile Application", "href": "#" },
+            { "label": "Analytics Report", "href": "#" }
+          ]
+        },
+        {
+          "title": "Solutions",
+          "links": [
+            { "label": "Office Buildings", "href": "#" },
+            { "label": "Manufacturing Plants", "href": "#" },
+            { "label": "Residential Areas", "href": "#" },
+            { "label": "Shopping Centers", "href": "#" },
+            { "label": "Warehouses", "href": "#" }
+          ]
+        },
+        {
+          "title": "Support",
+          "links": [
+            { "label": "Technical Documentation", "href": "#" },
+            { "label": "Instructional Videos", "href": "#" },
+            { "label": "FAQ", "href": "#" },
+            { "label": "Contact Support", "href": "#" },
+            { "label": "Book Consultation", "href": "#" }
+          ]
+        },
+        {
+          "title": "Company",
+          "links": [
+            { "label": "About Us", "href": "#" },
+            { "label": "News", "href": "#" },
+            { "label": "Careers", "href": "#" },
+            { "label": "Partners", "href": "#" },
+            { "label": "Privacy Policy", "href": "#" }
+          ]
+        }
+      ],
+      "copyright": "© 2025 SecureVision. All rights reserved.",
+			"termOfUse": "Terms of Use",
+			"privacyPolicy": "Privacy Policy",
+			"cookiePolicy": "Cookie Policy"
+    }
+  }
 }
