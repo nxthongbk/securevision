@@ -133,7 +133,7 @@ const testimonials = [
       'Hệ thống SecureVision đã giúp chúng tôi phát hiện và ngăn chặn 15 vụ xâm nhập bất hợp pháp trong 6 tháng qua. Độ chính xác của AI thật sự ấn tượng.',
     name: 'Nguyễn Văn Minh',
     position: 'Giám Đốc An Ninh',
-    company: 'Tập Đoàn ABC',
+    company: 'Tập Đoàn New Windows',
     companyUrl: '#',
     avatar: ''
   },
@@ -143,7 +143,7 @@ const testimonials = [
       'Từ khi triển khai, chúng tôi tiết kiệm được 40% chi phí nhân sự bảo vệ và hoàn toàn yên tâm về an ninh 24/7. Đội ngũ hỗ trợ rất chuyên nghiệp.',
     name: 'Trần Thị Lan',
     position: 'Quản Lý Vận Hành',
-    company: 'Nhà Máy XYZ',
+    company: 'Nhà Máy Kumho',
     companyUrl: '#',
     avatar: ''
   },
@@ -153,7 +153,7 @@ const testimonials = [
       'Giao diện ứng dụng rất trực quan, dễ sử dụng. Báo cáo chi tiết giúp chúng tôi có cái nhìn tổng quan về tình hình an ninh và đưa ra quyết định kịp thời.',
     name: 'Lê Hoàng Nam',
     position: 'CEO',
-    company: 'Tech Solutions Ltd',
+    company: 'Chuỗi của hàng Phổ Dình',
     companyUrl: '#',
     avatar: ''
   }
@@ -502,7 +502,7 @@ export default function SecureLandingPage() {
                 {
                   icon: <Phone size={28} className='text-blue-600' />,
                   label: 'Hotline',
-                  values: ['1900 1234 (24/7)', '028 1234 5678']
+                  values: ['1900 1212 (24/7)', '028 1234 5678']
                 },
                 {
                   icon: <EnvelopeSimple size={28} className='text-blue-600' />,
