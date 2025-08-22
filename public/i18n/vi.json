@@ -561,7 +561,7 @@
     "languages": {
       "en": "English",
       "vi": "Tiếng Việt",
-      "ja": "Japanese(日本語)"
+      "ja": "Japanese (日本語)"
     },
     "header": {
       "signIn": "Đăng Nhập",
@@ -674,15 +674,15 @@
       "quote1": "Hệ thống SecureVision đã giúp chúng tôi phát hiện và ngăn chặn 15 vụ xâm nhập bất hợp pháp trong 6 tháng qua. Độ chính xác của AI thật sự ấn tượng.",
       "name1": "Nguyễn Văn Minh",
       "position1": "Giám Đốc An Ninh",
-      "company1": "Tập Đoàn ABC",
+      "company1": "Tập Đoàn New Windows",
       "quote2": "Từ khi triển khai, chúng tôi tiết kiệm được 40% chi phí nhân sự bảo vệ và hoàn toàn yên tâm về an ninh 24/7. Đội ngũ hỗ trợ rất chuyên nghiệp.",
       "name2": "Trần Thị Lan",
       "position2": "Quản Lý Vận Hành",
-      "company2": "Nhà Máy XYZ",
+      "company2": "Nhà Máy Kumho",
       "quote3": "Giao diện ứng dụng rất trực quan, dễ sử dụng. Báo cáo chi tiết giúp chúng tôi có cái nhìn tổng quan về tình hình an ninh và đưa ra quyết định kịp thời.",
       "name3": "Lê Hoàng Nam",
       "position3": "CEO",
-      "company3": "Tech Solutions Ltd"
+      "company3": "Chuỗi của hàng Phổ Dình"
     },
     "contact": {
       "title": "Liên Hệ Tư Vấn",
@@ -718,7 +718,7 @@
     },
     "footer": {
       "description": "Chuyên cung cấp giải pháp giám sát an ninh thông minh với công nghệ AI tiên tiến, bảo vệ tài sản và con người 24/7.",
-      "address": "Tầng 10, Tòa nhà Secure, Quận 1, TP. Hồ Chí Minh, Việt Nam",
+      "address": "Tầng 10, Tòa nhà Secure, Quận 1,<br/>TP. Hồ Chí Minh, Việt Nam",
       "links": [
         {
           "title": "Sản Phẩm",

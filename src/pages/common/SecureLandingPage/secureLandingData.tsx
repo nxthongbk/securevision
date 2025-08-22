@@ -7,8 +7,7 @@ import {
   TrendDown,
   Users,
   Clock,
-  CurrencyDollar,
-
+  CurrencyDollar
 } from '@phosphor-icons/react';
 import OfficeImage from '../../../assets/images/png/secure-solution-1.png';
 import FactoryImage from '../../../assets/images/png/secure-solution-2.png';
@@ -184,7 +183,7 @@ export const getSecureLandingData = (t) => {
     {
       icon: <Phone size={28} className='text-blue-600' />,
       label: t('secureLandingPage.contact.hotline'),
-      values: ['1900 1234 (24/7)', '028 1234 5678']
+      values: ['1900 1212 (24/7)', '028 1234 5678']
     },
     {
       icon: <EnvelopeSimple size={28} className='text-blue-600' />,

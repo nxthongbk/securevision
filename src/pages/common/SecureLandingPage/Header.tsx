@@ -14,6 +14,7 @@ export default function Header({
 }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const { t } = useTranslation();
 
   const handleSignIn = (e: React.MouseEvent) => {
@@ -66,16 +67,74 @@ export default function Header({
               {t('secureLandingPage.header.freeConsultation')}
             </button>
             {lang && handleChangeLang && (
-              <select
-                value={lang}
-                onChange={handleChangeLang}
-                className='py-2 rounded-lg border text-blue-900 border-gray-300  shadow text-sm font-medium focus:outline-none'
-                style={{ minWidth: 90 }}
-              >
-                <option value='en'>{t('secureLandingPage.languages.en')}</option>
-                <option value='vi'>{t('secureLandingPage.languages.vi')}</option>
-                <option value='ja'>{t('secureLandingPage.languages.ja')}</option>
-              </select>
+              <div className='relative'>
+                <button
+                  type='button'
+                  className={`flex items-center py-2 px-3 rounded-lg border text-blue-900 border-gray-300 ${!scrolled ? 'bg-white/90' : 'bg-gray-50'} text-sm font-medium focus:outline-none min-w-[110px]`}
+                  onClick={() => setLangDropdownOpen((open) => !open)}
+                  aria-haspopup='listbox'
+                  aria-expanded={langDropdownOpen}
+                >
+                  <img
+                    src={
+                      lang === 'en'
+                        ? '/public/flag_en_icon.svg'
+                        : lang === 'vi'
+                          ? '/public/flag_vn_icon.svg'
+                          : '/public/flag_jp_icon.svg'
+                    }
+                    alt={lang}
+                    className='mr-2 h-5 w-8 items-center'
+                  />
+                  {lang === 'en' && t('secureLandingPage.languages.en')}
+                  {lang === 'vi' && t('secureLandingPage.languages.vi')}
+                  {lang === 'ja' && t('secureLandingPage.languages.ja')}
+                  <span className='ml-2 w-4 h-4 items-center text-gray-400'>▼</span>
+                </button>
+                {langDropdownOpen && (
+                  <ul
+                    className='absolute right-0 mt-2 min-w-[110px] text-blue-900 bg-white/90 border text-sm border-gray-200 rounded-sm shadow-lg z-50'
+                    role='listbox'
+                  >
+                    <li
+                      className={`flex items-center px-3 py-2 cursor-pointer hover:bg-blue-100 ${lang === 'en' ? 'font-bold' : ''}`}
+                      onClick={() => {
+                        handleChangeLang({ target: { value: 'en' } } as React.ChangeEvent<HTMLSelectElement>);
+                        setLangDropdownOpen(false);
+                      }}
+                      role='option'
+                      aria-selected={lang === 'en'}
+                    >
+                      <img src={'/public/flag_en_icon.svg'} className='mr-2 h-5 w-5' alt='English' />{' '}
+                      {t('secureLandingPage.languages.en')}
+                    </li>
+                    <li
+                      className={`flex items-center px-3 py-2 cursor-pointer hover:bg-blue-100 ${lang === 'vi' ? 'font-bold' : ''}`}
+                      onClick={() => {
+                        handleChangeLang({ target: { value: 'vi' } } as React.ChangeEvent<HTMLSelectElement>);
+                        setLangDropdownOpen(false);
+                      }}
+                      role='option'
+                      aria-selected={lang === 'vi'}
+                    >
+                      <img src={'/public/flag_vn_icon.svg'} className='mr-2 h-5 w-5' alt='Tiếng Việt' />{' '}
+                      {t('secureLandingPage.languages.vi')}
+                    </li>
+                    <li
+                      className={`flex items-center px-3 py-2 cursor-pointer hover:bg-blue-100 ${lang === 'ja' ? 'font-bold' : ''}`}
+                      onClick={() => {
+                        handleChangeLang({ target: { value: 'ja' } } as React.ChangeEvent<HTMLSelectElement>);
+                        setLangDropdownOpen(false);
+                      }}
+                      role='option'
+                      aria-selected={lang === 'ja'}
+                    >
+                      <img src={'/public/flag_jp_icon.svg'} className='mr-2 h-5 w-5' alt='日本語' />{' '}
+                      {t('secureLandingPage.languages.ja')}
+                    </li>
+                  </ul>
+                )}
+              </div>
             )}
           </div>
 

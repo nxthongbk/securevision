@@ -369,7 +369,7 @@ export default function SecureLandingPage() {
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      {t('secureLandingPage.contact.form.fullName')}
+                      {t('secureLandingPage.contact.form.fullName')} <span className='text-red-500'>*</span>
                     </label>
                     <input
                       type='text'
@@ -380,7 +380,7 @@ export default function SecureLandingPage() {
                   </div>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      {t('secureLandingPage.contact.form.phone')}
+                      {t('secureLandingPage.contact.form.phone')} <span className='text-red-500'>*</span>
                     </label>
                     <input
                       type='tel'
@@ -391,7 +391,7 @@ export default function SecureLandingPage() {
                   </div>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      {t('secureLandingPage.contact.form.email')}
+                      {t('secureLandingPage.contact.form.email')} <span className='text-red-500'>*</span>
                     </label>
                     <input
                       type='email'
@@ -402,7 +402,7 @@ export default function SecureLandingPage() {
                   </div>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>
-                      {t('secureLandingPage.contact.form.company')}
+                      {t('secureLandingPage.contact.form.company')} <span className='text-red-500'>*</span>
                     </label>
                     <input
                       type='text'
@@ -455,15 +455,18 @@ export default function SecureLandingPage() {
             <div className='space-y-2 mb-6'>
               <div className='flex items-center text-gray-300 text-sm'>
                 <Phone className='w-5 h-5 mr-2 text-blue-400' />
-                1900 1234 (24/7)
+                1900 1212 (24/7)
               </div>
               <div className='flex items-center text-gray-300 text-sm'>
                 <EnvelopeSimple className='w-5 h-5 mr-2 text-blue-400' />
                 info@securevision.com
               </div>
-              <div className='flex  text-gray-300 text-sm'>
+              <div className='flex items-center text-gray-300 text-sm'>
                 <MapPin className='w-5 h-5 mr-2 text-blue-400' />
-                {t('secureLandingPage.footer.address')}
+                <span
+                  className='line-clamp-2'
+                  dangerouslySetInnerHTML={{ __html: t('secureLandingPage.footer.address') }}
+                />
               </div>
             </div>
 

@@ -1,9 +1,9 @@
 {
   "secureLandingPage": {
 		 "languages": {
-      "en": "English",
-      "vi": "Vietnamese(ベトナム語)",
-      "ja": "Japanese(日本語)"
+      "en": "English (英語)",
+      "vi": "Vietnamese (ベトナム語)",
+      "ja": "Japanese (日本語)"
     },
     "header": {
       "signIn": "サインイン",
@@ -117,15 +117,15 @@
       "quote1": "SecureVisionのシステムは、過去6ヶ月間で15件の不正侵入を検出し、防止するのに役立ちました。AIの精度には本当に感銘を受けています。",
       "name1": "グエン・ヴァン・ミン",
       "position1": "セキュリティディレクター",
-      "company1": "ABC Corporation",
+      "company1": "New Windows 株式会社",
       "quote2": "導入以来、警備員の人件費を40%節約でき、24時間体制のセキュリティで完全に安心しています。サポートチームは非常にプロフェッショナルです。",
       "name2": "トラン・ティ・ラン",
       "position2": "オペレーションマネージャー",
-      "company2": "XYZ Factory",
+      "company2": "Kumho Factory",
       "quote3": "アプリケーションのインターフェースは非常に直感的で使いやすいです。詳細なレポートにより、セキュリティ状況を全体的に把握し、タイムリーな意思決定を行うことができます。",
       "name3": "レ・ホアン・ナム",
       "position3": "CEO",
-      "company3": "Tech Solutions Ltd"
+      "company3": "Pho Dinh 店舗"
     },
     "contact": {
       "title": "お問い合わせ・ご相談",
@@ -156,7 +156,7 @@
     },
     "footer": {
       "description": "AI技術を活用したスマートなセキュリティ監視ソリューションで、資産と人々を24時間守ります。",
-			"address": "Secureビル10階、1区、ホーチミン市、ベトナム",
+			"address": "Secureビル10階、1区、<br/> ホーチミン市、ベトナム",
       "links": [
         {
           "title": "製品",
