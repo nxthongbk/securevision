@@ -84,12 +84,15 @@ export default function Header({
                           : '/public/flag_jp_icon.svg'
                     }
                     alt={lang}
-                    className='mr-2 h-5 w-8 items-center'
+                    className='mr-2 h-5 w-6 object-cover align-middle'
+                    style={{ display: 'inline-block', verticalAlign: 'middle' }}
                   />
                   {lang === 'en' && t('secureLandingPage.languages.en')}
                   {lang === 'vi' && t('secureLandingPage.languages.vi')}
                   {lang === 'ja' && t('secureLandingPage.languages.ja')}
-                  <span className='ml-2 w-4 h-4 items-center text-gray-400'>▼</span>
+                  <span className='ml-2 flex items-center justify-center h-5'>
+                    <Icons.ChervonDown className='w-5 h-5 text-gray-400 align-middle' />
+                  </span>
                 </button>
                 {langDropdownOpen && (
                   <ul
