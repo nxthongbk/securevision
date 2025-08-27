@@ -66,17 +66,18 @@ export default function TabConfiguration(props: IProps) {
             <div className='font-semibold mb-2'>{p.name}</div>
             <div
               className={`px-3 py-1 rounded-full text-white text-sm font-bold mb-2 ${
-                p.status[0] === 'Disarmed'
+                p.status[0] === 'Armed'
                   ? 'bg-green-400'
-                  : p.status[0] === 'Armed'
+                  : p.status[0] === 'Alarm'
                     ? 'bg-red-400'
-                    : p.status[0] === 'Partial'
+                    : p.status[0] === 'Trouble'
                       ? 'bg-yellow-400'
                       : 'bg-yellow-300'
               }`}
             >
-              {p.status}
+              
             </div>
+            {p.status}
             <button className='w-full bg-white text-gray-700 text-sm font-bold py-2 rounded mb-2 border mt-2 shadow-sm'>
               Configure
             </button>
