@@ -2,7 +2,6 @@ import { useGetLatestTelemetry } from '../../handleApi';
 import useSocketLatestTelemetry from '~/utils/hooks/socket/useSocketLatestTelemetry';
 import { useState } from 'react';
 
-
 interface IProps {
   deviceId: string;
   deviceName?: string;
@@ -54,8 +53,13 @@ export default function TabConfiguration(props: IProps) {
   const [selectedPartition, setSelectedPartition] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  // Thêm trạng thái mode (Arm, DisArm, Partial, ByPass)
+  const [selectedMode, setSelectedMode] = useState<string>('Arm');
+
   const openDialog = (partition: any) => {
     setSelectedPartition(partition);
+    // Mặc định lấy mode hiện tại nếu có trong partition (nếu không có thì mặc định 'Arm')
+    setSelectedMode(partition.mode || 'Arm');
     setIsDialogOpen(true);
   };
 
@@ -65,8 +69,11 @@ export default function TabConfiguration(props: IProps) {
   };
 
   const handleSave = () => {
-    // Nếu cần cập nhật partitionList, có thể xử lý tại đây
-    // Hiện tại chỉ đóng dialog
+    // Cập nhật lại partition name và mode (ở đây chỉ cập nhật local state)
+    if (selectedPartition) {
+      selectedPartition.name = selectedPartition.name || '';
+      selectedPartition.mode = selectedMode;
+    }
     closeDialog();
   };
 
@@ -80,16 +87,16 @@ export default function TabConfiguration(props: IProps) {
             <div className='font-semibold mb-2'>{p.name}</div>
             <div
               className={`px-3 py-1 rounded-full text-white text-sm font-bold mb-2 ${
-                p.status[0] === 'Armed'
+                p.status.includes('Armed') || p.status.includes('Ready to Arm')
                   ? 'bg-green-400'
-                  : p.status[0] === 'Alarm'
+                  : p.status.includes('Alarm')
                   ? 'bg-red-400'
-                  : p.status[0] === 'Trouble'
+                  : p.status.includes('Trouble')
                   ? 'bg-yellow-400'
                   : 'bg-yellow-300'
               }`}
             >
-              {p.status}
+              {p.status.join(', ')}
             </div>
             <button
               className='w-full bg-white text-gray-700 text-sm font-bold py-2 rounded mb-2 border mt-2 shadow-sm'
@@ -118,7 +125,7 @@ export default function TabConfiguration(props: IProps) {
                   }`}
                   style={{ flex: '0 0 100px' }}
                 >
-                  <div className='text-xs'>{zone.id}</div>
+                  <div className='text-xs'>Zone: {zone.id}</div>
                   <div className='text-sm font-semibold'>{zone.name}</div>
                 </div>
               ))}
@@ -143,6 +150,20 @@ export default function TabConfiguration(props: IProps) {
                   setSelectedPartition({ ...selectedPartition, name: e.target.value })
                 }
               />
+            </div>
+
+            <div className='mb-4'>
+              <label className='block text-sm font-medium mb-1'>Mode</label>
+              <select
+                className='w-full border border-gray-300 rounded px-3 py-2'
+                value={selectedMode}
+                onChange={(e) => setSelectedMode(e.target.value)}
+              >
+                <option value='Arm'>Arm</option>
+                <option value='DisArm'>DisArm</option>
+                <option value='Partial'>Partial</option>
+                <option value='ByPass'>ByPass</option>
+              </select>
             </div>
 
             <div className='flex justify-end gap-2'>
