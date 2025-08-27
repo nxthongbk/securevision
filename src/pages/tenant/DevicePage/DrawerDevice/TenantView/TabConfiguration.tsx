@@ -117,7 +117,8 @@ export default function TabConfiguration(props: IProps) {
                   }`}
                   style={{ flex: '0 0 100px' }}
                 >
-                  {zone.id} {zone.name}
+                  <div className='text-xs'>{zone.id}</div>
+                  <div className='text-sm font-semibold'>{zone.name}</div>
                 </div>
               ))}
             </div>
