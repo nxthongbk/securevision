@@ -218,7 +218,8 @@
     "add-new-notification": "Add new notification",
     "notification": "Notification",
     "edit-warning": "Edit warning",
-    "content": "Content"
+    "content": "Content",
+    "configuration": "Configuration"
   },
   "locationPage": {
     "location-management": "Location Management",

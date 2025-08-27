@@ -7,6 +7,7 @@ import TabNotification from '../DrawerDevice/TenantView/TabNotification';
 import TabsInforDevice from '../DrawerDevice/TenantView/TabInfo';
 import { translationCapitalFirst } from '~/utils/translate';
 import { useState } from 'react';
+import TabConfiguration from '../DrawerDevice/TenantView/TabConfiguration';
 
 // import TabsInforDeviceSysAdminView from '../DrawerDevice/SysAdminView/TabInfo';
 // import TabAttributesDeviceSysAdminView from '../DrawerDevice/SysAdminView/TabAttributes';
@@ -93,6 +94,9 @@ export default function PopupDeviceInfor({ props, hasEdit }: { props: Record<str
         <CustomTabPanel value={value} index={4}>
           <TabNotification deviceId={props?.id} token={props?.token} />
         </CustomTabPanel>
+        <CustomTabPanel value={value} index={5}>
+          <TabConfiguration deviceId={props?.id} />
+        </CustomTabPanel>
       </>
     );
   };
@@ -107,13 +111,14 @@ export default function PopupDeviceInfor({ props, hasEdit }: { props: Record<str
           <div className='h-10'>
             <Typography variant='h4'>{props?.name}</Typography>
           </div>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: "space-between" }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
               <Tab label={translate('info')} {...a11yProps(0)} />
               <Tab label={'Attributes'} {...a11yProps(1)} />
               <Tab label={'Latest telemetry'} {...a11yProps(2)} />
               <Tab label={translate('warning')} {...a11yProps(3)} />
               <Tab label={translate('notification')} {...a11yProps(4)} />
+              <Tab label={translate('configuration')} {...a11yProps(5)} />
             </Tabs>
           </Box>
           {renderTabPanel()}
