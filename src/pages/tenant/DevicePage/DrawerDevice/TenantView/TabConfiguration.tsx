@@ -100,6 +100,7 @@ export default function TabConfiguration(props: IProps) {
                   }`}
                   style={{ flex: '0 0 100px' }}
                 >
+                  {zone.id}
                   {zone.name}
                 </div>
               ))}
