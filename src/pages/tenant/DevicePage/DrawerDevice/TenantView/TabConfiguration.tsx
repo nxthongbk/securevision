@@ -1,5 +1,7 @@
 import { useGetLatestTelemetry } from '../../handleApi';
 import useSocketLatestTelemetry from '~/utils/hooks/socket/useSocketLatestTelemetry';
+import { useState } from 'react';
+
 
 interface IProps {
   deviceId: string;
