@@ -7,6 +7,18 @@ interface IProps {
   deviceName?: string;
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.blink-red {
+  background-color: #f87171; /* Tailwind's bg-red-400 */
+  animation: blink 1s infinite;
+}
+
+
+
 export default function TabConfiguration(props: IProps) {
   const { deviceId } = props;
 
@@ -87,12 +99,16 @@ export default function TabConfiguration(props: IProps) {
             <div className='font-semibold mb-2'>{p.name}</div>
             <div
               className={`px-3 py-1 rounded-full text-white text-sm font-bold mb-2 ${
-                p.status.includes('Armed') || p.status.includes('Ready to Arm')
+                p.status.includes('Ready to Arm')
                   ? 'bg-green-400'
-                  : p.status.includes('Alarm')
+                  :p.status.includes('Alarm')
+                  ? 'blink-red'
+                  : p.status.includes('Arm')
                   ? 'bg-red-400'
                   : p.status.includes('Trouble')
                   ? 'bg-yellow-400'
+                  : p.status.includes('Exist')
+                  ? 'bg-pink-400'
                   : 'bg-yellow-300'
               }`}
             >
@@ -117,22 +133,42 @@ export default function TabConfiguration(props: IProps) {
           }
           return rows.map((row, idx) => (
             <div key={idx} className='flex flex-wrap gap-2'>
-              {row.map((zone) => (
-                <div
-                  key={zone.id}
-                  className={`w-[100px] px-3 py-2 rounded font-semibold text-white text-sm text-center ${
-                    zone.status === 'Normal' ? 'bg-green-400' : zone.status === 'Alarm' ? 'bg-red-400' : 'bg-yellow-300'
-                  }`}
-                  style={{ flex: '0 0 100px' }}
-                >
-                  <div className='text-xs'>Zone: {zone.id}</div>
-                  <div className='text-sm font-semibold'>{zone.name}</div>
-                </div>
-              ))}
+              {row.map((zone) => {
+                let bgClass = '';
+                switch (zone.status) {
+                  case 'Normal':
+                    bgClass = 'bg-green-400';
+                    break;
+                  case 'Alarm':
+                    bgClass = 'blink-red';
+                    break;
+                  case 'Open':
+                    bgClass = 'bg-yellow-400';
+                    break;
+                  case 'Not used':
+                    bgClass = 'bg-gray-400';
+                    break;
+                  default:
+                    bgClass = 'bg-yellow-300';
+                    break;
+                }
+
+                return (
+                  <div
+                    key={zone.id}
+                    className={`w-[100px] px-3 py-2 rounded font-semibold text-white text-sm text-center ${bgClass}`}
+                    style={{ flex: '0 0 100px' }}
+                  >
+                    <div className='text-xs'>Zone: {zone.id}</div>
+                    <div className='text-sm font-semibold'>{zone.name}</div>
+                  </div>
+                );
+              })}
             </div>
           ));
         })()}
-      </div>
+      </div>  
+
 
       {/* Dialog cấu hình partition */}
       {isDialogOpen && selectedPartition && (
