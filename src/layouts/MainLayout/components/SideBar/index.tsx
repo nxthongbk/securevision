@@ -1,11 +1,9 @@
-import { IconButton, Tooltip } from '@mui/material';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import classNames from 'classnames';
 import { ReactNode, useContext, useMemo } from 'react';
 import { AppContext } from '~/contexts/app.context';
-import AvatarPopper from './AvatarPopper';
 import { useSidebarOptions } from './useSidebarOptions';
-import IconImg from '~/assets/images/svg/Icon.svg';
+import SidebarLine  from '~/assets/sidebar/sidebar-line.svg';
 
 interface IMenuItemProps {
   icon: ReactNode;
@@ -14,19 +12,27 @@ interface IMenuItemProps {
   bindActive?: boolean;
 }
 
-const MenuItem = ({ icon, path, title, bindActive = false }: IMenuItemProps) => {
+const MenuItem = ({ path, title, bindActive = false }: IMenuItemProps) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const tenantCode = searchParams.get('tenantCode');
-  const buttonClassName = classNames('w-10 h-10 !rounded-md', {
-    '!bg-[var(--primary)] !text-[white]': path === location.pathname || bindActive
-  });
+  const isActive = path === location.pathname || bindActive;
+  const baseClass =
+    'relative px-4 py-2 font-semibold text-sm transition-colors flex flex-col items-center text-white hover:text-[#7CD4FD]';
+
+  const activeClass =
+    'text-[#7CD4FD] ' +
+  
+    'before:content-[""] before:absolute before:left-1/2 before:-translate-x-1/2 ' +
+    'before:-bottom-3 before:w-8 before:h-3 before:rounded-full ' +
+    'before:bg-[#7CD4FD] before:blur-md before:opacity-70';
+
 
   return (
     <Link to={tenantCode ? `${path}?tenantCode=${tenantCode}` : path}>
-      <Tooltip title={title} placement='right' arrow>
-        <IconButton className={buttonClassName}>{icon}</IconButton>
-      </Tooltip>
+      <span className={classNames(baseClass, isActive ? activeClass : '')}>
+        {title.split(' ')[0].toUpperCase()}
+      </span>
     </Link>
   );
 };
@@ -34,14 +40,12 @@ const MenuItem = ({ icon, path, title, bindActive = false }: IMenuItemProps) => 
 export default function SideBar() {
   const { userInfo } = useContext(AppContext);
   const location = useLocation();
-  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const tenantCode = searchParams.get('tenantCode');
   const userRole = userInfo?.roles?.[0];
   const { sysAdminSidebar, tenantSidebar } = useSidebarOptions();
 
   const sidebarOptions = useMemo(() => {
-
     if (userRole === 'SYSADMIN' && !tenantCode) {
       return sysAdminSidebar;
     } else {
@@ -49,27 +53,32 @@ export default function SideBar() {
     }
   }, [sysAdminSidebar, tenantCode, tenantSidebar, userRole]);
 
-
   return (
-    <div
-      className={`min-w-[64px] border border-b border-[var(--border-color)] miniLaptop:flex hidden miniLaptop:flex-col justify-between px-4 ${tenantCode ? ' min-h-[calc(100vh-56px)] ' : ' miniLaptop:min-h-screen '}`}
-    >
-      <div className='flex items-center justify-center mt-6 miniLaptop:flex-col'>
-        <img
-          src={IconImg}
-          className='w-[40px] h-[40px] mb-4 cursor-pointer'
-          onClick={() => {
-            navigate('/');
-          }}
-        />
-        <div className='flex-col items-center hidden gap-1 miniLaptop:flex'>
-          {sidebarOptions.map((option) => (
-            <MenuItem key={option.id} title={option.title} icon={option.icon} path={option.path} />
-          ))}
-        </div>
-      </div>
+    <div className="relative w-full">
+      {/* SVG is the navbar background */}
+      <img
+        src={SidebarLine}
+        alt="navbar decorative line"
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[110%] max-w-none 
+                  pointer-events-none select-none z-40"
+      />
 
-      <AvatarPopper />
+      {/* Navbar items (no background or border) */}
+      <div
+        className="fixed bottom-0.5 left-1/2 -translate-x-1/2 
+                  px-6 py-2 z-50
+                  flex flex-row items-center gap-6"
+      >
+        {sidebarOptions.map((option) => (
+          <MenuItem
+            key={option.id}
+            title={option.title}
+            icon={option.icon}
+            path={option.path}
+          />
+        ))}
+      </div>
     </div>
+
   );
 }

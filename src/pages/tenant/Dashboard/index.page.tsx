@@ -43,8 +43,7 @@ export default function DashboardPage() {
         <div
           className={` border-r border-[var(--border-color)] overflow-auto transition-all duration-500 ${isVisible ? 'h-[1000px] opacity-100 w-[240px]' : ' w-[0px] max-h-0 opacity-0'
             }`}
-        >
-          <div className='px-2 '>
+        > <div className='px-2 '>
             <div className='flex gap-2 py-2 border-b'>
               <CreateDashboard tenantCode={tenantCode} />
             </div>
