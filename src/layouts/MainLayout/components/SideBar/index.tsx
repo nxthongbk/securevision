@@ -59,7 +59,7 @@ export default function SideBar() {
       <img
         src={SidebarLine}
         alt="navbar decorative line"
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[110%] max-w-none 
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[110%] max-w-none 
                   pointer-events-none select-none z-40"
       />
 
