@@ -1,4 +1,4 @@
-import TopBarSVG from '~/assets/topbar/topbar.svg';
+import TopBarSVG from '~/assets/uisvg/HeaderSVG/topbar.svg';
 import { Avatar, Popper, Fade, Typography, Divider } from '@mui/material';
 import { useState, useContext, useEffect } from 'react';
 import { AppContext } from '~/contexts/app.context';
