@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 import AvatarTableRow from '~/components/AvatarTableRow';
 import { AppContext } from '~/contexts/app.context';
 
-import SelectedIcon from '~/assets/uisvg/selected.svg';
-import UnselectedIcon from '~/assets/uisvg/unselected.svg';
-import AlarmSelectedIcon from '~/assets/uisvg/alarmSelected.svg';
-import AlarmUnselectedIcon from '~/assets/uisvg/alarmUnselected.svg';
+import SelectedIcon from '~/assets/uisvg/ListBuildingSVG/selected.svg';
+import UnselectedIcon from '~/assets/uisvg/ListBuildingSVG/unselected.svg';
+import AlarmSelectedIcon from '~/assets/uisvg/ListBuildingSVG/alarmSelected.svg';
+import AlarmUnselectedIcon from '~/assets/uisvg/ListBuildingSVG/alarmUnselected.svg';
+// import HeaderIcon from '~/assets/uisvg/ListBuildingSVG/header.svg';
 
-interface IItemBuilding {
+interface ItemBuilding {
   name: string;
   status: string;
   isSelected?: boolean;
@@ -27,7 +28,7 @@ function ItemBuilding({
   onClick,
   imageUrl,
   isSelected = false
-}: Readonly<IItemBuilding>) {
+}: Readonly<ItemBuilding>) {
   // Pick the correct SVG for container
   let SvgBackground;
   if (status === 'ALARM' && isSelected) {
@@ -89,7 +90,7 @@ export default function ListBuilding({ data, mapRef, closeDialog }: { data: any[
 
   return (
     <div
-      className="h-[87vh] overflow-y-auto flex flex-col gap-3 px-2 backdrop-blur-md
+      className="h-[87vh] overflow-y-auto flex flex-col gap-3 px-2 
       scrollbar-none
       [-ms-overflow-style:none] 
       scrollbar-width:none 

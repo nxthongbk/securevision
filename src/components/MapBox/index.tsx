@@ -11,7 +11,9 @@ function MapBox(props: Omit<MapProps, 'projection'>, ref?: any) {
       mapboxAccessToken={accessToken}
       initialViewState={initialViewState}
       style={{ width: '100%', height: '100%', ...style }}
-      mapStyle={mapStyle ?? 'mapbox://styles/mapbox/satellite-v9'}
+      // mapStyle={mapStyle ?? 'mapbox://styles/mapbox/dark-v11'}
+      mapStyle= 'mapbox://styles/mapbox/dark-v11'
+
 
       keyboard={false}
       doubleClickZoom={false}

@@ -14,12 +14,22 @@ import PendingPopup from '../Popup/PendingPopup';
 import PopupMarker from '../Popup/PopupMarker';
 import { useTranslation } from 'react-i18next';
 
-function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; socketData: any }) {
+function MapRight({
+  data,
+  mapRef,
+  socketData,
+  setLogs // accept logs setter
+}: {
+  data: any[];
+  mapRef: any;
+  socketData: any;
+  setLogs: React.Dispatch<React.SetStateAction<ILocationLog[]>>;
+}) {
   const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
   const { t } = useTranslation();
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
-  const [logs, setLogs] = useState<ILocationLog[]>([]);
-  const logContainerRef = useRef<HTMLDivElement>(null); // Reference to the log container
+  const logContainerRef = useRef<HTMLDivElement>(null); // optional if needed for scrolling
+
   const {
     openLocationPopup,
     openCancelPopup,
@@ -32,38 +42,28 @@ function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; sock
     selectedFilter
   } = useContext(AppContext);
 
+  // Update logs from socket
   useEffect(() => {
-    if (!socketData) {
-      return;
-    }
+    if (!socketData) return;
 
     if (socketData.deviceId) {
-      setLogs([...logs, { deviceSocketData: socketData }]);
+      setLogs((prev) => [...prev, { deviceSocketData: socketData }]);
     }
 
     if (socketData.length) {
-      setLogs([
-        ...logs,
-        ...socketData.map((location) => ({ alarmSocketData: { locationName: location.name, timestamp: Date.now() } }))
+      setLogs((prev) => [
+        ...prev,
+        ...socketData.map((location) => ({
+          alarmSocketData: { locationName: location.name, timestamp: Date.now() }
+        }))
       ]);
     }
-  }, [location, socketData]);
+  }, [socketData]);
 
   useEffect(() => {
-    if (logs.length > 100) {
-      setLogs(logs.slice(-50));
-    }
-  }, [logs]);
-
-  useEffect(() => {
-    // Scroll to bottom whenever logs change
-    if (logContainerRef.current) {
-      logContainerRef.current.scrollTo({
-        top: logContainerRef.current.scrollHeight,
-        behavior: 'smooth' // Enables smooth scrolling
-      });
-    }
-  }, [logs]);
+    // keep logs capped at 100
+    setLogs((prev) => (prev.length > 100 ? prev.slice(-50) : prev));
+  }, [socketData]);
 
   const onLoadMap = useCallback((evt: mapboxgl.MapboxEvent) => {
     setMap(evt?.target);
@@ -77,51 +77,19 @@ function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; sock
   const coordinates = useMemo(
     () => markerData.map((marker) => [marker?.location?.longitude, marker?.location?.latitude]),
     [markerData]
-  ) as LngLatLike[];
+  ) as mapboxgl.LngLatLike[];
 
   useEffect(() => {
-    if (map) {
+    if (map && coordinates.length > 0) {
       const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
-      for (const coord of coordinates) {
-        bounds.extend(coord);
-      }
+      for (const coord of coordinates) bounds.extend(coord);
       if (bounds['_ne'] && bounds['_sw']) {
-        map.fitBounds(bounds, {
-          padding: {
-            top: 100,
-            bottom: 20,
-            left: 20,
-            right: 20
-          }
-        });
+        map.fitBounds(bounds, { padding: { top: 100, bottom: 20, left: 20, right: 20 } });
       }
     }
   }, [coordinates, map]);
-  const handleButtonClick = () => {
-    const newValue = !isBellRingAlarm;
-    setIsBellRingAlarm(newValue);
 
-    localStorage.setItem('isBellRingAlarm', newValue.toString());
-    window.dispatchEvent(new Event('localStorageChange'));
-  };
-  useEffect(() => {
-    const checkLocalStorage = () => {
-      const isBellRingAlarm = localStorage.getItem('isBellRingAlarm') === 'true';
-      setIsBellRingAlarm(isBellRingAlarm);
-    };
-    checkLocalStorage();
-    window.addEventListener('storage', checkLocalStorage);
-    window.addEventListener('localStorageChange', checkLocalStorage);
-    return () => {
-      window.removeEventListener('storage', checkLocalStorage);
-      window.removeEventListener('localStorageChange', checkLocalStorage);
-    };
-  }, []);
   const [isSatelliteView, setIsSatelliteView] = useState(false);
-
-  const handleToggleView = () => {
-    setIsSatelliteView(!isSatelliteView);
-  };
 
   return (
     <MapBox
@@ -150,48 +118,10 @@ function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; sock
       {openCancelPopup && <CancelPopup />}
       {openAlertPopup && <AlertPopup />}
       {openPendingPopup && <PendingPopup />}
-
-      <div className='absolute flex flex-col top-4 right-4 rounded-lg bg-opacity-70 bg-blue-200 p-2 z-50 w-fit'>
-        <div className='flex flex-row justify-center items-center z-50'>
-          {/* <Button
-            onClick={handleToggleView}
-            variant='text'
-            color='primary'
-            sx={{
-              padding: '10px',
-              zIndex: 1
-            }}
-          >
-            <img
-              className='w-10 h-10'
-              src={
-                isSatelliteView
-                  ? 'https://maps.gstatic.com/tactile/layerswitcher/ic_satellite-1x.png'
-                  : 'https://maps.gstatic.com/tactile/layerswitcher/ic_default_colors2-1x.png'
-              }
-            />
-          </Button> */}
-          {/* <Button
-            className={`!px-6 ${!isBellRingAlarm && '!bg-[var(--grey-primary-100)]'} `}
-            onClick={handleButtonClick}
-            variant='contained'
-            startIcon={isBellRingAlarm ? <BellRinging size={18} /> : <BellSlash size={18} />}
-            sx={{
-              padding: '10px',
-              zIndex: 1
-            }}
-          >
-            <Typography variant='button3' fontWeight={600}>
-              {t('alram-ring')}
-            </Typography>
-          </Button> */}
-        </div>
-        {/* <div ref={logContainerRef} className='flex flex-col overflow-y-scroll w-[320px] max-h-[700px]'>
-          {logs?.map((log) => <LocationLog log={log} />)}
-        </div> */}
-      </div>
     </MapBox>
   );
 }
 
 export default MapRight;
+
+
