@@ -153,7 +153,7 @@ function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; sock
 
       <div className='absolute flex flex-col top-4 right-4 rounded-lg bg-opacity-70 bg-blue-200 p-2 z-50 w-fit'>
         <div className='flex flex-row justify-center items-center z-50'>
-          <Button
+          {/* <Button
             onClick={handleToggleView}
             variant='text'
             color='primary'
@@ -170,8 +170,8 @@ function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; sock
                   : 'https://maps.gstatic.com/tactile/layerswitcher/ic_default_colors2-1x.png'
               }
             />
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             className={`!px-6 ${!isBellRingAlarm && '!bg-[var(--grey-primary-100)]'} `}
             onClick={handleButtonClick}
             variant='contained'
@@ -184,11 +184,11 @@ function MapRight({ data, mapRef, socketData }: { data: any[]; mapRef: any; sock
             <Typography variant='button3' fontWeight={600}>
               {t('alram-ring')}
             </Typography>
-          </Button>
+          </Button> */}
         </div>
-        <div ref={logContainerRef} className='flex flex-col overflow-y-scroll w-[320px] max-h-[700px]'>
+        {/* <div ref={logContainerRef} className='flex flex-col overflow-y-scroll w-[320px] max-h-[700px]'>
           {logs?.map((log) => <LocationLog log={log} />)}
-        </div>
+        </div> */}
       </div>
     </MapBox>
   );

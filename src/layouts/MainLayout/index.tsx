@@ -1,7 +1,7 @@
 import HeaderAccessTenant from './components/HeaderAccessTenant';
 import SideBar from './components/SideBar';
-import TopBar from './components/TopBar';
 import { Outlet, useLocation } from 'react-router-dom';
+import Header from './components/Header';
 
 export default function MainLayout() {
   const location = useLocation();
@@ -11,7 +11,8 @@ export default function MainLayout() {
     <>
       {tenantCode && <HeaderAccessTenant />}
       <div className={`flex flex-col min-h-screen ${tenantCode ? ' pt-14' : ''}`}>
-        <TopBar />
+        
+        <Header></Header>
         {/* Main content */}
         <div className='flex-1 overflow-y-auto'>
           <Outlet />

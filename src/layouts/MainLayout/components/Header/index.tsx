@@ -1,30 +1,34 @@
-import { AppBar, Avatar, Divider, Fade, Popper, Typography } from '@mui/material';
-import { BellSimple } from '@phosphor-icons/react';
-import { clearCookie, getRefreshTokenFromCookie } from '~/utils/auth';
-import { useContext, useState } from 'react';
-
+import TopBarSVG from '~/assets/topbar/topbar.svg';
+import { Avatar, Popper, Fade, Typography, Divider } from '@mui/material';
+import { useState, useContext, useEffect } from 'react';
 import { AppContext } from '~/contexts/app.context';
-import ButtonCustom from '~/components/ButtonCustom';
-import IconPhosphor from '~/assets/iconPhosphor';
-import Logo from '~/assets/images/svg/logo/Logo32.svg';
+import { clearCookie, getRefreshTokenFromCookie } from '~/utils/auth';
 import authService from '~/services/auth.service';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { FormatHourly, FormatDate } from '~/utils/formatDateTime'; // adjust path
+import LanguageMini from '~/pages/systemAdmin/SettingPage/components/Language/mini';
 
-export default function Header() {
-  const logoutMutation = useMutation({
-    mutationFn: (query: { refreshToken: string }) => {
-      return authService.logout(query);
-    }
-  });
+export default function TopHeader() {
+  const { userInfo, reset } = useContext(AppContext);
   const navigate = useNavigate();
-  const { reset, userInfo } = useContext(AppContext);
-  const [open, setOpen] = useState(false);
+  const logoutMutation = useMutation({
+    mutationFn: (query: { refreshToken: string }) => authService.logout(query)
+  });
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState(false);
+
+  const [dateTime, setDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setDateTime(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleOpenControl = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    setOpen((previousOpen) => !previousOpen);
+    setOpen((prev) => !prev);
   };
 
   const canBeOpen = open && Boolean(anchorEl);
@@ -45,65 +49,96 @@ export default function Header() {
   };
 
   return (
-    <AppBar className='w-screen !min-h-14 !bg-[white] !shadow-none border border-b border-[var(--border-color)]'>
-      <div className='flex h-full px-4 justify-between'>
-        <div className='flex items-center !min-h-14'>
-          <img src={Logo} alt='logo-tma' className='ml-3' />
-          <Typography variant='h6' className='text-[var(--text-primary)] !ml-6'>
-            Trung tâm điều hành - Phòng điều hành Phú Mỹ Hưng
-          </Typography>
-        </div>
-        <div className='flex items-center min-h-14 gap-3'>
-          <span className='p-1'>
-            <BellSimple size={24} color={'var(--text-primary)'} />
-          </span>
-          <div>
-            <Avatar
-              onClick={handleOpenControl}
-              className='!w-[32px] !h-[32px]'
-              alt={userInfo?.name || userInfo?.username}
-              src={userInfo?.avatarUrl}
-            />
+    <div className="relative w-full">
+      {/* TopBar SVG as background */}
+      <img
+        src={TopBarSVG}
+        alt="TopBar Background"
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-[110%] max-w-none pointer-events-none select-none z-40"
+      />
 
-            <Popper id={id} open={open} anchorEl={anchorEl} transition className=''>
-              {({ TransitionProps }) => (
-                <Fade {...TransitionProps} timeout={350}>
-                  <div className='bg-white border px-4 min-w-[250px] mr-4 mt-4 rounded-lg shadow-md'>
-                    <div className='flex py-2 gap-3 items-center'>
-                      <Avatar
-                        className='!w-[32px] !h-[32px]'
-                        alt={userInfo?.name || userInfo?.username}
-                        src={userInfo?.avatarUrl}
-                      />
-                      <div className='flex flex-col'>
-                        <Typography variant='label1'>{userInfo?.name || userInfo?.username}</Typography>
-                        <Typography variant='label4' color='var(--grey-neutral-500)'>
-                          {userInfo?.roles?.[0]}
-                        </Typography>
-                      </div>
-                    </div>
-                    <Divider />
-                    <div className='py-2'>
-                      <ButtonCustom
-                        variant='text'
-                        sx={{
-                          textDecoration: 'none !important'
-                        }}
-                        className='cursor-pointer w-full !justify-start text- hover:no-underline !px-0 gap-2'
-                      >
-                        <IconPhosphor iconName='SignOut' size={24} color='var(--text-secondary)' />
-                        <Typography onClick={handleLogout} className='!no-underline text-[var(--text-secondary)]'>
-                          Đăng xuất
-                        </Typography>
-                      </ButtonCustom>
-                    </div>
-                  </div>
-                </Fade>
-              )}
-            </Popper>
-          </div>
-        </div>
+      {/* Title */}
+      <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 flex justify-center w-full">
+        <Typography
+          className="
+            font-saira font-bold uppercase
+            text-[24px] leading-[32px]
+            tracking-normal text-white
+          "
+          style={{
+            textShadow: '0 0 8px rgba(124, 212, 253, 0.7), 0 0 16px rgba(124, 212, 253, 0.5)'
+          }}
+        >
+          Secure Vision
+        </Typography>
       </div>
-    </AppBar>
+
+      {/* Date and Time at 1/4 of the topbar width */}
+      <div className="fixed top-3 left-[25%] -translate-x-1/2 z-50 flex items-center gap-2">
+        <Typography
+          className="font-saira font-normal uppercase text-white"
+          style={{ fontSize: '18px', lineHeight: '28px' }}
+        >
+          {FormatHourly(dateTime)}
+        </Typography>
+        <Typography
+          className="font-saira font-small uppercase text-white opacity-80"
+          style={{ fontSize: '14px', lineHeight: '20px' }}
+        >
+          {FormatDate(dateTime)}
+        </Typography>
+      </div>
+
+      {/* Profile and Language at 3/4 of the topbar width */}
+      <div className="fixed top-2 left-[70%] z-50 flex items-center gap-3">
+        {/* Language selector button */}
+        <div className="h-full flex items-center">
+          <LanguageMini />
+        </div>
+        <div className="w-[2px] h-6 bg-white/20 rounded-full" />
+        {/* Profile avatar */}
+        <Avatar
+          onClick={handleOpenControl}
+          className="!w-[25px] !h-[25px] cursor-pointer"
+          alt={userInfo?.name || userInfo?.username}
+          src={userInfo?.avatarUrl}
+        />
+        <Typography
+            className="font-saira font-small uppercase text-white text-[14px] leading-[20px]"
+          >
+            {userInfo?.name || userInfo?.username}
+        </Typography>
+        <Popper id={id} open={open} anchorEl={anchorEl} transition>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={350}>
+              <div className="bg-white border px-4 min-w-[200px] rounded-lg shadow-md mt-4">
+                <div className="flex py-2 gap-3 items-center">
+                  <Avatar
+                    className="!w-[32px] !h-[32px]"
+                    alt={userInfo?.name || userInfo?.username}
+                    src={userInfo?.avatarUrl}
+                  />
+                  <div className="flex flex-col">
+                    <Typography variant="body1">{userInfo?.name || userInfo?.username}</Typography>
+                    <Typography variant="caption" color="var(--grey-neutral-500)">
+                      {userInfo?.roles?.[0]}
+                    </Typography>
+                  </div>
+                </div>
+                <Divider />
+                <div className="py-2">
+                  <Typography
+                    onClick={handleLogout}
+                    className="cursor-pointer text-[var(--text-secondary)] hover:text-[#7CD4FD]"
+                  >
+                    Đăng xuất
+                  </Typography>
+                </div>
+              </div>
+            </Fade>
+          )}
+        </Popper>
+      </div>
+    </div>
   );
 }

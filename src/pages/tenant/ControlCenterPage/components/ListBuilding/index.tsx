@@ -54,7 +54,7 @@ function ItemBuilding({
               sx={{ width: '56px', height: '56px', borderRadius: '10px !important' }}
             />
             <div className="flex-1 min-w-0">
-              <Typography variant="label2" className="truncate text-[17px] text-white">
+              <Typography variant="label2" className="word-wrap text-[17px] text-white">
                 {name}
               </Typography>
               <Typography variant="body3" className="truncate opacity-80 text-white">

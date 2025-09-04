@@ -150,48 +150,71 @@ export default function ControlCenterPage() {
     setIsDialogOpen(false); // Đóng dialog
   };
   return (
-    <div className={'overflow-hidden miniLaptop:flex block h-full'}>
-      <div className='block px-6 miniLaptop:hidden'>
-        <DataGridHeader
-          isSearch={false}
-          setKeyword={setKeyword}
-          title={t('monitoring')}
-          btnPopup={
-            <div onClick={handleDialogOpen} className='p-2 rounded-md bg-primary'>
-              <ListMagnifyingGlass size={20} color='white' />
-            </div>
-          }
-        />
+<div className="flex flex-col h-screen overflow-hidden relative">
+  {/* Header / search button for mobile */}
+  <div className="block px-6 miniLaptop:hidden z-20 relative">
+    <DataGridHeader
+      isSearch={false}
+      setKeyword={setKeyword}
+      title={t('monitoring')}
+      btnPopup={
+        <div onClick={handleDialogOpen} className="p-2 rounded-md bg-primary">
+          <ListMagnifyingGlass size={20} color="white" />
+        </div>
+      }
+    />
+  </div>
+
+  {/* Full-screen map */}
+  <div className="flex-1 relative w-full h-full">
+    <MapRight data={locations} socketData={socketData} mapRef={mapRef} />
+
+    {/* Left panel / search + list (desktop) */}
+    {!isSmallScreen && (
+      <div
+        className="absolute top-[10%] left-4 overflow-auto z-10"
+        style={{
+          width: '320px',
+          height: '80%',                  // 80% height
+          backgroundColor: '#030912A3',   // semi-transparent
+          boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+          border: '1px solid #36BFFA3D',  // Thin blue border
+        }}
+      >
+        <ListBuilding data={locations} mapRef={mapRef} />
       </div>
-      {!isSmallScreen && (
-        <div className='pt-6 px-4 bg-[white] border-r border-[var(--border-color)] min-w-[320px]'>
-          <SearchBox setKeyword={setKeyword} />
-          <ListBuilding data={locations} mapRef={mapRef} />
-        </div>
-      )}
-      <Dialog open={isDialogOpen} onClose={handleDialogClose} fullScreen fullWidth className='rounded-md'>
-        <div className='flex justify-between'>
-          <DialogTitle>{t('list-location')}</DialogTitle>
-          <IconButton onClick={handleDialogClose}>
-            <IconPhosphor iconName='X' size={24} />
-          </IconButton>
-        </div>
-        <div className='overflow-hidden'>
-          <div className='px-4'>
-            <SearchBox setKeyword={setKeyword} />
-            <ListBuilding closeDialog={handleDialogClose} data={locations} mapRef={mapRef} />
-          </div>
-        </div>
-      </Dialog>
-      <Box className='relative w-full miniLaptop:h-full h-[calc(100vh-56px)]' sx={popupStyles}>
-        <MapRight data={locations} socketData={socketData} mapRef={mapRef} />
-      </Box>
-      {/* <audio autoPlay>
-        <source
-          src='C:\\Users\\nghialt\\Works\\tma\\repos\\sCity\\src\\assets\\videos\\fire-alarm-33770.mp3'
-          type='audio/mpeg'
-        />
-      </audio> */}
+    )}
+
+    {/* Right panel */}
+    <div
+      className="absolute top-[10%] right-4 rounded-xl overflow-auto z-10"
+      style={{
+        width: '320px',
+        height: '80%',                  // same 80% height
+        backgroundColor: '#030912A3',   // semi-transparent
+        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+      }}
+    >
+      {/* You can put filters, details, or other content here */}
     </div>
+  </div>
+
+  {/* Mobile dialog */}
+  <Dialog open={isDialogOpen} onClose={handleDialogClose} fullScreen fullWidth className="rounded-md">
+    <div className="flex justify-between">
+      <DialogTitle>{t('list-location')}</DialogTitle>
+      <IconButton onClick={handleDialogClose}>
+        <IconPhosphor iconName="X" size={24} />
+      </IconButton>
+    </div>
+    <div className="overflow-hidden px-4">
+      <SearchBox setKeyword={setKeyword} />
+      <ListBuilding closeDialog={handleDialogClose} data={locations} mapRef={mapRef} />
+    </div>
+  </Dialog>
+</div>
+
+
+
   );
 }
