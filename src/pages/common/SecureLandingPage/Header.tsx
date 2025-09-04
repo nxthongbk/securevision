@@ -77,11 +77,7 @@ export default function Header({
                 >
                   <img
                     src={
-                      lang === 'en'
-                        ? '/public/flag_en_icon.svg'
-                        : lang === 'vi'
-                          ? '/public/flag_vn_icon.svg'
-                          : '/public/flag_jp_icon.svg'
+                      lang === 'en' ? '/flag_en_icon.svg' : lang === 'vi' ? '/flag_vn_icon.svg' : '/flag_jp_icon.svg'
                     }
                     alt={lang}
                     className='mr-2 h-5 w-6 object-cover align-middle'
