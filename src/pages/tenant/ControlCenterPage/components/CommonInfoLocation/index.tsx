@@ -11,19 +11,19 @@ interface IProps {
 export default function CommonInfoLocation({ info }: IProps) {
   const { t } = useTranslation();
   return (
-    <div className='flex flex-col '>
+    <div className='flex flex-col text-white  '>
       <div className='py-3 flex justify-center tablet:justify-start'>
-        <img src={Img} className='w-[72px] h-[72px] rounded-md ' />
+        <img src={Img} className='w-[72px] h-[72px]  ' />
       </div>
-      <div className='flex w-full bg-[#F2F5F7] px-4 py-3 rounded-md '>
-        <Typography variant='label2' className='w-[26%]'>
-          {t('fire-alerts-page.status')}
+      <div className='flex w-fullb px-4 py-3  '>
+        <Typography variant='label2' className='w-[26%] '>
+          {t('alarm-page.status')}
         </Typography>
         <Typography variant='body2' className='flex-1'>
           <StatusChip status={info?.status} />
         </Typography>
       </div>
-      <div className='flex w-full px-4 py-3 '>
+      <div className='flex w-full px-4 py-3 bg-[#00BCFF12]  '>
         <Typography variant='label2' className='w-[26%]'>
           ID
         </Typography>
@@ -31,23 +31,23 @@ export default function CommonInfoLocation({ info }: IProps) {
           {info?.code ? String(info?.code).padStart(4, '0') : ''}
         </Typography>
       </div>
-      <div className='flex w-full bg-[#F2F5F7] rounded-md px-4 py-3'>
+      <div className='flex w-full   px-4 py-3'>
         <Typography variant='label2' className='w-[26%]'>
           {t('locationPage.name')}
         </Typography>
-        <Typography variant='body2' className='flex-1'>
+        <Typography variant='body2' className='flex-1'> 
           {info?.name}
         </Typography>
       </div>
-      <div className='flex w-full px-4 py-3 '>
+      <div className='flex w-full px-4 py-3 bg-[#00BCFF12]  '>
         <Typography variant='label2' className='w-[26%]'>
-          {t('fire-alerts-page.address')}
+          {t('alarm-page.address')}
         </Typography>
         <Typography variant='body2' className='flex-1'>
           {info?.address}
         </Typography>
       </div>
-      <div className='flex w-full px-4 py-3 bg-[#F2F5F7] rounded-md '>
+      <div className='flex w-full px-4 py-3  '>
         <Typography variant='label2' className='w-[26%]'>
           {t('locationPage.coordinate')}
         </Typography>
@@ -56,12 +56,12 @@ export default function CommonInfoLocation({ info }: IProps) {
         </Typography>
       </div>
 
-      <div className='flex w-full px-4 py-3 '>
+      <div className='flex w-full px-4 py-3 bg-[#00BCFF12] '>
         <Typography variant='label2' className='w-[26%]'>
           {t('locationPage.manager')}
         </Typography>
         <div className='flex items-center gap-2'>
-          <img src={Img} className='w-[32px] h-[32px] rounded-md' />
+          <img src={Img} className='w-[32px] h-[32px] ' />
           <div className='flex flex-col'>
             <Typography variant='body2' className='flex-1'>
               {info?.operatorInfo?.name}

@@ -16,7 +16,7 @@ import { useGetDashboards } from '../../../handleApi';
 
 export default function LocationPopup() {
   const [locationTranslate] = useTranslation('', { keyPrefix: 'locationPage' });
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
   const { openLocationPopup, setOpenLocationPopup } = useContext(AppContext);
   const [cameraList, setCameraList] = useState([]);
   const { tenantCode } = useTenantCode();
@@ -38,44 +38,48 @@ export default function LocationPopup() {
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
-  const title = fireAlertTranslate('location-information');
+  const title = alarmTranslate('location-information');
 
   const renderBody = () => (
     <div className='flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6'>
-      <div className='flex flex-col tablet:grid grid-cols-2 gap-6 tablet:gap-12'>
+
+      {/* Common Info section */}
+      <div className=' p-4 '>
         <CommonInfoLocation info={openLocationPopup} />
-        <div>
-          <Typography variant='label1'>{fireAlertTranslate('warning')}</Typography>
-          <Typography variant='body1' className='text-[var(--text-secondary)]'>
-            {fireAlertTranslate('no-alarm')}
-          </Typography>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <Typography variant='label1'>Dashboard</Typography>
-          <div className='overflow-y-scroll flex flex-col'>
-            {dashboards.length > 0 ? dashboards.map((item) => {
-              return (
-                <MenuItem
-                  key={item.id}
-                  title={item.name}
-                  img={item.imageUrl}
-                  onClick={() => navigate(`/dashboard/${item.id}`)}
-                  tenantCode={tenantCode}
-                  data={item}
-                />
-              );
-            }) : (
-              <Typography variant='body1' className='text-[var(--text-secondary)]'>
-                No dashboards
-              </Typography>
-            )
-          }
-          </div>
+      </div>
+
+      {/* Warning section */}
+      <div className='bg-[#FF1F1F] p-4 '>
+        <Typography variant='label1'>{alarmTranslate('warning')}</Typography>
+        <Typography variant='body1' className='text-[var(--text-secondary)]'>
+          {alarmTranslate('no-alarm')}
+        </Typography>
+      </div>
+
+      {/* Dashboard section */}
+      <div className='flex flex-col gap-2 bg-[#161B29] p-4'>
+        <Typography variant='label1'>Dashboard</Typography>
+        <div className='overflow-y-scroll flex flex-col'>
+          {dashboards.length > 0 ? dashboards.map((item) => (
+            <MenuItem
+              key={item.id}
+              title={item.name}
+              img={item.imageUrl}
+              onClick={() => navigate(`/dashboard/${item.id}`)}
+              tenantCode={tenantCode}
+              data={item}
+            />
+          )) : (
+            <Typography variant='body1' className='text-[var(--text-secondary)]'>
+              No dashboards
+            </Typography>
+          )}
         </div>
       </div>
 
+      {/* Camera section */}
       {cameraList?.length > 0 && (
-        <div className='flex flex-col gap-3 '>
+        <div className='flex flex-col gap-3 bg-[#0D1117] p-4 rounded'>
           <Typography variant='label1'>Camera</Typography>
           <CarouselCustom>
             {cameraList.map((deviceInfo, index) => (
@@ -86,8 +90,10 @@ export default function LocationPopup() {
           </CarouselCustom>
         </div>
       )}
+
     </div>
   );
+
 
   return (
     <>
