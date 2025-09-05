@@ -84,7 +84,7 @@ function MapRight({
       const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
       for (const coord of coordinates) bounds.extend(coord);
       if (bounds['_ne'] && bounds['_sw']) {
-        map.fitBounds(bounds, { padding: { top: 100, bottom: 20, left: 20, right: 20 } });
+        map.fitBounds(bounds, { padding: { top: 150, bottom: 20, left: 20, right: 20 }, maxZoom: 13});
       }
     }
   }, [coordinates, map]);

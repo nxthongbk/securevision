@@ -105,7 +105,7 @@ export default function ListBuilding({ data, mapRef, closeDialog }: { data: any[
           <div style={{ display: selectedFilter.includes('ALARM') ? 'block' : 'none' }}>
             <div className="sticky top-0 z-10 -mx-2 px-2 py-2 bg-[rgba(8,16,26,0.9)] backdrop-blur">
               <Typography variant="label2" className="tracking-wide text-[#36BFFA]">
-                {t('fire-locations')} ({warningData?.length})
+                {t('alarm-locations')} ({warningData?.length})
               </Typography>
             </div>
 
@@ -135,7 +135,7 @@ export default function ListBuilding({ data, mapRef, closeDialog }: { data: any[
       <div style={{ display: !selectedFilter.includes('ACTIVE') ? 'none' : 'block' }}>
         <div className="sticky top-0 z-10 -mx-2 px-2 py-2 bg-[rgba(8,16,26,0.9)] backdrop-blur">
           <Typography variant="label2" className="tracking-wide text-[#36BFFA]">
-            {t('all-locations')} ({data?.length})
+            {t('all-locations')} ({data?.length}) 
           </Typography>
         </div>
 

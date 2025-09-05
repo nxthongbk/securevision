@@ -20,6 +20,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
 import { useTranslation } from 'react-i18next';
 import LocationLog, { ILocationLog } from './components/LocationLog';
+import { Typography } from '@mui/material';
 
 const SOCKET_URL = import.meta.env.VITE_API_HOST + '/websocket/ws';
 
@@ -180,7 +181,7 @@ export default function ControlCenterPage() {
         {/* Left panel */}
         {!isSmallScreen && (
           <div
-            className="absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-md"
+            className="absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-md scrollbar-hide"
             style={{
               width: '320px',
               height: '80%',
@@ -195,7 +196,7 @@ export default function ControlCenterPage() {
 
         {/* Right panel for logs */}
         <div
-          className="absolute top-[10%] right-4 overflow-auto z-10 backdrop-blur-md"
+          className="absolute top-[10%] right-4 overflow-hidden z-10 backdrop-blur-md"
           style={{
               width: '320px',
               height: '80%',
@@ -204,10 +205,20 @@ export default function ControlCenterPage() {
               border: '1px solid #36BFFA3D',
           }}
         >
-          <div ref={logContainerRef} className="flex flex-col overflow-y-scroll max-h-full p-2">
-            {logs.map((log, index) => (
-              <LocationLog key={index} log={log} />
-            ))} 
+          <div className="flex flex-col h-full">
+            {/* Sticky Header */}
+            <div className="sticky top-0 z-10 px-2 py-2 bg-[rgba(8,16,26,0.9)] backdrop-blur">
+              <Typography variant="label2" className="tracking-wide text-[#36BFFA]">
+                Device Statistics
+              </Typography>
+            </div>
+
+            {/* Scrollable logs */}
+            <div ref={logContainerRef} className="flex-1 overflow-y-auto p-2">
+              {logs.map((log, index) => (
+                <LocationLog key={index} log={log} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

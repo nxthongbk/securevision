@@ -32,7 +32,7 @@ export default function PendingPopup() {
   const [selectedAlarmLocationId, setSelectedAlarmLocationId] = useState<string>('');
   const { tenantCode } = useTenantCode();
   const [cameraList, setCameraList] = useState([]);
-  const timeoutId = useRef<NodeJS.Timeout>();
+  const timeoutId = useRef<NodeJS.Timeout>(); 
   const socket = new SockJS(SOCKET_URL);
   const { data: detail } = useGetLocationDetail(openPendingPopup?.id, tenantCode);
   const { status, data } = useGetAlarmPendingLocationInfo(openPendingPopup?.id, tenantCode);
