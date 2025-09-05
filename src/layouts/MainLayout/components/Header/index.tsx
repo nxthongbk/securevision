@@ -1,5 +1,6 @@
 import TopBarSVG from '~/assets/uisvg/HeaderSVG/topbar.svg';
-import { Avatar, Popper, Fade, Typography, Divider } from '@mui/material';
+import { Avatar, Popper, Fade, Typography, Divider, IconButton } from '@mui/material';
+import { BellRinging, BellSlash } from '@phosphor-icons/react';
 import { useState, useContext, useEffect } from 'react';
 import { AppContext } from '~/contexts/app.context';
 import { clearCookie, getRefreshTokenFromCookie } from '~/utils/auth';
@@ -12,6 +13,31 @@ import LanguageMini from '~/pages/systemAdmin/SettingPage/components/Language/mi
 export default function TopHeader() {
   const { userInfo, reset } = useContext(AppContext);
   const navigate = useNavigate();
+
+  // 🔔 Alarm state
+  const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
+
+  const handleAlarmToggle = () => {
+    const newValue = !isBellRingAlarm;
+    setIsBellRingAlarm(newValue);
+    localStorage.setItem('isBellRingAlarm', newValue.toString());
+    window.dispatchEvent(new Event('localStorageChange'));
+  };
+
+  useEffect(() => {
+    const checkLocalStorage = () => {
+      const isBell = localStorage.getItem('isBellRingAlarm') === 'true';
+      setIsBellRingAlarm(isBell);
+    };
+    checkLocalStorage();
+    window.addEventListener('storage', checkLocalStorage);
+    window.addEventListener('localStorageChange', checkLocalStorage);
+    return () => {
+      window.removeEventListener('storage', checkLocalStorage);
+      window.removeEventListener('localStorageChange', checkLocalStorage);
+    };
+  }, []);
+
   const logoutMutation = useMutation({
     mutationFn: (query: { refreshToken: string }) => authService.logout(query)
   });
@@ -77,49 +103,70 @@ export default function TopHeader() {
       <div className="fixed top-3 left-[25%] -translate-x-1/2 z-50 flex items-center gap-2">
         <Typography
           className="font-saira font-normal uppercase text-white"
-          style={{ fontSize: '18px', lineHeight: '28px' }}
+          style={{ fontSize: '16px', lineHeight: '24px' }}
         >
           {FormatHourly(dateTime)}
         </Typography>
         <Typography
           className="font-saira font-small uppercase text-white opacity-80"
-          style={{ fontSize: '14px', lineHeight: '20px' }}
+          style={{ fontSize: '12px', lineHeight: '18px' }}
         >
           {FormatDate(dateTime)}
         </Typography>
       </div>
 
-      {/* Profile and Language at 3/4 of the topbar width */}
-      <div className="fixed top-2 left-[70%] z-50 flex items-center gap-3">
-        {/* Language selector button */}
+      {/* Profile + Language + Alarm at 3/4 of the topbar width */}
+      <div className="fixed top-2 left-[70%] z-50 flex items-center gap-2 scale-90">
+        {/* Language selector */}
         <div className="h-full flex items-center">
           <LanguageMini />
         </div>
-        <div className="w-[2px] h-6 bg-white/20 rounded-full" />
-        {/* Profile avatar */}
+
+        {/* 🔔 Alarm toggle beside Language */}
+        <IconButton
+          onClick={handleAlarmToggle}
+          sx={{
+            width: 32,
+            height: 32,
+            borderRadius: '6px',
+            backgroundColor: 'transparent', // clear background
+            color: isBellRingAlarm ? 'var(--primary-main)' : 'var(--grey-primary-200)',
+            '&:hover': {
+              backgroundColor: 'rgba(255,255,255,0.08)',
+            },
+          }}
+        >
+          {isBellRingAlarm ? <BellRinging size={18} /> : <BellSlash size={18} />}
+        </IconButton>
+
+        <div className="w-[1px] h-5 bg-white/20 rounded-full" />
+
+        {/* Profile */}
         <Avatar
           onClick={handleOpenControl}
-          className="!w-[25px] !h-[25px] cursor-pointer"
+          className="!w-[22px] !h-[22px] cursor-pointer"
           alt={userInfo?.name || userInfo?.username}
           src={userInfo?.avatarUrl}
         />
         <Typography
-            className="font-saira font-small uppercase text-white text-[14px] leading-[20px]"
-          >
-            {userInfo?.name || userInfo?.username}
+          className="font-saira font-small uppercase text-white text-[12px] leading-[18px]"
+        >
+          {userInfo?.name || userInfo?.username}
         </Typography>
+
+        {/* Popper */}
         <Popper id={id} open={open} anchorEl={anchorEl} transition>
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
               <div className="bg-white border px-4 min-w-[200px] rounded-lg shadow-md mt-4">
                 <div className="flex py-2 gap-3 items-center">
                   <Avatar
-                    className="!w-[32px] !h-[32px]"
+                    className="!w-[28px] !h-[28px]"
                     alt={userInfo?.name || userInfo?.username}
                     src={userInfo?.avatarUrl}
                   />
                   <div className="flex flex-col">
-                    <Typography variant="body1">{userInfo?.name || userInfo?.username}</Typography>
+                    <Typography variant="body2">{userInfo?.name || userInfo?.username}</Typography>
                     <Typography variant="caption" color="var(--grey-neutral-500)">
                       {userInfo?.roles?.[0]}
                     </Typography>
