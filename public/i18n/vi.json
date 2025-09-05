@@ -552,11 +552,13 @@
   "chosse-template": "Chọn template",
   "addition-information": "Thêm thông tin",
   "fire-locations": "Các địa điểm cháy",
+  "alarm-locations": "Vị trí báo động", 
   "view-detail": "Xem chi tiết",
   "connectors": "Số thiết bị kết nối",
   "apply": "Áp dụng",
   "Đặt lại": "Đặt lại",
   "list-location": "Danh sách địa điểm",
+  "device-statistics": "Thống kê thiết bị",
   "set-alarm-successfully": "Cài cảnh báo thành công",
   "secureLandingPage": {
     "languages": {

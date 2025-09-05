@@ -209,7 +209,7 @@ export default function ControlCenterPage() {
             {/* Sticky Header */}
             <div className="sticky top-0 z-10 px-2 py-2 bg-[rgba(8,16,26,0.9)] backdrop-blur">
               <Typography variant="label2" className="tracking-wide text-[#36BFFA]">
-                Device Statistics
+                {t('device-statistics')}
               </Typography>
             </div>
 
