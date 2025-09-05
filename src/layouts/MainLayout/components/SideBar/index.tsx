@@ -19,13 +19,14 @@ const MenuItem = ({ path, title, bindActive = false }: IMenuItemProps) => {
   const isActive = path === location.pathname || bindActive;
   const baseClass =
     'relative px-4 py-2 font-semibold text-sm transition-colors flex flex-col items-center text-white hover:text-[#7CD4FD]';
-
   const activeClass =
     'text-[#7CD4FD] ' +
-  
     'before:content-[""] before:absolute before:left-1/2 before:-translate-x-1/2 ' +
     'before:-bottom-3 before:w-8 before:h-3 before:rounded-full ' +
-    'before:bg-[#7CD4FD] before:blur-md before:opacity-70';
+    'before:bg-[#7CD4FD] before:opacity-80 before:blur-md ' +
+    'pulsate';
+
+
 
 
   return (
