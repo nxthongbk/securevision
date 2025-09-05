@@ -13,24 +13,24 @@ export default function PopupDetail({
   alertDetail: Record<string, any> | null;
   onClose: () => void;
 }) {
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
 
   const fields = [
     { label: 'ID', value: alertDetail.id, key: 'id' },
-    { label: fireAlertTranslate('location'), value: alertDetail.location, key: 'location' },
-    { label: fireAlertTranslate('alarm-device'), value: '000001', key: 'alarmDevice' },
+    { label: alarmTranslate('location'), value: alertDetail.location, key: 'location' },
+    { label: alarmTranslate('alarm-device'), value: '000001', key: 'alarmDevice' },
     {
-      label: fireAlertTranslate('start-time'),
+      label: alarmTranslate('start-time'),
       value: FormatTime(alertDetail.startTime),
       key: 'startTime'
     },
     {
-      label: fireAlertTranslate('end-time'),
+      label: alarmTranslate('end-time'),
       value: '-',
       key: 'endTime'
     },
     {
-      label: fireAlertTranslate('status'),
+      label: alarmTranslate('status'),
       value: alertDetail.status,
       key: 'status'
     }
@@ -67,7 +67,7 @@ export default function PopupDetail({
   return (
     <DialogCustom
       open={open}
-      title={fireAlertTranslate('fire-alert-info')}
+      title={alarmTranslate('fire-alert-info')}
       maxWidth='600px'
       handleClose={onClose}
       content={

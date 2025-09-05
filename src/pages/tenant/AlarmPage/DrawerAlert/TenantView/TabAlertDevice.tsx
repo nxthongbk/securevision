@@ -8,7 +8,7 @@ import { translationCapitalFirst } from '~/utils/translate';
 import { useMemo } from 'react';
 
 function TabAlertDevice({ deviceAlarms }) {
-  const translate = (text: string) => translationCapitalFirst(text, 'fire-alerts-page');
+  const translate = (text: string) => translationCapitalFirst(text, 'alarm-page');
 
   const rows = useMemo(() => {
     return deviceAlarms.map((alarm) => ({
@@ -44,7 +44,7 @@ const ColumnsAttribute = () => {
     <Typography variant='label3'>{params.colDef.headerName}</Typography>
   );
 
-  const translate = (text: string) => translationCapitalFirst(text, 'fire-alerts-page');
+  const translate = (text: string) => translationCapitalFirst(text, 'alarm-page');
   const columns: GridColDef[] = [
     {
       field: 'updateTime',

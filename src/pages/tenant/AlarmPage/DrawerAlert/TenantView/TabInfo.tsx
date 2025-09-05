@@ -9,7 +9,7 @@ type Data = {
   value: string;
 };
 function TabInfo({ alertDetail }: Readonly<{ alertDetail: Record<string, any> }>) {
-  const translate = (text: string) => translationCapitalFirst(text, 'fire-alerts-page');
+  const translate = (text: string) => translationCapitalFirst(text, 'alarm-page');
 
   const data: Data[] = [
     { key: 'id', label: 'ID', value: alertDetail.code },

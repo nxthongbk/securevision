@@ -55,7 +55,7 @@ export default function PopupAlertInfor({
   tenantCode: string;
   hasEdit: boolean;
 }>) {
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
   const [value, setValue] = useState(0);
   const { data } = useGetAlarmLocationByAlarmLocationId(alarmLocationId, tenantCode);
   const alarmDetail = data?.data || {};
@@ -78,14 +78,14 @@ export default function PopupAlertInfor({
       <Drawer open={open} onClose={onClose} anchor='right'>
         <Box sx={{ width: 1024 }} className='p-6 gap-4 flex flex-col flex-1' role='presentation'>
           <div className='h-10 flex justify-between items-start'>
-            <Typography variant='h4'>{fireAlertTranslate('warning')}</Typography>
+            <Typography variant='h4'>{alarmTranslate('warning')}</Typography>
             {showAlarmAction && (
               <div className='flex gap-4'>
                 <ButtonCustom onClick={handleSkipAlarm} variant='outlined' startIcon={<X />} className='!font-semibold'>
-                  <Typography variant='button3'>{fireAlertTranslate('skip')}</Typography>
+                  <Typography variant='button3'>{alarmTranslate('skip')}</Typography>
                 </ButtonCustom>
                 <ButtonCustom onClick={handleVerifyAlarm} variant='contained' startIcon={<Check />}>
-                  <Typography variant='button3'>{fireAlertTranslate('verify')}</Typography>
+                  <Typography variant='button3'>{alarmTranslate('verify')}</Typography>
                 </ButtonCustom>
               </div>
             )}
@@ -93,8 +93,8 @@ export default function PopupAlertInfor({
 
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
-              <Tab label={fireAlertTranslate('info')} {...a11yProps(0)} />
-              <Tab label={fireAlertTranslate('alarm-device')} {...a11yProps(1)} />
+              <Tab label={alarmTranslate('info')} {...a11yProps(0)} />
+              <Tab label={alarmTranslate('alarm-device')} {...a11yProps(1)} />
               <Tab label={'Camera'} {...a11yProps(2)} />
             </Tabs>
           </Box>

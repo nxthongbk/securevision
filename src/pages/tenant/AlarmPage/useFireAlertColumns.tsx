@@ -14,7 +14,7 @@ const renderHeader = (params: GridColumnHeaderParams) => (
 );
 
 export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdit) {
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
 
   const menuOptions = useMemo(
     () => (alarmLocationId) =>
@@ -22,21 +22,21 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
         ? [
             {
               icon: <Check size={20} />,
-              title: fireAlertTranslate('verify'),
+              title: alarmTranslate('verify'),
               onClick: () => {
                 onVerify(alarmLocationId);
               }
             },
             {
               icon: <X size={20} />,
-              title: fireAlertTranslate('skip'),
+              title: alarmTranslate('skip'),
               onClick: () => {
                 onSkip(alarmLocationId);
               }
             }
           ]
         : [],
-    [fireAlertTranslate, onSkip, onVerify]
+    [alarmTranslate, onSkip, onVerify]
   );
 
   const columns: GridColDef[] = useMemo(() => {
@@ -52,7 +52,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
       },
       {
         field: 'location',
-        headerName: fireAlertTranslate('location'),
+        headerName: alarmTranslate('location'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -69,7 +69,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
       },
       {
         field: 'startTime',
-        headerName: fireAlertTranslate('start'),
+        headerName: alarmTranslate('start'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -79,7 +79,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
       },
       {
         field: 'endTime',
-        headerName: fireAlertTranslate('end'),
+        headerName: alarmTranslate('end'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -88,8 +88,8 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
           if (isLaptop) return <Typography variant='label3'>{params.colDef.headerName}</Typography>;
           return (
             <Stack>
-              <Typography variant='label3'>{fireAlertTranslate('start')}</Typography>
-              <Typography variant='label3'>{fireAlertTranslate('end')}</Typography>
+              <Typography variant='label3'>{alarmTranslate('start')}</Typography>
+              <Typography variant='label3'>{alarmTranslate('end')}</Typography>
             </Stack>
           );
         },
@@ -115,7 +115,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
       },
       {
         field: 'verify',
-        headerName: fireAlertTranslate('verify'),
+        headerName: alarmTranslate('verify'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -134,7 +134,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
       },
       {
         field: 'status',
-        headerName: fireAlertTranslate('status'),
+        headerName: alarmTranslate('status'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -145,7 +145,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
 
       {
         field: 'actions',
-        headerName: fireAlertTranslate('action'),
+        headerName: alarmTranslate('action'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -155,7 +155,7 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
           const showMenuOptions = [AlarmStatus.PENDING, AlarmStatus.ALARM].includes(params.row.status);
           return (
             <ActionMenu
-              label={fireAlertTranslate('view-info')}
+              label={alarmTranslate('view-info')}
               onClick={() => onDetail(params.row.id)}
               menuOptions={showMenuOptions ? menuOptions(params.row.id) : []}
             />
@@ -163,6 +163,6 @@ export function useFireAlertColumns(onDetail, onSkip, onVerify, isLaptop, hasEdi
         }
       }
     ];
-  }, [fireAlertTranslate, isLaptop, menuOptions, onDetail]);
+  }, [alarmTranslate, isLaptop, menuOptions, onDetail]);
   return { columns };
 }

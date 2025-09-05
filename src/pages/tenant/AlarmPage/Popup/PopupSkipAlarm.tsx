@@ -24,11 +24,11 @@ export default function PopupSkipAlarm({
   alarmLocationId: string;
   tenantCode: string;
 }) {
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
   const {mutate, isPending, isSuccess} = useUpdateAlarmStatusOfLocation();
   const queryClient = useQueryClient();
   const skipSchema = yup.object({
-    reason: yup.string().required(fireAlertTranslate('please-select-reason'))
+    reason: yup.string().required(alarmTranslate('please-select-reason'))
   });
 
   const {
@@ -58,7 +58,7 @@ export default function PopupSkipAlarm({
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
-  const title = fireAlertTranslate('verify-alert');
+  const title = alarmTranslate('verify-alert');
 
   return (
     <>
@@ -67,10 +67,10 @@ export default function PopupSkipAlarm({
           <InputCustom
             classNameContainer='w-full'
             isRequired
-            label={fireAlertTranslate('reason')}
+            label={alarmTranslate('reason')}
             control={control}
             name='reason'
-            placeholder={fireAlertTranslate('enter-reason')}
+            placeholder={alarmTranslate('enter-reason')}
             isError={!!errors.reason}
             helperText={errors?.reason?.message}
           />
@@ -78,16 +78,16 @@ export default function PopupSkipAlarm({
       ) : (
         <DialogCustom
           open={open}
-          title={fireAlertTranslate('skip-alert')}
+          title={alarmTranslate('skip-alert')}
           maxWidth='600px'
           handleClose={onClose}
           footer={
             <div className='flex gap-4'>
               <ButtonCustom onClick={onClose} variant='outlined' startIcon={<X />} className='!font-semibold'>
-                <Typography variant='button3'>{fireAlertTranslate('cancel')}</Typography>
+                <Typography variant='button3'>{alarmTranslate('cancel')}</Typography>
               </ButtonCustom>
               <ButtonCustom onClick={handleSkip} variant='contained' startIcon={<Check />} disabled={!isValid}>
-                <Typography variant='button3'>{fireAlertTranslate('save')}</Typography>
+                <Typography variant='button3'>{alarmTranslate('save')}</Typography>
               </ButtonCustom>
             </div>
           }
@@ -96,10 +96,10 @@ export default function PopupSkipAlarm({
               <InputCustom
                 classNameContainer='w-full'
                 isRequired
-                label={fireAlertTranslate('reason')}
+                label={alarmTranslate('reason')}
                 control={control}
                 name='reason'
-                placeholder={fireAlertTranslate('enter-reason')}
+                placeholder={alarmTranslate('enter-reason')}
                 isError={!!errors.reason}
                 helperText={errors?.reason?.message}
               />
