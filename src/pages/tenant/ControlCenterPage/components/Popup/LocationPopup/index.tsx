@@ -49,8 +49,8 @@ export default function LocationPopup() {
       </div>
 
       {/* Warning section */}
-      <div className='bg-[#FF1F1F] p-4 '>
-        <Typography variant='label1'>{alarmTranslate('warning')}</Typography>
+      <div className='bg-[#0D1117] p-4 '>
+        <Typography variant='label1'className='text-white'>{alarmTranslate('warning')}</Typography>
         <Typography variant='body1' className='text-[var(--text-secondary)]'>
           {alarmTranslate('no-alarm')}
         </Typography>
@@ -58,7 +58,7 @@ export default function LocationPopup() {
 
       {/* Dashboard section */}
       <div className='flex flex-col gap-2 bg-[#161B29] p-4'>
-        <Typography variant='label1'>Dashboard</Typography>
+        <Typography variant='label1' className='text-white'>Dashboard</Typography>
         <div className='overflow-y-scroll flex flex-col'>
           {dashboards.length > 0 ? dashboards.map((item) => (
             <MenuItem
