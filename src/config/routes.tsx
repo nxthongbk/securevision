@@ -4,7 +4,7 @@ import { AppContext } from '~/contexts/app.context';
 import AuthLayout from '~/layouts/AuthLayout';
 import ControlCenterPage from '~/pages/tenant/ControlCenterPage';
 import DevicePage from '~/pages/tenant/DevicePage';
-import FireAlertPage from '~/pages/tenant/FireAlertPage';
+import AlarmPage from '~/pages/tenant/AlarmPage';
 import HumanResourcesPage from '~/pages/tenant/HumanResourcesPage';
 import LocationPage from '~/pages/tenant/LocationPage';
 import MainLayout from '~/layouts/MainLayout';
@@ -54,8 +54,8 @@ const tenantRoutes: RouteObject[] = [
     element: <DevicePage />
   },
   {
-    path: ROUTES.FIRE_ALERTS,
-    element: <FireAlertPage />
+    path: ROUTES.ALARM,
+    element: <AlarmPage />
   },
   {
     path: ROUTES.LOCATION,
@@ -122,8 +122,8 @@ const systemAdminRoutes: RouteObject[] = [
     element: <DevicePage />
   },
   {
-    path: ROUTES.FIRE_ALERTS,
-    element: <FireAlertPage />
+    path: ROUTES.ALARM,
+    element: <AlarmPage />
   },
   {
     path: ROUTES.LOCATION,

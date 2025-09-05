@@ -24,8 +24,8 @@ import { useTranslation } from 'react-i18next';
 import { usePermissions } from '~/utils/hooks/usePermission';
 import ForbiddenPage from '~/pages/common/403';
 
-function FireAlertPage() {
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+function AlarmPage() {
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
 
   const theme = useTheme();
   const isLaptop = useMediaQuery(theme.breakpoints.up('laptop'));
@@ -162,13 +162,13 @@ function FireAlertPage() {
   const filter: ResizableHeaderFilter[] = [
     {
       id: 'location',
-      label: fireAlertTranslate('location'),
+      label: alarmTranslate('location'),
       onChange(e: ChangeEvent<HTMLSelectElement>) {
         setLocationFilter(e?.target?.value);
       },
       value: locationFilter,
       isHiddenPlacehoder: !locationFilter,
-      placeholder: fireAlertTranslate('select-location'),
+      placeholder: alarmTranslate('select-location'),
       option: locationOptions,
       sizes: {
         miniLaptop: 4,
@@ -178,14 +178,14 @@ function FireAlertPage() {
     },
     {
       id: 'choose-status',
-      label: 'fire-alerts-page.status',
+      label: 'alarm-page.status',
       onChange(e: SelectChangeEvent<string>) {
         setStatus(e.target.value as AlarmStatus);
         setPage(1);
       },
       value: status,
       isHiddenPlacehoder: status === '',
-      placeholder: 'fire-alerts-page.select-status',
+      placeholder: 'alarm-page.select-status',
       option: statusFilterOptions,
       sizes: {
         miniLaptop: 4,
@@ -195,7 +195,7 @@ function FireAlertPage() {
     },
     {
       id: 'choose-due-date',
-      label: 'fire-alerts-page.start-time',
+      label: 'alarm-page.start-time',
       isDateRangeFilter: true,
       onChange: handleChangeStartTime,
       value: {
@@ -211,14 +211,14 @@ function FireAlertPage() {
 
   if (!hasEdit && !hasView) {
     return (
-      <HandleScrollPage props={{ title: fireAlertTranslate('management') }}>
+      <HandleScrollPage props={{ title: alarmTranslate('management') }}>
         <ForbiddenPage />
       </HandleScrollPage>
     );
   }
 
   return (
-    <HandleScrollPage props={{ title: fireAlertTranslate('management') }}>
+    <HandleScrollPage props={{ title: alarmTranslate('management') }}>
       <ResizableHeader
         isSearch
         keyword={keyword}
@@ -226,7 +226,7 @@ function FireAlertPage() {
         filter={filter}
         handleResetFilter={handleResetFilter}
         disableResetFilter={disableResetFiter}
-        title={fireAlertTranslate('management')}
+        title={alarmTranslate('management')}
       />
       <CustomDataGrid
         rows={tableRows}
@@ -237,8 +237,8 @@ function FireAlertPage() {
         setSize={setSize}
         total={totalRecords}
         rowHeight={56}
-        emptyMessage={fireAlertTranslate('no-data')}
-        explainName={fireAlertTranslate('line')}
+        emptyMessage={alarmTranslate('no-data')}
+        explainName={alarmTranslate('line')}
         loading={isLoading}
         columnsVisible={{
           startTime: isLaptop
@@ -275,4 +275,4 @@ function FireAlertPage() {
   );
 }
 
-export default FireAlertPage;
+export default AlarmPage;

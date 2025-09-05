@@ -64,9 +64,9 @@ export function useSidebarOptions() {
       },
       {
         id: 3,
-        title: sidebarTranslate('fire-alerts-page'),
+        title: sidebarTranslate('alarm-page'),
         icon: <FireSimple size={20} />,
-        path: ROUTES.FIRE_ALERTS
+        path: ROUTES.ALARM
       },
       {
         id: 4,

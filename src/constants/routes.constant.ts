@@ -7,7 +7,7 @@ const ROUTES = {
   DEVICE_PROFILE: '/device-profile',
   LOCATION: '/location',
   REPORT: '/report',
-  FIRE_ALERTS: '/fire-alerts',
+  ALARM: '/alarm-management',
   HUMAN_RESOURCES: '/human-resources',
   CUSTOMER_MANAGEMENT: '/customer-management',
   TENANT: '/tenant/:tenantCode',

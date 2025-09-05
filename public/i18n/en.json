@@ -310,7 +310,7 @@
     "select-status": "Select Status",
     "reset-password": "Reset password"
   },
-  "fire-alerts-page": {
+  "alarm-page": {
     "management": "Alarm Management",
     "location": "Location",
     "address": "Address",
@@ -453,6 +453,7 @@
     "device-management": "Device Management",
     "monitor": "Monitor",
     "fire-alerts-page": "Fire Alerts Management",
+    "alarm-page": "Alarm Management",
     "location-management": "Location Management",
     "report": "Report",
     "tool": "Tool",

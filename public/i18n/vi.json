@@ -326,7 +326,7 @@
     "only-start-with-0": "Số điện thoại gồm 10 số và bắt đầu bằng “0”",
     "reset-password-success": "Đặt lại mật khẩu mặc định thành công"
   },
-  "fire-alerts-page": {
+  "alarm-page": {
     "management": "Quản lý cảnh báo",
     "location": "Địa điểm",
     "address": "Địa chỉ",
@@ -474,6 +474,7 @@
     "device-management": "Quản lý thiết bị",
     "monitor": "Giám sát",
     "fire-alerts-page": "Quản lý báo cháy",
+    "alarm-page": "Quản lý cảnh báo",
     "location-management": "Quản lý địa điểm",
     "hr-management": "Quản lý nhân sự",
     "report": "Báo cáo",
