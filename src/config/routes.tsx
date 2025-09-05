@@ -5,7 +5,7 @@ import AuthLayout from '~/layouts/AuthLayout';
 import ControlCenterPage from '~/pages/tenant/ControlCenterPage';
 import DevicePage from '~/pages/tenant/DevicePage';
 import AlarmPage from '~/pages/tenant/AlarmPage';
-import HumanResourcesPage from '~/pages/tenant/HumanResourcesPage';
+import UserPage from '~/pages/tenant/UserPage';
 import LocationPage from '~/pages/tenant/LocationPage';
 import MainLayout from '~/layouts/MainLayout';
 import NotFoundPage from '~/pages/common/404Page';
@@ -62,8 +62,8 @@ const tenantRoutes: RouteObject[] = [
     element: <LocationPage />
   },
   {
-    path: ROUTES.HUMAN_RESOURCES,
-    element: <HumanResourcesPage />
+    path: ROUTES.USER,
+    element: <UserPage />
   },
   {
     path: ROUTES.REPORT,
@@ -130,8 +130,8 @@ const systemAdminRoutes: RouteObject[] = [
     element: <LocationPage />
   },
   {
-    path: ROUTES.HUMAN_RESOURCES,
-    element: <HumanResourcesPage />
+    path: ROUTES.USER,
+    element: <UserPage />
   },
   {
     path: ROUTES.REPORT,

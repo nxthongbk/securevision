@@ -76,9 +76,9 @@ export function useSidebarOptions() {
       },
       {
         id: 5,
-        title: sidebarTranslate('hr-management'),
+        title: sidebarTranslate('user-management'),
         icon: <UsersThree size={20} />,
-        path: ROUTES.HUMAN_RESOURCES
+        path: ROUTES.USER
       },
       {
         id: 6,

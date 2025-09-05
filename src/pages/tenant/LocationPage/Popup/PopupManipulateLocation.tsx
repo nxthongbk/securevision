@@ -32,7 +32,7 @@ import locationService from '~/services/location.service';
 import { UserRole } from '~/utils/constant';
 import useLazyQuery from '~/utils/hooks/useLazyQuery';
 import handleNotificationMessege from '~/utils/notification';
-import { useGetStaffs } from '../../HumanResourcesPage/handleApi';
+import { useGetStaffs } from '../../UserPage/handleApi';
 import SearchOption from '../SearchBox/SearchOption';
 import SearchResultsContainer from '../SearchBox/SearchResult';
 import AutocompleteSearchTextField from '../SearchBox/SearchTextField';

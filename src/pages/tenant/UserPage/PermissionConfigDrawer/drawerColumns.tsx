@@ -8,21 +8,21 @@ import ActionMenu from '~/components/ActionMenu';
 import EllipsisTypography from '~/components/EllipsisTypography';
 
 export function useDrawerColumns(onDetail: () => void, onDelete: (staffCount: number) => void) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const [permissionGroupId, setPermissionGroupId] = useState<string | null>(null);
 
   const menuOptions = useMemo(
     () => (permissionGroupId, staffCount) => [
       {
         icon: <TrashSimple size={20} />,
-        title: hrPageTranslate('delete'),
+        title: userPageTranslate('delete'),
         onClick: () => {
           setPermissionGroupId(permissionGroupId);
           onDelete(staffCount);
         }
       }
     ],
-    [hrPageTranslate, onDelete]
+    [userPageTranslate, onDelete]
   );
 
   const tableColumns: GridColDef[] = useMemo(
@@ -44,7 +44,7 @@ export function useDrawerColumns(onDetail: () => void, onDelete: (staffCount: nu
         minWidth: 200,
         flex: 5.24,
         field: 'configName',
-        headerName: hrPageTranslate('config-name'),
+        headerName: userPageTranslate('config-name'),
         editable: false,
         sortable: true,
         hideSortIcons: true,
@@ -68,7 +68,7 @@ export function useDrawerColumns(onDetail: () => void, onDelete: (staffCount: nu
       {
         width: 120,
         field: 'staffCount',
-        headerName: hrPageTranslate('staff-count'),
+        headerName: userPageTranslate('staff-count'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -76,7 +76,7 @@ export function useDrawerColumns(onDetail: () => void, onDelete: (staffCount: nu
       },
       {
         field: 'action',
-        headerName: hrPageTranslate('action'),
+        headerName: userPageTranslate('action'),
         width: 186,
         editable: false,
         sortable: false,
@@ -89,7 +89,7 @@ export function useDrawerColumns(onDetail: () => void, onDelete: (staffCount: nu
 
           return (
             <ActionMenu
-              label={hrPageTranslate('view-config')}
+              label={userPageTranslate('view-config')}
               onClick={() => {
                 setPermissionGroupId(id);
                 onDetail();
@@ -103,7 +103,7 @@ export function useDrawerColumns(onDetail: () => void, onDelete: (staffCount: nu
         }
       }
     ],
-    [hrPageTranslate, menuOptions, onDetail]
+    [userPageTranslate, menuOptions, onDetail]
   );
   return { tableColumns, permissionGroupId };
 }

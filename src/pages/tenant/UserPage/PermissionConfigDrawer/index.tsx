@@ -12,7 +12,7 @@ import PopupConfigDetail from './Popup/PopupConfigDetail';
 import PopupDeletePermissionConfig from './Popup/PopupDeletePermissionConfig';
 
 export default function PermisisonConfigDrawer({ tenantCode }: { tenantCode: string }) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState<string>('');
 
@@ -64,7 +64,7 @@ export default function PermisisonConfigDrawer({ tenantCode }: { tenantCode: str
     >
       <HandleScrollPage
         props={{
-          title: 'hr-page.permission-config'
+          title: 'user-page.permission-config'
         }}
       >
         <DrawerHeader keyword={keyword} setKeyword={setKeyword} actionPopup={<PopupUpsertConfig />} />
@@ -72,8 +72,8 @@ export default function PermisisonConfigDrawer({ tenantCode }: { tenantCode: str
           rows={tableRows}
           columns={tableColumns}
           rowHeight={56}
-          emptyMessage={hrPageTranslate('no-data')}
-          explainName={hrPageTranslate('personel')}
+          emptyMessage={userPageTranslate('no-data')}
+          explainName={userPageTranslate('personel')}
           loading={isLoading}
         />
       </HandleScrollPage>
@@ -83,7 +83,7 @@ export default function PermisisonConfigDrawer({ tenantCode }: { tenantCode: str
   return (
     <div>
       <Button variant='outlined' color='primary' onClick={() => setOpen(true)} startIcon={<GearSix size={20} />}>
-        <Typography variant='button3'>{hrPageTranslate('permission-config')}</Typography>
+        <Typography variant='button3'>{userPageTranslate('permission-config')}</Typography>
       </Button>
       <Drawer anchor='right' open={open} onClose={toggleDrawer(false)}>
         {DrawerList}

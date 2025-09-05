@@ -355,7 +355,7 @@
     "select-alarm-type": "Select alarm type",
     "no-alarm": "No alarm"
   },
-  "hr-page": {
+  "user-page": {
     "management": "User Management",
     "location": "Location",
     "select-location": "Select location",
@@ -448,6 +448,7 @@
   },
   "sidebar": {
     "hr-management": "HR management",
+    "user-management": "User Management",
     "customer-management": "Customer Management",
     "device-profile": "Device Profile",
     "device-management": "Device Management",

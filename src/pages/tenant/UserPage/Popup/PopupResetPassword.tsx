@@ -16,7 +16,7 @@ export default function PopupResetPassword({
   staffId: string;
   onClose: () => void;
 }) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const mutation = useSetPassword();
   const handleResetPassword = () => {
     mutation.mutate({
@@ -45,10 +45,10 @@ export default function PopupResetPassword({
         <Box className='flex flex-col '>
           <Box className='flex flex-col justify-start items-start p-6 gap-[6px]'>
             <Typography color='var(--text-primary)' variant='h6'>
-              {hrPageTranslate('reset-password')}
+              {userPageTranslate('reset-password')}
             </Typography>
             <Typography color='var(--text-secondary)' variant='body3'>
-              {hrPageTranslate('reset-password-message')}
+              {userPageTranslate('reset-password-message')}
             </Typography>
           </Box>
 

@@ -2,8 +2,8 @@ import { ChangeEvent, useMemo, useState } from 'react';
 import HandleScrollPage from '~/components/HandleScrollPage';
 import CustomDataGrid from '~/components/DataGrid/CustomDataGrid';
 import DataGridHeader, { FilterInterface } from '~/components/DataGrid/DataGridHeader';
-import { useHRTableColumns } from './tableColumns';
-import { HrItem } from './type';
+import { useUserTableColumns } from './tableColumns';
+import { UserItem } from './type';
 import { useTranslation } from 'react-i18next';
 import PopupDetail from './Popup/PopupDetail';
 import PopupUpsertEmployee from './Popup/PopupUpsertEmployee';
@@ -19,12 +19,12 @@ import { useLocation } from 'react-router-dom';
 import { usePermissions } from '~/utils/hooks/usePermission';
 import ForbiddenPage from '~/pages/common/403';
 
-export default function HumanResourcesPage() {
+export default function userPage() {
   const theme = useTheme();
   const isBelowDesktop = useMediaQuery(theme.breakpoints.down('desktop'));
   const isMiniLaptop = useMediaQuery(theme.breakpoints.down('laptop'));
 
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -70,7 +70,7 @@ export default function HumanResourcesPage() {
 
   const { hasView, hasEdit } = usePermissions('VIEW_STAFF', 'UPDATE_STAFF', tenantCode);
 
-  const { tableColumns, selectedStaffId } = useHRTableColumns(
+  const { tableColumns, selectedStaffId } = useUserTableColumns(
     isMiniLaptop,
     onDetail,
     onDelete,
@@ -79,7 +79,7 @@ export default function HumanResourcesPage() {
   );
 
   const tableRows = useMemo(() => {
-    const rows = (data?.data?.content || []).map((item: HrItem, index) => {
+    const rows = (data?.data?.content || []).map((item: UserItem, index) => {
       const locations = item?.locations || [];
       const firstLocation = locations[0]?.name || '';
       const locationValue = locations.length > 1 ? `${firstLocation} (+${locations.length - 1})` : firstLocation;
@@ -90,7 +90,7 @@ export default function HumanResourcesPage() {
         userName: item?.username,
         fullName: item?.name,
         phone: item?.phone,
-        location: item?.assignAllLocations ? hrPageTranslate('all') : locationValue,
+        location: item?.assignAllLocations ? userPageTranslate('all') : locationValue,
         status: item?.status,
         permissionGroupName: item?.permissionGroup?.name,
         avatarUrl: item?.avatarUrl,
@@ -98,16 +98,16 @@ export default function HumanResourcesPage() {
       };
     });
     return rows;
-  }, [data?.data?.content, hrPageTranslate]);
+  }, [data?.data?.content, userPageTranslate]);
 
   const totalRecords = data?.data?.total || 0;
 
   const statusOptions = useMemo(
     () => [
-      { id: 'active', name: hrPageTranslate('active'), value: 'ACTIVE' },
-      { id: 'blocked', name: hrPageTranslate('blocked'), value: 'BLOCKED' }
+      { id: 'active', name: userPageTranslate('active'), value: 'ACTIVE' },
+      { id: 'blocked', name: userPageTranslate('blocked'), value: 'BLOCKED' }
     ],
-    [hrPageTranslate]
+    [userPageTranslate]
   );
 
   const locationOptions = useMemo(() => {
@@ -126,7 +126,7 @@ export default function HumanResourcesPage() {
     return (
       <HandleScrollPage
         props={{
-          title: 'hr-page.management'
+          title: 'user-page.management'
         }}
       >
         <ForbiddenPage />
@@ -137,35 +137,35 @@ export default function HumanResourcesPage() {
   const filter: FilterInterface[] = [
     {
       id: 'location',
-      label: hrPageTranslate('location'),
+      label: userPageTranslate('location'),
       onChange(e: ChangeEvent<HTMLSelectElement>) {
         setLocationFilter(e?.target?.value);
       },
       value: locationFilter,
       isHiddenPlacehoder: !locationFilter,
-      placeholder: hrPageTranslate('select-location'),
+      placeholder: userPageTranslate('select-location'),
       option: locationOptions
     },
     {
       id: 'permission',
-      label: hrPageTranslate('permission'),
+      label: userPageTranslate('permission'),
       onChange(e: ChangeEvent<HTMLSelectElement>) {
         setPermissionGroupFilter(e?.target?.value);
       },
       value: permissionGroupFilter,
       isHiddenPlacehoder: !permissionGroupFilter,
-      placeholder: hrPageTranslate('select-permission'),
+      placeholder: userPageTranslate('select-permission'),
       option: permissionConfigOptions
     },
     {
       id: 'status',
-      label: hrPageTranslate('status'),
+      label: userPageTranslate('status'),
       onChange(e: ChangeEvent<HTMLSelectElement>) {
         setStatusFilter(e?.target?.value);
       },
       value: statusFilter,
       isHiddenPlacehoder: !statusFilter,
-      placeholder: hrPageTranslate('select-status'),
+      placeholder: userPageTranslate('select-status'),
       option: statusOptions
     }
   ];
@@ -182,7 +182,7 @@ export default function HumanResourcesPage() {
   return (
     <HandleScrollPage
       props={{
-        title: 'hr-page.management',
+        title: 'user-page.management',
         btnPopup: (
           <Box className='flex gap-4'>
             <PermisisonConfigDrawer tenantCode={tenantCode} />
@@ -199,7 +199,7 @@ export default function HumanResourcesPage() {
         disableResetFilter={disableResetFilter}
         handleResetFilter={handleResetFilter}
         filterFullwidth={isBelowDesktop}
-        title={'hr-page.management'}
+        title={'user-page.management'}
         btnPopup={
           <Box className='flex gap-4'>
             <PermisisonConfigDrawer tenantCode={tenantCode} />
@@ -216,8 +216,8 @@ export default function HumanResourcesPage() {
         setSize={setSize}
         total={totalRecords}
         rowHeight={56}
-        emptyMessage={hrPageTranslate('no-data')}
-        explainName={hrPageTranslate('personel')}
+        emptyMessage={userPageTranslate('no-data')}
+        explainName={userPageTranslate('personel')}
         loading={isLoading}
         columnsVisible={{
           permissionGroupName: !isBelowDesktop,

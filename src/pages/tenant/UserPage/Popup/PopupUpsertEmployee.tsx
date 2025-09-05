@@ -42,7 +42,7 @@ const defaultValues = {
 };
 
 const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: UpsertEmployeeProps) => {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const [open, setOpen] = useState(false);
   const [_imageFile, setFileImage] = useState();
   const [isSelectAllLocations, setSelectAllLocations] = useState<boolean>(false);
@@ -64,23 +64,23 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
 
   // Form Schema
   const validationSchema = yup.object().shape({
-    fullName: yup.string().required(hrPageTranslate('please-enter-fullname')).trim(),
+    fullName: yup.string().required(userPageTranslate('please-enter-fullname')).trim(),
     userName: yup
       .string()
-      .required(hrPageTranslate('please-enter-username'))
-      .min(4, hrPageTranslate('please-enter-username-valid-min-length'))
-      .max(20, hrPageTranslate('please-enter-username-valid-max-length'))
-      .matches(/^[a-zA-Z0-9]+$/, hrPageTranslate('please-enter-username-valid-character'))
+      .required(userPageTranslate('please-enter-username'))
+      .min(4, userPageTranslate('please-enter-username-valid-min-length'))
+      .max(20, userPageTranslate('please-enter-username-valid-max-length'))
+      .matches(/^[a-zA-Z0-9]+$/, userPageTranslate('please-enter-username-valid-character'))
       .trim(),
     phone: yup
       .string()
-      .required(hrPageTranslate('please-enter-phone-number'))
+      .required(userPageTranslate('please-enter-phone-number'))
       .matches(VN_PHONE_REGEX, {
-        message: hrPageTranslate('please-enter-valid-phone-number')
+        message: userPageTranslate('please-enter-valid-phone-number')
       }),
     avatarUrl: yup.string().nullable(),
     locationIds: yup.array().of(yup.string().uuid()),
-    permissionGroupId: yup.string().required(hrPageTranslate('please-select-permission-group'))
+    permissionGroupId: yup.string().required(userPageTranslate('please-select-permission-group'))
   });
 
   const {
@@ -210,7 +210,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
           startIcon={<Plus size={20} color='white' />}
         >
           <Typography variant='button3' color='white'>
-            {hrPageTranslate('add-new')}
+            {userPageTranslate('add-new')}
           </Typography>
         </Button>
       )}
@@ -238,7 +238,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
           <Box>
             <Box className='flex justify-between items-center px-4 py-2.5'>
               <Typography color='var(--text-primary)' variant='h6'>
-                {hrPageTranslate(staffId ? 'update-information' : 'add-employee')}
+                {userPageTranslate(staffId ? 'update-information' : 'add-employee')}
               </Typography>
               <IconButton aria-label='close' onClick={handleClose}>
                 <X size={20} />
@@ -264,10 +264,10 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
             <InputCustom
               sx={{ width: '100%' }}
               classNameContainer='w-full'
-              label={hrPageTranslate('fullname')}
+              label={userPageTranslate('fullname')}
               control={control}
               name='fullName'
-              placeholder={hrPageTranslate('fullname-placeholder')}
+              placeholder={userPageTranslate('fullname-placeholder')}
               isRequired
               isError={!!getError('fullName')}
               helperText={errors?.fullName?.message}
@@ -276,10 +276,10 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
               <InputCustom
                 sx={{ width: '100%' }}
                 classNameContainer='w-full'
-                label={hrPageTranslate('username')}
+                label={userPageTranslate('username')}
                 control={control}
                 name='userName'
-                placeholder={hrPageTranslate('username-placeholder')}
+                placeholder={userPageTranslate('username-placeholder')}
                 isRequired={true}
                 isError={!!getError('userName')}
                 helperText={errors?.userName?.message}
@@ -287,10 +287,10 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
               <InputCustom
                 sx={{ width: '100%' }}
                 classNameContainer='w-full'
-                label={hrPageTranslate('phone')}
+                label={userPageTranslate('phone')}
                 control={control}
                 name='phone'
-                placeholder={hrPageTranslate('phone-placeholder')}
+                placeholder={userPageTranslate('phone-placeholder')}
                 isRequired
                 isError={!!getError('phone')}
                 helperText={errors?.phone?.message}
@@ -300,8 +300,8 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
               isSelectAll={true}
               control={control}
               name='locationIds'
-              label={hrPageTranslate('location')}
-              placeholderText={hrPageTranslate('select-location')}
+              label={userPageTranslate('location')}
+              placeholderText={userPageTranslate('select-location')}
               displayEmpty
               multiple
               MenuProps={{
@@ -349,7 +349,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
                         fontSize: '14px'
                       }}
                     >
-                      {hrPageTranslate('all')}
+                      {userPageTranslate('all')}
                     </span>
                   );
                 }
@@ -361,7 +361,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
                         fontSize: '14px'
                       }}
                     >
-                      {hrPageTranslate('select-location')}
+                      {userPageTranslate('select-location')}
                     </span>
                   );
                 }
@@ -449,7 +449,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
                 }}
               >
                 <Typography variant='button3' color={'var(--primary)'}>
-                  {hrPageTranslate('all')}
+                  {userPageTranslate('all')}
                 </Typography>
                 <Checkbox
                   checked={isSelectAllLocations}
@@ -493,8 +493,8 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
             <SelectCustom
               control={control}
               name='permissionGroupId'
-              label={hrPageTranslate('config')}
-              placeholderText={hrPageTranslate('select-config')}
+              label={userPageTranslate('config')}
+              placeholderText={userPageTranslate('select-config')}
               isRequired
               classNameContainer='mb-3'
               displayEmpty
@@ -579,7 +579,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
             <Box className='flex justify-end items-center p-4 gap-3'>
               <ButtonCustom variant='outlined' color='primary' onClick={handleClose} startIcon={<X size={18} />}>
                 <Typography variant='button3' fontWeight={600}>
-                  {hrPageTranslate('cancel')}
+                  {userPageTranslate('cancel')}
                 </Typography>
               </ButtonCustom>
               <ButtonCustom
@@ -591,7 +591,7 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
                 disabled={!isValid}
               >
                 <Typography variant='button3' fontWeight={600}>
-                  {hrPageTranslate('save')}
+                  {userPageTranslate('save')}
                 </Typography>
               </ButtonCustom>
             </Box>

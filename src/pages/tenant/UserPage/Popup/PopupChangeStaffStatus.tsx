@@ -15,7 +15,7 @@ export default function PopupChangeStaffStatus({
   desiredStatus: string;
   onClose: () => void;
 }) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const mutation = useChangeStaffStatus();
   const isLock = desiredStatus === 'lock';
 
@@ -42,10 +42,10 @@ export default function PopupChangeStaffStatus({
         <Box className='flex flex-col '>
           <Box className='flex flex-col justify-start items-start p-6 gap-[6px]'>
             <Typography color='var(--text-primary)' variant='h6'>
-              {hrPageTranslate(isLock ? 'lock-account' : 'unlock-account')}
+              {userPageTranslate(isLock ? 'lock-account' : 'unlock-account')}
             </Typography>
             <Typography color='var(--text-secondary)' variant='body3'>
-              {hrPageTranslate(isLock ? 'lock-account-message' : 'unlock-account-message')}
+              {userPageTranslate(isLock ? 'lock-account-message' : 'unlock-account-message')}
             </Typography>
           </Box>
 

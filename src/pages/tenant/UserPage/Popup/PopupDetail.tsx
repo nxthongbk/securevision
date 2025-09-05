@@ -25,7 +25,7 @@ export default function PopupDetail({
   onResetPassword: () => void;
   hasEdit: boolean;
 }>) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const { data: functionGroupPermissions } = useGetFunctionGroupPermission(0, 50, '', tenantCode);
 
   const handleUpdateStaff = () => {
@@ -40,30 +40,30 @@ export default function PopupDetail({
 
   const fields = [
     { label: 'ID', value: staffDetail.code && String(staffDetail.code).padStart(4, '0'), key: 'id' },
-    { label: hrPageTranslate('username'), value: staffDetail.username, key: 'username' },
-    { label: hrPageTranslate('fullname'), value: staffDetail.name, key: 'fullname' },
+    { label: userPageTranslate('username'), value: staffDetail.username, key: 'username' },
+    { label: userPageTranslate('fullname'), value: staffDetail.name, key: 'fullname' },
     {
-      label: hrPageTranslate('phone'),
+      label: userPageTranslate('phone'),
       value: staffDetail.phone,
       key: 'phone'
     },
     {
-      label: hrPageTranslate('location'),
+      label: userPageTranslate('location'),
       value: staffDetail.assignAllLocations
-        ? hrPageTranslate('all-location')
+        ? userPageTranslate('all-location')
         : (staffDetail.locations || []).map((location) => location.name).join(', '),
       key: 'location'
     },
     {
-      label: hrPageTranslate('location-manage'),
+      label: userPageTranslate('location-manage'),
       value: (staffDetail.locations || [])
         .filter((location) => location.operator)
         .map((location) => location.name)
         .join(', '),
       key: 'locationManaged'
     },
-    { label: hrPageTranslate('status'), value: staffDetail.status || '', key: 'status' },
-    { label: hrPageTranslate('permission'), value: staffDetail, key: 'permission' }
+    { label: userPageTranslate('status'), value: staffDetail.status || '', key: 'status' },
+    { label: userPageTranslate('permission'), value: staffDetail, key: 'permission' }
   ];
 
   const renderField = ({ label, value, key }, order) => {
@@ -140,7 +140,7 @@ export default function PopupDetail({
   return (
     <DialogCustom
       open={open}
-      title={hrPageTranslate('personal-information')}
+      title={userPageTranslate('personal-information')}
       maxWidth='800px'
       handleClose={onClose}
       footer={
@@ -151,7 +151,7 @@ export default function PopupDetail({
             startIcon={<Password />}
             className='!font-semibold'
           >
-            <Typography variant='button3'>{hrPageTranslate('reset-password')}</Typography>
+            <Typography variant='button3'>{userPageTranslate('reset-password')}</Typography>
           </ButtonCustom>
           {hasEdit && (
             <ButtonCustom
@@ -160,7 +160,7 @@ export default function PopupDetail({
               startIcon={<PencilSimple />}
               className='!bg-[var(--primary)] !text-[var(--white)] !font-semibold'
             >
-              <Typography variant='button3'>{hrPageTranslate('update')}</Typography>
+              <Typography variant='button3'>{userPageTranslate('update')}</Typography>
             </ButtonCustom>
           )}
         </div>

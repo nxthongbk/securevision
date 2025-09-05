@@ -1,4 +1,4 @@
-export interface HrItem {
+export interface UserItem {
   id: string;
   code: number;
   username: string;

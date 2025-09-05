@@ -16,7 +16,7 @@ let captcha = generateCaptcha();
 
 const PopupDelete = ({ open, onClose, staffId }: Props) => {
   const [verifyCode, setVerifyCode] = useState<string>('');
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const { isPending, mutate } = useDeleteStaff(staffId);
 
   const handleClose = () => {
@@ -47,7 +47,7 @@ const PopupDelete = ({ open, onClose, staffId }: Props) => {
           <Box>
             <Box className='flex justify-between items-center px-4 py-2.5'>
               <Typography color='var(--text-primary)' variant='h6'>
-                {hrPageTranslate('delete-account')}
+                {userPageTranslate('delete-account')}
               </Typography>
               <IconButton aria-label='close' onClick={handleClose}>
                 <X size={20} />
@@ -65,10 +65,10 @@ const PopupDelete = ({ open, onClose, staffId }: Props) => {
               <Warning size={62} color='var(--red-400)' />
               <Stack gap='6px'>
                 <Typography color='var(--text-primary)' variant='body3'>
-                  {hrPageTranslate('delete-account-confirm')}
+                  {userPageTranslate('delete-account-confirm')}
                 </Typography>
                 <Typography color='var(--text-primary)' variant='body3'>
-                  {hrPageTranslate('delete-account-action')}
+                  {userPageTranslate('delete-account-action')}
                 </Typography>
               </Stack>
             </Box>
@@ -78,7 +78,7 @@ const PopupDelete = ({ open, onClose, staffId }: Props) => {
             <TextField
               value={verifyCode}
               onChange={(e) => setVerifyCode(e.target.value)}
-              placeholder={hrPageTranslate('enter-code')}
+              placeholder={userPageTranslate('enter-code')}
             />
           </Stack>
           <Box>
@@ -91,7 +91,7 @@ const PopupDelete = ({ open, onClose, staffId }: Props) => {
             <Box className='flex justify-end items-center p-4 gap-3'>
               <ButtonCustom variant='outlined' color='primary' onClick={handleClose} startIcon={<X size={18} />}>
                 <Typography variant='button3' fontWeight={600}>
-                  {hrPageTranslate('cancel')}
+                  {userPageTranslate('cancel')}
                 </Typography>
               </ButtonCustom>
               <ButtonCustom
@@ -104,7 +104,7 @@ const PopupDelete = ({ open, onClose, staffId }: Props) => {
                 isLoading={isPending}
               >
                 <Typography variant='button3' fontWeight={600}>
-                  {hrPageTranslate('delete-account')}
+                  {userPageTranslate('delete-account')}
                 </Typography>
               </ButtonCustom>
             </Box>

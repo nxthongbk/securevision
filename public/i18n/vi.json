@@ -371,7 +371,7 @@
     "select-alarm-type": "Chọn loại cảnh báo",
     "no-alarm": "Hiện không có cảnh báo nào."
   },
-  "hr-page": {
+  "user-page": {
     "management": "Quản lý nhân sự",
     "location": "Địa điểm",
     "select-location": "Chọn địa điểm",
@@ -477,6 +477,7 @@
     "alarm-page": "Quản lý cảnh báo",
     "location-management": "Quản lý địa điểm",
     "hr-management": "Quản lý nhân sự",
+    "user-management": "Quản lý người dùng",
     "report": "Báo cáo",
     "tool": "Công cụ",
     "setting": "Cấu hình/ Cài đặt"

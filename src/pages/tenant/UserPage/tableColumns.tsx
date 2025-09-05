@@ -10,14 +10,14 @@ import EllipsisTypography from '~/components/EllipsisTypography';
 import StatusChip from '~/components/StatusChip';
 import { DATA_STATUS } from '~/components/StatusChip/constant';
 
-export function useHRTableColumns(
+export function useUserTableColumns(
   isMiniLaptop: boolean,
   onDetail: (data) => void,
   onDelete: () => void,
   onChangeStatus: (status) => void,
   hasEdit: boolean
 ) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
 
   const menuOptions = useMemo(
@@ -26,7 +26,7 @@ export function useHRTableColumns(
         ? [
             {
               icon: <TrashSimple size={20} />,
-              title: hrPageTranslate('delete'),
+              title: userPageTranslate('delete'),
               onClick: () => {
                 setSelectedStaffId(staffId);
                 onDelete();
@@ -34,7 +34,7 @@ export function useHRTableColumns(
             },
             {
               icon: status === DATA_STATUS.ACTIVE ? <LockSimple size={20} /> : <LockSimpleOpen size={20} />,
-              title: hrPageTranslate(status === DATA_STATUS.ACTIVE ? 'lock' : 'unlock'),
+              title: userPageTranslate(status === DATA_STATUS.ACTIVE ? 'lock' : 'unlock'),
               onClick: () => {
                 setSelectedStaffId(staffId);
                 onChangeStatus(status === DATA_STATUS.ACTIVE ? 'lock' : 'unlock');
@@ -42,7 +42,7 @@ export function useHRTableColumns(
             }
           ]
         : [],
-    [hasEdit, hrPageTranslate, onChangeStatus, onDelete]
+    [hasEdit, userPageTranslate, onChangeStatus, onDelete]
   );
 
   const tableColumns: GridColDef[] = useMemo(
@@ -60,7 +60,7 @@ export function useHRTableColumns(
         minWidth: 150,
         flex: 1.5,
         field: 'userName',
-        headerName: hrPageTranslate('username'),
+        headerName: userPageTranslate('username'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -73,7 +73,7 @@ export function useHRTableColumns(
         minWidth: 200,
         flex: 3.55,
         field: 'fullName',
-        headerName: capitalize(hrPageTranslate('fullname')),
+        headerName: capitalize(userPageTranslate('fullname')),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -102,7 +102,7 @@ export function useHRTableColumns(
       {
         width: 150,
         field: 'phone',
-        headerName: hrPageTranslate('phone'),
+        headerName: userPageTranslate('phone'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -112,7 +112,7 @@ export function useHRTableColumns(
         minWidth: 160,
         flex: 3.55,
         field: 'location',
-        headerName: hrPageTranslate('location'),
+        headerName: userPageTranslate('location'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -122,7 +122,7 @@ export function useHRTableColumns(
         minWidth: 150,
         flex: 2,
         field: 'permissionGroupName',
-        headerName: hrPageTranslate('permission-group-name'),
+        headerName: userPageTranslate('permission-group-name'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -131,7 +131,7 @@ export function useHRTableColumns(
       {
         width: 124,
         field: 'status',
-        headerName: hrPageTranslate('status'),
+        headerName: userPageTranslate('status'),
         editable: false,
         sortable: false,
         headerClassName: 'table-grid__header',
@@ -142,7 +142,7 @@ export function useHRTableColumns(
       },
       {
         field: 'action',
-        headerName: hrPageTranslate('action'),
+        headerName: userPageTranslate('action'),
         width: 190,
         editable: false,
         sortable: false,
@@ -154,7 +154,7 @@ export function useHRTableColumns(
           const { id, status, dataIndex } = params?.row || {};
           return (
             <ActionMenu
-              label={hrPageTranslate('view-information')}
+              label={userPageTranslate('view-information')}
               onClick={() => {
                 setSelectedStaffId(id);
                 onDetail(dataIndex);
@@ -168,7 +168,7 @@ export function useHRTableColumns(
         }
       }
     ],
-    [hrPageTranslate, isMiniLaptop, menuOptions, onDetail]
+    [userPageTranslate, isMiniLaptop, menuOptions, onDetail]
   );
   return { tableColumns, selectedStaffId };
 }
