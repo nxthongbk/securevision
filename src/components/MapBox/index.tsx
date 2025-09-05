@@ -5,7 +5,7 @@ import { Map, MapProps } from 'react-map-gl';
 const accessToken = import.meta.env.VITE_TOKEN_MAPBOX;
 
 function MapBox(props: Omit<MapProps, 'projection'>, ref?: any) {
-  const { children, initialViewState, style, onMove, onLoad, mapStyle } = props;
+  const { children, initialViewState, style, onMove, onLoad } = props;
   return (
     <Map
       mapboxAccessToken={accessToken}

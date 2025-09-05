@@ -1,8 +1,8 @@
-import { BellRinging, BellSlash } from '@phosphor-icons/react';
-import { Button, Typography } from '@mui/material';
-import LocationLog, { ILocationLog } from '../LocationLog';
-import mapboxgl, { LngLatLike } from 'mapbox-gl';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+// import { BellRinging, BellSlash } from '@phosphor-icons/react';
+// import { Button, Typography } from '@mui/material';
+import  { ILocationLog } from '../LocationLog';
+import mapboxgl from 'mapbox-gl';
+import { useCallback, useContext, useEffect, useMemo,  useState } from 'react';
 
 import AlertPopup from '../Popup/AlertPopup';
 import { AppContext } from '~/contexts/app.context';
@@ -12,7 +12,7 @@ import MapBox from '~/components/MapBox';
 import MarkerMap from '../../../../../components/Marker';
 import PendingPopup from '../Popup/PendingPopup';
 import PopupMarker from '../Popup/PopupMarker';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
 function MapRight({
   data,
@@ -25,10 +25,10 @@ function MapRight({
   socketData: any;
   setLogs: React.Dispatch<React.SetStateAction<ILocationLog[]>>;
 }) {
-  const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
-  const { t } = useTranslation();
+  // const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
+  // const { t } = useTranslation();
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
-  const logContainerRef = useRef<HTMLDivElement>(null); // optional if needed for scrolling
+  // const logContainerRef = useRef<HTMLDivElement>(null); // optional if needed for scrolling
 
   const {
     openLocationPopup,
@@ -89,7 +89,7 @@ function MapRight({
     }
   }, [coordinates, map]);
 
-  const [isSatelliteView, setIsSatelliteView] = useState(false);
+  // const [isSatelliteView, setIsSatelliteView] = useState(false);
 
   return (
     <MapBox
@@ -97,7 +97,7 @@ function MapRight({
       initialViewState={viewportMapRight}
       onMove={(evt) => setViewportMapRight(evt.viewState)}
       onLoad={onLoadMap}
-      mapStyle={isSatelliteView ? 'mapbox://styles/mapbox/satellite-v9' : 'mapbox://styles/mapbox/streets-v12'}
+      // mapStyle={isSatelliteView ? 'mapbox://styles/mapbox/satellite-v9' : 'mapbox://styles/mapbox/streets-v12'}
     >
       {markerData?.map((item) => (
         <MarkerMap
