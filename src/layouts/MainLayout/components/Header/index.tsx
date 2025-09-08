@@ -167,13 +167,13 @@ export default function TopHeader() {
           <Popper id={id} open={open} anchorEl={anchorEl} transition sx={{ zIndex: 1001 }}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <div className="bg-white border px-4 min-w-[200px] rounded-lg shadow-md mt-4">
+                <div className=" px-4 min-w-[200px] shadow-md mt-4 bg-[#030912A3] backdrop-blur ">
                   <div className="flex py-2 gap-3 items-center">
                     <Avatar className="!w-[28px] !h-[28px]" alt={userInfo?.name || userInfo?.username} src={img || undefined}>
                       {!img && (userInfo?.name?.[0] || 'U')}
                     </Avatar>
                     <div className="flex flex-col">
-                      <Typography variant="body2">{userInfo?.name || userInfo?.username}</Typography>
+                      <Typography variant="body2" className='text-white'>{userInfo?.name || userInfo?.username}</Typography>
                       <Typography variant="caption" color="var(--grey-neutral-500)">
                         {userInfo?.roles?.[0]}
                       </Typography>
