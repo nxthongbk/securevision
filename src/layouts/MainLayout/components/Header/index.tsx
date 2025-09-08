@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { FormatHourly, FormatDate } from '~/utils/formatDateTime';
 import LanguageMini from '~/pages/systemAdmin/SettingPage/components/Language/mini';
 import { useTranslation } from "react-i18next";
+import fileStorageService from '~/services/fileStorage.service';
+import { useQuery } from '@tanstack/react-query';
 
 export default function TopHeader() {
   const { userInfo, reset } = useContext(AppContext);
@@ -38,7 +40,6 @@ export default function TopHeader() {
       window.removeEventListener('localStorageChange', checkLocalStorage);
     };
   }, []);
-  console.log('Avatar URL:', userInfo?.avatarUrl);
 
   // Logout mutation
   const logoutMutation = useMutation({
@@ -76,6 +77,17 @@ export default function TopHeader() {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch avatar image like in AvatarPopper
+  const { data: img } = useQuery({
+    queryKey: ['userImg', userInfo?.avatarUrl],
+    queryFn: async () => {
+      if (!userInfo?.avatarUrl) return '';
+      const res: any = await fileStorageService.getFileImage(userInfo.avatarUrl);
+      if (res) return URL.createObjectURL(res);
+      return '';
+    }
+  });
+
   const canBeOpen = open && Boolean(anchorEl);
   const id = canBeOpen ? 'transition-popper' : undefined;
 
@@ -111,9 +123,7 @@ export default function TopHeader() {
       {/* Profile + Language + Alarm */}
       <div className="fixed top-2 left-[70%] z-50 flex items-center gap-2 scale-90">
         {/* Language selector */}
-        <div className="h-full flex items-center">
-          <LanguageMini />
-        </div>
+        <LanguageMini />
 
         {/* Alarm toggle */}
         <IconButton
@@ -137,9 +147,11 @@ export default function TopHeader() {
           <Avatar
             onClick={handleOpenControl}
             className="!w-[22px] !h-[22px] cursor-pointer"
-            alt={userInfo?.name || userInfo?.username}
-            src={userInfo?.avatarUrl}
-          />
+            alt={userInfo?.name || userInfo?.username || 'User'}
+            src={img || undefined} // use fetched Blob URL
+          >
+            {!img && (userInfo?.name?.[0] || 'U')}
+          </Avatar>
           <Typography className="font-saira font-small uppercase text-white text-[12px] leading-[18px]">
             {userInfo?.name || userInfo?.username}
           </Typography>
@@ -152,12 +164,14 @@ export default function TopHeader() {
             setOpen(false);
           }}
         >
-          <Popper id={id} open={open} anchorEl={anchorEl} sx={{ zIndex: 1001 }} transition>
+          <Popper id={id} open={open} anchorEl={anchorEl} transition sx={{ zIndex: 1001 }}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <div className="bg-white border px-4 min-w-[200px] rounded-lg shadow-md mt-4">
                   <div className="flex py-2 gap-3 items-center">
-                    <Avatar className="!w-[28px] !h-[28px]" alt={userInfo?.name || userInfo?.username} src={userInfo?.avatarUrl} />
+                    <Avatar className="!w-[28px] !h-[28px]" alt={userInfo?.name || userInfo?.username} src={img || undefined}>
+                      {!img && (userInfo?.name?.[0] || 'U')}
+                    </Avatar>
                     <div className="flex flex-col">
                       <Typography variant="body2">{userInfo?.name || userInfo?.username}</Typography>
                       <Typography variant="caption" color="var(--grey-neutral-500)">
