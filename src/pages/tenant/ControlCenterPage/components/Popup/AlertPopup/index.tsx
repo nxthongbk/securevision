@@ -1,5 +1,5 @@
 import { Box, Divider, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState, useMemo } from 'react';
 
 import { AppContext } from '~/contexts/app.context';
 import { ArrowsOut } from '@phosphor-icons/react';
@@ -21,6 +21,10 @@ import { useGetLocationDetail } from '~/pages/tenant/LocationPage/handleApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
 import { useTranslation } from 'react-i18next';
+import { useGetDashboards } from '../../../handleApi';
+import { MenuItem } from '../../../../Dashboard/components/CustomWidgets/menu-item.component';
+import { useNavigate } from 'react-router-dom';
+
 
 // import { ArrowsOut } from '@phosphor-icons/react';
 
@@ -34,7 +38,7 @@ const SOCKET_URL = import.meta.env.VITE_API_HOST + '/websocket/ws';
 export default function AlertPopup() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [fireAlertTranslate] = useTranslation('', { keyPrefix: 'fire-alerts-page' });
+  const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
   const { openAlertPopup, setOpenAlertPopup } = useContext(AppContext);
   const [openVerifyPopup, setOpenVerifyPopup] = useState<boolean>(false);
   const [openSkipPopup, setOpenSkipPopup] = useState<boolean>(false);
@@ -43,9 +47,14 @@ export default function AlertPopup() {
   const { tenantCode } = useTenantCode();
   const timeoutId = useRef<NodeJS.Timeout>();
   const socket = new SockJS(SOCKET_URL);
+  const navigate = useNavigate();
+  
 
   const { status, data } = useGetAlarmLocationInfo(openAlertPopup?.id, tenantCode);
   const { data: detail } = useGetLocationDetail(openAlertPopup?.id, tenantCode);
+  // Fetch dashboards (React Query)
+  const { data: dashboardsData } = useGetDashboards(detail?.data?.id, tenantCode);
+  const dashboards = useMemo(() => dashboardsData?.data || [], [dashboardsData]);  
 
   useEffect(() => {
     if (openAlertPopup) {
@@ -99,14 +108,14 @@ export default function AlertPopup() {
     if (status === 'error') {
       return (
         <Box key={alarm.id}>
-          <Typography variant='label1'>{fireAlertTranslate('no-alarm')}</Typography>
+          <Typography variant='label1'>{alarmTranslate('no-alarm')}</Typography>
         </Box>
       );
     }
 
     return (
       <>
-        <Box key={alarm.id} className='flex flex-col	bg-[var(--red-60)] rounded-lg'>
+        <Box key={alarm.id} className='flex flex-col	bg-[var(--red-60)] '>
           <Box className='flex items-center justify-between w-full px-4 py-3'>
             <div className='flex flex-col'>
               <Typography variant='caption1'>ID: {alarm?.code ? String(alarm?.code).padStart(6, '0') : ''}</Typography>
@@ -134,7 +143,7 @@ export default function AlertPopup() {
                 setSelectedAlarmLocationId(alarm.id);
               }}
             >
-              {fireAlertTranslate('skip')}
+              {alarmTranslate('skip')}
             </ButtonCustom>
             <ButtonCustom
               variant='contained'
@@ -144,99 +153,149 @@ export default function AlertPopup() {
                 setSelectedAlarmLocationId(alarm.id);
               }}
             >
-              {fireAlertTranslate('verify')}
+              {alarmTranslate('verify')}
             </ButtonCustom>
           </Box>
         </Box>
-        <div className='pt-3'>
-          <CarouselCustom>{alarm.alarms.map((item) => renderDeviceAlarmPanel(item))}</CarouselCustom>
-        </div>
+
       </>
     );
   };
 
   const renderDeviceAlarmPanel = (alarm) => {
     return (
-      <Grid>
-        <div className='w-80 flex flex-col gap-3 border border-[var(--neutral)] rounded-lg pt-3 '>
-          <div className='flex flex-col px-3 '>
-            <Typography variant='caption1' className='max-w-[256px]'>
-              {alarm.deviceInfo?.code ? String(alarm.deviceInfo?.code).padStart(4, '0') : ''}
-            </Typography>
-            <Typography variant='label1' className='max-w-[256px]'>
-              {alarm.deviceInfo?.name}
-            </Typography>
-          </div>
-          <div className='flex flex-col gap-2'>
-            <div className='flex flex-col gap-[6px]'>
-              <div className='flex bg-[var(--grey-primary-60)] p-2 px-4 rounded-lg'>
-                <Typography variant='label3' className='flex-1'>
-                  {t('fire-alerts-page.status')}
-                </Typography>
-                <div className='flex-end'>
-                  <StatusChip status={alarm?.status} />
-                </div>
-              </div>
-              <div className='flex px-4 py-2'>
-                <Typography variant='label3' className='flex-1'>
-                  {t('devicePage.content')}
-                </Typography>
-                <div className='break-words'>
-                  <Typography variant='body3' className='flex-1 text-right'>
-                    {alarm?.detail}
-                  </Typography>
-                </div>
-              </div>
-              <div className='flex px-4 py-2 bg-[var(--grey-primary-60)] rounded-lg'>
-                <Typography variant='label3' className='flex-1'>
-                  {t('devicePage.start-time')}
-                </Typography>
-                <Typography variant='body3' className='flex-1 text-right'>
-                  {alarm?.createdAlarmBy ? dayjs(alarm?.createdAlarmBy.date).format('HH:mm DD/MM') : '-'}
-                </Typography>
-              </div>
-              <div className='flex p-2 px-4 '>
-                <Typography variant='label3' className='flex-1'>
-                  {t('devicePage.update-time')}
-                </Typography>
-                <Typography variant='body3' className='flex-1 text-right'>
-                  {alarm?.updatedAlarmBy ? dayjs(alarm?.updatedAlarmBy.date).format('HH:mm DD/MM') : '-'}
-                </Typography>
-              </div>
-            </div>
-          </div>
+    <Grid>
+      <div className='flex flex-col border border-[var(--neutral)] w-80 text-white'>
+        <div className='flex w-full px-4 py-3'>
+          <Typography variant='label2' className='w-[40%]'>
+            {t('alarm-page.status')}
+          </Typography>
+          <Typography variant='body2' className='flex-1'>
+            <StatusChip status={alarm?.status} />
+          </Typography>
         </div>
-      </Grid>
+
+      
+        <div className='flex w-full px-4 py-3'>
+          <Typography variant='label2' className='w-[40%]'>
+            {t('devicePage.name')}
+          </Typography>
+          <Typography variant='body2' className='flex-1'>
+            {alarm.deviceInfo?.name || '-'}
+          </Typography>
+        </div>
+
+        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
+          <Typography variant='label2' className='w-[40%]'>
+            {t('devicePage.detail')}
+          </Typography>
+          <Typography variant='body2' className='flex-1 break-words'>
+            {alarm?.detail || '-'}
+          </Typography>
+        </div>
+
+        <div className='flex w-full px-4 py-3'>
+          <Typography variant='label2' className='w-[40%]'>
+            {t('devicePage.start-time')}
+          </Typography>
+          <Typography variant='body2' className='flex-1'>
+            {alarm?.createdAlarmBy ? dayjs(alarm?.createdAlarmBy.date).format('HH:mm DD/MM') : '-'}
+          </Typography>
+        </div>
+
+        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
+          <Typography variant='label2' className='w-[40%]'>
+            {t('devicePage.update-time')}
+          </Typography>
+          <Typography variant='body2' className='flex-1'>
+            {alarm?.updatedAlarmBy ? dayjs(alarm?.updatedAlarmBy.date).format('HH:mm DD/MM') : '-'}
+          </Typography>
+        </div>
+      </div>
+    </Grid>
+
     );
   };
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
-  const title = fireAlertTranslate('location-information');
+  const title = alarmTranslate('location-information');
 
   const renderBody = () => (
-    <div className='flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6'>
-      <div className='flex flex-col tablet:grid grid-cols-2 gap-6 tablet:gap-12'>
-        <CommonInfoLocation info={status === 'error' ? { ...openAlertPopup, status: 'CONFIRM' } : openAlertPopup} />
-        <div className='flex flex-col gap-2'>
-          <Typography variant='label1'>{t('fire-alerts-page.warning')}</Typography>
-          {alarms.map((alarm) => renderAlarmPanel(alarm))}
-        </div>
+  <div className="flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6">
+
+    {/* Top row: Common Info (left) + Alarms (right) */}
+    <div className="tablet:grid grid-cols-2 gap-6 tablet:gap-12">
+      {/* Left column: Common Info */}
+      <CommonInfoLocation info={status === 'error' ? { ...openAlertPopup, status: 'CONFIRM' } : openAlertPopup} />
+
+      {/* Right column: Alarm panel */}
+      <div className="flex flex-col gap-4">
+        <Typography variant="label1" className='text-white'>{t('alarm-page.warning')}</Typography>
+        {alarms.map((alarm) => (
+          <Box key={alarm.id}>{renderAlarmPanel(alarm)}</Box>
+        ))}
       </div>
-      {cameraList?.length > 0 && (
-        <div className='flex flex-col gap-3 '>
-          <Typography variant='label1'>Camera</Typography>
-          <CarouselCustom>
-            {cameraList.map((deviceInfo, index) => (
-              <div key={index} className='mx-2'>
-                <CameraDetail deviceInfo={deviceInfo} />
-              </div>
-            ))}
-          </CarouselCustom>
-        </div>
-      )}
     </div>
-  );
+
+    {/* Device panel row (full width) */}
+    {alarms.some((alarm) => alarm.alarms?.length > 0) && (
+      <div className="flex flex-col gap-3">
+        <Typography variant="label1" className='text-white'>Devices</Typography>
+        <CarouselCustom>
+          {alarms.flatMap((alarm) =>
+            alarm.alarms.map((device) => (
+              <div key={device.id} className="mx-2">
+                {renderDeviceAlarmPanel(device)}
+              </div>
+            ))
+          )}
+        </CarouselCustom>
+      </div>
+    )}
+
+    {/* Dashboard row (full width) */}
+    <div className="flex flex-col gap-3 bg-[#161B29] p-3">
+      <Typography variant="label1" className="text-white">
+        Dashboard
+      </Typography>
+      <div className="overflow-y-auto max-h-56 flex flex-col gap-1">
+        {dashboards.length > 0 ? (
+          dashboards.map((item) => (
+            <MenuItem
+              key={item.id}
+              title={item.name}
+              img={item.imageUrl}
+              onClick={() => navigate(`/dashboard/${item.id}`)}
+              tenantCode={tenantCode}
+              data={item}
+            />
+          ))
+        ) : (
+          <Typography variant="body2" className="text-[var(--text-secondary)]">
+            No dashboards
+          </Typography>
+        )}
+      </div>
+    </div>
+
+    {/* Camera row (full width) */}
+    {cameraList?.length > 0 && (
+      <div className="flex flex-col gap-3 bg-[#0D1117] p-3">
+        <Typography variant="label1">Camera</Typography>
+        <CarouselCustom>
+          {cameraList.map((deviceInfo, index) => (
+            <div key={index} className="mx-2">
+              <CameraDetail deviceInfo={deviceInfo} />
+            </div>
+          ))}
+        </CarouselCustom>
+      </div>
+    )}
+  </div>
+);
+
+
 
   return (
     <>
@@ -317,9 +376,9 @@ export function CameraDetail({ deviceInfo }) {
     }
   };
   return (
-    <div className='rounded-lg h-[253px] relative'>
-      <div className='w-full h-full bg-black rounded-lg'>
-        <video ref={videoRef} className='w-full h-full rounded-lg' />
+    <div className=' h-[253px] relative'>
+      <div className='w-full h-full bg-black '>
+        <video ref={videoRef} className='w-full h-full ' />
       </div>
       <div className='bg-[rgba(0,_0,_0,_0.5)] rounded-b-xl px-2 py-1 absolute w-full bottom-0 flex justify-between'>
         <div className='flex items-center gap-2'>

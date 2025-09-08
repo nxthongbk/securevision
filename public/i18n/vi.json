@@ -224,7 +224,9 @@
     "alarm-details": "Chi tiết cảnh báo",
     "update-infos": "Cập nhật thông tin",
     "update-notification": "Cập nhật cấu hình thông báo",
-    "add-new-notification": "Thêm cấu hình thông báo mới"
+    "add-new-notification": "Thêm cấu hình thông báo mới",
+    "name": "Tên"
+
   },
   "locationPage": {
     "location-management": "Quản lý địa điểm",

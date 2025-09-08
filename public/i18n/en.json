@@ -219,7 +219,8 @@
     "notification": "Notification",
     "edit-warning": "Edit warning",
     "content": "Content",
-    "configuration": "Configuration"
+    "configuration": "Configuration",
+    "name": "Name"
   },
   "locationPage": {
     "location-management": "Location Management",
