@@ -115,7 +115,7 @@ export default function AlertPopup() {
 
     return (
       <>
-        <Box key={alarm.id} className='flex flex-col	bg-[var(--red-60)] '>
+        <Box key={alarm.id} className='flex flex-col bg-[#0D1117] text-white '>
           <Box className='flex items-center justify-between w-full px-4 py-3'>
             <div className='flex flex-col'>
               <Typography variant='caption1'>ID: {alarm?.code ? String(alarm?.code).padStart(6, '0') : ''}</Typography>
@@ -127,17 +127,17 @@ export default function AlertPopup() {
               <StatusChip status={alarm.status} />
             </div>
           </Box>
-          <Divider
+          {/* <Divider
             sx={{
               borderBottom: '1px solid var(--border-color)',
               width: '100%'
             }}
-          />
+          /> */}
           <Box className='self-end px-4 py-3'>
             <ButtonCustom
               variant='contained'
               color='info'
-              className='!mr-2 h-[40px] !text-sm	!text-[#007EF5]'
+              className='!mr-2 h-[40px] !text-sm  !text-white !rounded-none !bg-[#0e2c42]'
               onClick={() => {
                 setOpenSkipPopup(true);
                 setSelectedAlarmLocationId(alarm.id);
@@ -147,7 +147,7 @@ export default function AlertPopup() {
             </ButtonCustom>
             <ButtonCustom
               variant='contained'
-              className='h-[40px] !text-sm'
+              className='h-[40px] !text-sm !rounded-none !bg-[#00BCFFCC]'
               onClick={() => {
                 setOpenVerifyPopup(true);
                 setSelectedAlarmLocationId(alarm.id);
@@ -165,7 +165,7 @@ export default function AlertPopup() {
   const renderDeviceAlarmPanel = (alarm) => {
     return (
     <Grid>
-      <div className='flex flex-col border border-[var(--neutral)] w-80 text-white'>
+      <div className='flex flex-col w-80 text-white'>
         <div className='flex w-full px-4 py-3'>
           <Typography variant='label2' className='w-[40%]'>
             {t('alarm-page.status')}
@@ -176,7 +176,7 @@ export default function AlertPopup() {
         </div>
 
       
-        <div className='flex w-full px-4 py-3'>
+        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
           <Typography variant='label2' className='w-[40%]'>
             {t('devicePage.name')}
           </Typography>
@@ -185,7 +185,7 @@ export default function AlertPopup() {
           </Typography>
         </div>
 
-        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
+        <div className='flex w-full px-4 py-3 '>
           <Typography variant='label2' className='w-[40%]'>
             {t('devicePage.detail')}
           </Typography>
@@ -194,7 +194,7 @@ export default function AlertPopup() {
           </Typography>
         </div>
 
-        <div className='flex w-full px-4 py-3'>
+        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
           <Typography variant='label2' className='w-[40%]'>
             {t('devicePage.start-time')}
           </Typography>
@@ -203,7 +203,7 @@ export default function AlertPopup() {
           </Typography>
         </div>
 
-        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
+        <div className='flex w-full px-4 py-3'>
           <Typography variant='label2' className='w-[40%]'>
             {t('devicePage.update-time')}
           </Typography>
@@ -227,20 +227,24 @@ export default function AlertPopup() {
     {/* Top row: Common Info (left) + Alarms (right) */}
     <div className="tablet:grid grid-cols-2 gap-6 tablet:gap-12">
       {/* Left column: Common Info */}
+      <div className="bg-[#161B29] p-3">      
       <CommonInfoLocation info={status === 'error' ? { ...openAlertPopup, status: 'CONFIRM' } : openAlertPopup} />
-
+      </div>
       {/* Right column: Alarm panel */}
-      <div className="flex flex-col gap-4">
-        <Typography variant="label1" className='text-white'>{t('alarm-page.warning')}</Typography>
-        {alarms.map((alarm) => (
-          <Box key={alarm.id}>{renderAlarmPanel(alarm)}</Box>
-        ))}
+      <div className="bg-[#0D1117] p-3">
+        <div className="flex flex-col gap-4">
+          <Typography variant="label1" className='text-white'>{t('alarm-page.warning')}</Typography>
+          {alarms.map((alarm) => (
+            <Box className= 'border border-white' key={alarm.id}>{renderAlarmPanel(alarm)}</Box>
+          ))}
+        </div>
       </div>
     </div>
 
     {/* Device panel row (full width) */}
+    <div className="bg-[#0D1117] p-3">
     {alarms.some((alarm) => alarm.alarms?.length > 0) && (
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 ">
         <Typography variant="label1" className='text-white'>Devices</Typography>
         <CarouselCustom>
           {alarms.flatMap((alarm) =>
@@ -253,6 +257,7 @@ export default function AlertPopup() {
         </CarouselCustom>
       </div>
     )}
+    </div>
 
     {/* Dashboard row (full width) */}
     <div className="flex flex-col gap-3 bg-[#161B29] p-3">
