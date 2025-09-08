@@ -44,7 +44,7 @@ export function useLocationTableColumns(
           icon: <UsersThree size={20} />,
           title: locationTranslate('human-resource-management'),
           onClick: () => {
-            navigate(ROUTES.HUMAN_RESOURCES?.concat(`?locationId=${locationId}`));
+            navigate(ROUTES.USER?.concat(`?locationId=${locationId}`));
           }
         }
       ];
@@ -197,7 +197,7 @@ export function useLocationTableColumns(
         renderCell: (params) => {
           const navigatePath = isAdmin
             ? `/fire-alerts?tenantCode=${params?.row?.tenantCode}&locationId=${params.row?.locationId}`
-            : ROUTES.FIRE_ALERTS?.concat(`?locationId=${params.row?.locationId}`);
+            : ROUTES.ALARM?.concat(`?locationId=${params.row?.locationId}`);
 
           return (
             <ActionMenu

@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useContext, useEffect, useRef, useState, useMemo } from 'react';
 
 import { AppContext } from '~/contexts/app.context';

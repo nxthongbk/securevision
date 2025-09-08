@@ -1,7 +1,7 @@
 {
   "name": "scity",
   "private": true,
-  "version": "v1.0.0905",
+  "version": "v1.0.0908",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -18,7 +18,7 @@ import {
 import { ReactNode, useEffect, useRef, useState } from 'react';
 
 import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr';
-import AvatarPopper from '~/layouts/MainLayout/components/SideBar/AvatarPopper';
+// import AvatarPopper from '~/layouts/MainLayout/components/SideBar/AvatarPopper';
 import ButtonCustom from '../ButtonCustom';
 import DateRangePicker from '../DatePicker';
 import { Funnel } from '@phosphor-icons/react';
@@ -335,9 +335,9 @@ const DataGridHeader = ({
       </div>
       <div className='flex flex-col w-full gap-6 miniLaptop:hidden'>
         <div className='flex items-center justify-between '>
-          <div className='flex items-center justify-start w-[60%] gap-2'>
+          {/* <div className='flex items-center justify-start w-[60%] gap-2'>
             <AvatarPopper pageTitle={title} />
-          </div>
+          </div> */}
           <div className='flex items-center justify-end w-[40%] gap-2'>
             {btnPopup && (
               <>
