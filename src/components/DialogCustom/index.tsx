@@ -26,13 +26,13 @@
     });
 
     export default function DialogCustom(props: IProps) {
-      const { title, content, footer, maxWidth, open, otherPosition, handleClose } = props;
+      const { title, content, footer, open, otherPosition, handleClose } = props;
 
       return (
         <Dialog
           open={open}
           sx={{ '& .MuiPaper-root': 
-            { maxWidth: maxWidth, 
+            { maxWidth: '60vw', 
               borderRadius: '0px',
               backgroundColor: '#030712',
               boxShadow: '0 4px 20px rgba(0,0,0,0.2)',

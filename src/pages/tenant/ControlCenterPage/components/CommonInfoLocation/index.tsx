@@ -23,15 +23,15 @@ export default function CommonInfoLocation({ info }: IProps) {
           <StatusChip status={info?.status} />
         </Typography>
       </div>
-      <div className='flex w-full px-4 py-3 bg-[#00BCFF12]  '>
+      {/* <div className='flex w-full px-4 py-3 bg-[#00BCFF12]  '>
         <Typography variant='label2' className='w-[26%]'>
           ID
         </Typography>
         <Typography variant='body2' className='flex-1'>
           {info?.code ? String(info?.code).padStart(4, '0') : ''}
         </Typography>
-      </div>
-      <div className='flex w-full   px-4 py-3'>
+      </div> */}
+      <div className='flex w-full px-4 py-3 bg-[#00BCFF12] '>
         <Typography variant='label2' className='w-[26%]'>
           {t('locationPage.name')}
         </Typography>
@@ -39,7 +39,7 @@ export default function CommonInfoLocation({ info }: IProps) {
           {info?.name}
         </Typography>
       </div>
-      <div className='flex w-full px-4 py-3 bg-[#00BCFF12]  '>
+      <div className='flex w-full px-4 py-3 '>
         <Typography variant='label2' className='w-[26%]'>
           {t('alarm-page.address')}
         </Typography>
@@ -47,14 +47,14 @@ export default function CommonInfoLocation({ info }: IProps) {
           {info?.address}
         </Typography>
       </div>
-      <div className='flex w-full px-4 py-3  '>
+      {/* <div className='flex w-full px-4 py-3  '>
         <Typography variant='label2' className='w-[26%]'>
           {t('locationPage.coordinate')}
         </Typography>
         <Typography variant='body2' className='flex-1'>
           {info?.location?.latitude}, {info?.location?.longitude}
         </Typography>
-      </div>
+      </div> */}
 
       <div className='flex w-full px-4 py-3 bg-[#00BCFF12] '>
         <Typography variant='label2' className='w-[26%]'>

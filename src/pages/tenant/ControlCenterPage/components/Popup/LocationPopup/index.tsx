@@ -41,57 +41,69 @@ export default function LocationPopup() {
   const title = alarmTranslate('location-information');
 
   const renderBody = () => (
-    <div className='flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6'>
+    <div className="flex flex-col gap-4 p-3 tablet:px-4 tablet:py-4">
 
-      {/* Common Info section */}
-      <div className=' p-4 '>
-        <CommonInfoLocation info={openLocationPopup} />
+      {/* Top row: Common Info + Warning */}
+      <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+        {/* Common Info */}
+        <div className="bg-[#161B29] p-3">
+          <CommonInfoLocation info={openLocationPopup} />
+        </div>
+
+        {/* Warning */}
+        <div className="bg-[#0D1117] p-3">
+          <Typography variant="label1" className="text-white">
+            {alarmTranslate("warning")}
+          </Typography>
+          <Typography variant="body2" className="text-[var(--text-secondary)]">
+            {alarmTranslate("no-alarm")}
+          </Typography>
+        </div>
       </div>
 
-      {/* Warning section */}
-      <div className='bg-[#0D1117] p-4 '>
-        <Typography variant='label1'className='text-white'>{alarmTranslate('warning')}</Typography>
-        <Typography variant='body1' className='text-[var(--text-secondary)]'>
-          {alarmTranslate('no-alarm')}
+      {/* Dashboard full row */}
+      <div className="bg-[#161B29] p-3 flex flex-col flex-1">
+        <Typography variant="label1" className="text-white mb-2">
+          Dashboard
         </Typography>
-      </div>
-
-      {/* Dashboard section */}
-      <div className='flex flex-col gap-2 bg-[#161B29] p-4'>
-        <Typography variant='label1' className='text-white'>Dashboard</Typography>
-        <div className='overflow-y-scroll flex flex-col'>
-          {dashboards.length > 0 ? dashboards.map((item) => (
-            <MenuItem
-              key={item.id}
-              title={item.name}
-              img={item.imageUrl}
-              onClick={() => navigate(`/dashboard/${item.id}`)}
-              tenantCode={tenantCode}
-              data={item}
-            />
-          )) : (
-            <Typography variant='body1' className='text-[var(--text-secondary)]'>
+        <div className="overflow-y-auto max-h-56 flex flex-col gap-1">
+          {dashboards.length > 0 ? (
+            dashboards.map((item) => (
+              <MenuItem
+                key={item.id}
+                title={item.name}
+                img={item.imageUrl}
+                onClick={() => navigate(`/dashboard/${item.id}`)}
+                tenantCode={tenantCode}
+                data={item}
+              />
+            ))
+          ) : (
+            <Typography variant="body2" className="text-[var(--text-secondary)]">
               No dashboards
             </Typography>
           )}
         </div>
       </div>
 
-      {/* Camera section */}
+      {/* Camera Section */}
       {cameraList?.length > 0 && (
-        <div className='flex flex-col gap-3 bg-[#0D1117] p-4 rounded'>
-          <Typography variant='label1'>Camera</Typography>
+        <div className="bg-[#0D1117] p-3">
+          <Typography variant="label1" className="text-white mb-2">
+            Camera
+          </Typography>
           <CarouselCustom>
             {cameraList.map((deviceInfo, index) => (
-              <div key={index} className='mx-2'>
+              <div key={index} className="mx-2">
                 <CameraDetail deviceInfo={deviceInfo} />
               </div>
             ))}
           </CarouselCustom>
         </div>
       )}
-
     </div>
+
+
   );
 
 
