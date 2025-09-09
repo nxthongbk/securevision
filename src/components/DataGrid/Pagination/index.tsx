@@ -2,18 +2,18 @@ import {  Pagination, PaginationItem, Stack,  } from '@mui/material';
 // import { Theme } from '@emotion/react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
 const PaginationComponent = ({
   page,
   setPage,
-  setSize,
-  setSizeOfPage,
+  // setSize,
+  // setSizeOfPage,
   total,
   sizeOfPage,
-  pageSizeOptions
+  // pageSizeOptions
 }: any) => {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const totalPage: number = useMemo(() => Math.ceil(total / sizeOfPage), [total, sizeOfPage]);
 
   const handleChangePage = (_, value: number) => {
