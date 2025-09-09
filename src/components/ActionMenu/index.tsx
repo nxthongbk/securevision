@@ -1,6 +1,5 @@
-import { Box, Button, Divider, MenuItem, SxProps, Theme, Typography, alpha } from '@mui/material';
+import { Box, Button, Divider, MenuItem, SxProps, Theme, Typography } from '@mui/material';
 import { MouseEvent, ReactNode, useState } from 'react';
-
 import { CaretDown } from '@phosphor-icons/react';
 import { StyledMenu } from './styled';
 
@@ -26,43 +25,56 @@ export default function ActionMenu({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const hasMenuOptions = menuOptions.length > 0;
+
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     hasMenuOptions && setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
-    <div className='w-fit'>
+    <div className="w-fit">
       <Button
-        id='action-button'
-        variant='contained'
+        id="action-button"
+        variant="text"
         disableElevation
         onClick={handleClick}
-        className='h-[32px] w-full !p-0'
-        sx={{ bgcolor: 'var(--grey-primary-80)', '&:hover': { bgcolor: alpha('#d9e1e8', 0.8) } }}
+        className="h-[32px] w-full !p-0"
+        sx={{
+          color: '#00BCFF',
+          bgcolor: 'transparent',
+          '&:hover': {
+            bgcolor: 'transparent',
+            color: '#00BCFF'
+          }
+        }}
       >
         <Box
           onClick={(e) => {
             onClick?.();
             e.stopPropagation();
           }}
-          className={`px-[14px] h-full flex items-center ${centerBtnContent ? 'justify-center' : 'justify-normal'} grow`}
+          className={`px-[14px] h-full flex items-center ${
+            centerBtnContent ? 'justify-center' : 'justify-normal'
+          } grow`}
         >
-          <Typography color='var(--text-primary)' variant='button3'>
+          <Typography sx={{ color: '#00BCFF' }} variant="button3">
             {label}
           </Typography>
         </Box>
+
         {hasMenuOptions && (
-          <Box className='flex items-center pr-[8px] gap-[6.5px]'>
-            <Divider orientation='vertical' sx={{ width: '1px', height: '21px' }} />
-            <CaretDown size={16} color='var(--grey-neutral-800' />
+          <Box className="flex items-center pr-[8px] gap-[6.5px]">
+            <Divider orientation="vertical" sx={{ width: '1px', height: '21px', borderColor: '#00BCFF' }} />
+            <CaretDown size={16} color="#00BCFF" />
           </Box>
         )}
       </Button>
+
       <StyledMenu
-        id='action-menu'
+        id="action-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -80,7 +92,7 @@ export default function ActionMenu({
             disableRipple
           >
             {option.icon}
-            <Typography variant='body3'>{option.title}</Typography>
+            <Typography variant="body3">{option.title}</Typography>
           </MenuItem>
         ))}
       </StyledMenu>
