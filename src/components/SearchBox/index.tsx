@@ -64,7 +64,7 @@ const SearchBox = ({ keyword, setKeyword, dataSearch, placeholder, minWidth, id 
           InputProps={{
             className: 'border-none',
             startAdornment: (
-              <IconPhosphor iconName='MagnifyingGlass' size={20} color='var(--text-tertiary)' className='mr-2' />
+              <IconPhosphor iconName='MagnifyingGlass' size={20} color='#00BCFFCC' className='mr-2' />
             ),
             endAdornment:
               keyword !== '' ? (
@@ -91,17 +91,26 @@ const SearchBox = ({ keyword, setKeyword, dataSearch, placeholder, minWidth, id 
 export default SearchBox;
 
 const textFieldCustomStyle: SxProps<Theme> = {
-  '& .MuiInputBase-root': {
-    padding: '0px 16px',
-    height: '40px',
-    lineHeight: '20px',
-    '&.MuiOutlinedInput-root input': {
-      padding: '0 !important',
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 0, // remove rounded corners if you want
+    '& fieldset': {
+      border: '1px solid #00BCFFCC', // hardcoded blue border
+    },
+    '&:hover fieldset': {
+      border: '1px solid #00BCFFCC',
+    },
+    '&.Mui-focused fieldset': {
+      border: '1px solid #00BCFFCC',
+    },
+    '& input': {
+      padding: '15 !important',
       fontSize: '14px',
       lineHeight: '20px',
+      color: 'white',
       '&::placeholder': {
         fontSize: '14px'
       }
     }
   }
 };
+

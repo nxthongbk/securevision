@@ -1,114 +1,119 @@
-import { useState } from 'react';
-import { TextFieldVariants, Typography } from '@mui/material';
-import { CalendarBlank } from '@phosphor-icons/react';
-import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import 'dayjs/locale/en-gb';
+import { useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
+import { CalendarBlank } from "@phosphor-icons/react";
+import {
+  DateCalendar,
+  LocalizationProvider,
+} from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import "dayjs/locale/en-gb";
 
-const CustomDatePicker = ({ hasTimeSelection, open, value, onClose, onClick, onChange, disabled, minDateTime }) => {
-  const commonProps = {
-    open,
-    value,
-    onClose,
-    onChange,
-    disabled,
-    slotProps: {
-      textField: {
-        onClick,
-        variant: 'standard' as TextFieldVariants,
-        InputProps: {
-          endAdornment: null,
-          disableUnderline: true,
-          className: 'input-field'
-        },
-        sx: {
-          '& input': {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            textDecoration: 'none',
-            textTransform: 'lowercase',
-            fontSize: '14px'
-          }
-        }
-      }
-    }
-  };
+interface DateRangePickerProps {
+  valueStart?: dayjs.Dayjs | null;
+  valueEnd?: dayjs.Dayjs | null;
+  onChange?: (range: [dayjs.Dayjs | null, dayjs.Dayjs | null]) => void;
+  disabled?: boolean;
+}
 
-  return hasTimeSelection ? (
-    <DateTimePicker {...commonProps} className='text-[--text-primary]' minDateTime={minDateTime} />
-  ) : (
-    <DatePicker {...commonProps} className='text-[--text-primary]' />
+const DateRangePicker = ({
+  valueStart,
+  valueEnd,
+  onChange,
+  disabled = false,
+}: DateRangePickerProps) => {
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
+    valueStart ?? null
   );
-};
+  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(
+    valueEnd ?? null
+  );
 
-const DateRangePicker = ({ valueStart, valueEnd, onChange, disabled = false, hasTimeSelection = true }) => {
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
-  const [openEndDatePicker, setOpenEndDatePicker] = useState(false);
-  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
-
-  const handleStartDateChange = (date: dayjs.Dayjs | null) => {
-    setStartDate(date);
-    onChange?.([date, endDate]);
+  const handleApply = () => {
+    onChange?.([startDate, endDate]);
   };
 
-  const handleEndDateChange = (date: dayjs.Dayjs | null) => {
-    setEndDate(date);
-    onChange?.([startDate, date]);
+  const handleReset = () => {
+    setStartDate(null);
+    setEndDate(null);
+    onChange?.([null, null]);
   };
-
-  const minEndDateTime = startDate || dayjs();
 
   return (
-    <div>
-      <div
-        style={{
-          border: '1px solid var(--border-color)',
-          borderRadius: '8px',
-          height: '40px'
-        }}
-        className='bg-white px-4 grid grid-cols-12 items-center'
+    <Box
+      sx={{
+        border: "1px solid var(--border-color)",
+        borderRadius: "8px",
+        p: 2,
+        background: "#0B1118",
+        color: "white",
+        width: "100%",
+        maxWidth: 600,
+      }}
+    >
+      {/* Header */}
+      <Box
+        sx={{ display: "flex", alignItems: "center", mb: 2, gap: 1 }}
       >
-        <div className='w-fit col-span-3'>
-          <Typography variant='body3' sx={{ color: 'var(--tertiary)', fontSize: '14px' }}>
-            Thời gian:
-          </Typography>
-        </div>
-        <div className='flex justify-end col-span-3'>
-          <LocalizationProvider adapterLocale='en-gb' dateAdapter={AdapterDayjs}>
-            <CustomDatePicker
-              hasTimeSelection={hasTimeSelection}
-              open={openStartDatePicker}
-              value={valueStart}
-              onClose={() => setOpenStartDatePicker(false)}
-              onClick={() => setOpenStartDatePicker(true)}
-              onChange={handleStartDateChange}
-              disabled={disabled}
-              minDateTime={undefined}
-            />
-          </LocalizationProvider>
-        </div>
-        <div className='px-1 col-span-1'>-</div>
-        <div className='col-span-3'>
-          <LocalizationProvider adapterLocale='en-gb' dateAdapter={AdapterDayjs}>
-            <CustomDatePicker
-              hasTimeSelection={hasTimeSelection}
-              open={openEndDatePicker}
-              value={valueEnd}
-              onClose={() => setOpenEndDatePicker(false)}
-              onClick={() => setOpenEndDatePicker(true)}
-              onChange={handleEndDateChange}
-              disabled={disabled}
-              minDateTime={minEndDateTime}
-            />
-          </LocalizationProvider>
-        </div>
-        <div className='justify-self-end col-span-2'>
-          <CalendarBlank size={22} color='var(--tertiary)' />
-        </div>
-      </div>
-    </div>
+        <CalendarBlank size={20} color="var(--tertiary)" />
+        <Typography variant="body2" sx={{ color: "var(--tertiary)" }}>
+          Thời gian
+        </Typography>
+      </Box>
+
+      {/* Two Calendars Inline */}
+      <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+        <LocalizationProvider
+          adapterLocale="en-gb"
+          dateAdapter={AdapterDayjs}
+        >
+          <DateCalendar
+            disabled={disabled}
+            value={startDate}
+            onChange={(date) => setStartDate(date)}
+          />
+        </LocalizationProvider>
+
+        <LocalizationProvider
+          adapterLocale="en-gb"
+          dateAdapter={AdapterDayjs}
+        >
+          <DateCalendar
+            disabled={disabled}
+            value={endDate}
+            minDate={startDate || undefined}
+            onChange={(date) => setEndDate(date)}
+          />
+        </LocalizationProvider>
+      </Box>
+
+      {/* Buttons */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 1,
+          mt: 2,
+        }}
+      >
+        <Button
+          size="small"
+          variant="outlined"
+          sx={{ color: "white", borderColor: "var(--tertiary)" }}
+          onClick={handleReset}
+        >
+          Reset
+        </Button>
+        <Button
+          size="small"
+          variant="contained"
+          sx={{ background: "var(--primary)" }}
+          onClick={handleApply}
+        >
+          Apply
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

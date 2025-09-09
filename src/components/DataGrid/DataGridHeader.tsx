@@ -209,7 +209,7 @@ const DataGridHeader = ({
                           valueStart={item?.value?.startTime}
                           valueEnd={item?.value?.endTime}
                           onChange={item?.onChange}
-                          hasTimeSelection={false}
+                          // hasTimeSelection={false}
                         />
                       </Box>
                     </Stack>
@@ -477,7 +477,7 @@ const DataGridHeader = ({
                                   valueStart={item?.value?.startTime}
                                   valueEnd={item?.value?.endTime}
                                   onChange={item?.onChange}
-                                  hasTimeSelection={false}
+                                  // hasTimeSelection={false}
                                 />
                               </Box>
                             </Stack>
