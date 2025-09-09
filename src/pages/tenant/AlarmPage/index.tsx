@@ -218,7 +218,7 @@ function AlarmPage() {
   }
 
   return (
-    <HandleScrollPage props={{ title: alarmTranslate('management') }}>
+    <HandleScrollPage props={{ title: "alarmTranslate('management') "}}>
       <ResizableHeader
         isSearch
         keyword={keyword}

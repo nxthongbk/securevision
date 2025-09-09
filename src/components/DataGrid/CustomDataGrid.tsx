@@ -101,7 +101,7 @@ const CustomDataGrid = (props: CustomDataGridProps) => {
   }
 
   return (
-    <div className='flex-1 table__wrapper flex justify-between flex-col border rounded-lg '>
+    <div className='flex-1 table__wrapper flex justify-between flex-col border '>
       <DataGrid
         sortingOrder={['desc', 'asc']}
         onRowSelectionModelChange={onSelectionModelChange}
@@ -166,6 +166,9 @@ const dataGridCustomStyle: SxProps<Theme> = {
       WebkitBoxOrient: 'vertical',
       wordBreak: 'break-word'
     }
+  },
+  '& .MuiDataGrid-columnHeader': {
+    borderRight: 'none' // <- remove border between header columns
   },
   borderRadius: 0,
   border: 'none',
