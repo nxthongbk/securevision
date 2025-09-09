@@ -1,6 +1,6 @@
 import { FormatTime } from '~/utils/formatDateTime';
 import StatusChip from '~/components/StatusChip';
-import { Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import { translationCapitalFirst } from '~/utils/translate';
 
 type Data = {
@@ -8,6 +8,7 @@ type Data = {
   label: string;
   value: string;
 };
+
 function TabInfo({ alertDetail }: Readonly<{ alertDetail: Record<string, any> }>) {
   const translate = (text: string) => translationCapitalFirst(text, 'alarm-page');
 
@@ -34,28 +35,42 @@ function TabInfo({ alertDetail }: Readonly<{ alertDetail: Record<string, any> }>
     },
     { key: 'reason', label: translate('reason-cause'), value: alertDetail.reason ?? '-' }
   ];
+
   return (
-    <div className='w-full flex flex-col justify-start'>
-      {data?.map((item: Data, idx: number) => {
-        return (
-          <div
-            key={item.key}
-            className={`w-full flex justify-start items-start py-3 px-4 rounded-md ${idx % 2 === 0 ? ' bg-[var(--grey-primary-60)]' : ''}`}
-          >
-            <div className='w-[30%]'>
-              <Typography variant='label2'>{item.label}</Typography>
-            </div>
-            <div className='w-[70%]'>
-              {item.key === 'status' ? (
-                <StatusChip status={item.value} />
-              ) : (
-                <Typography variant='body2'>{item.value}</Typography>
-              )}
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    <Box className='w-full flex flex-col justify-start'>
+      {data.map((item: Data, idx: number) => (
+        <Box
+          key={item.key}
+          sx={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'start',
+            alignItems: 'start',
+            px: '16px', // Tailwind px-4
+            py: '12px', // Tailwind py-3
+            backgroundColor: idx % 2 === 0 ? '#03111b' : '#031423',
+            color: 'white',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: 0, // no rounding
+          }}
+        >
+          <Box sx={{ width: '30%' }}>
+            <Typography variant='label2' sx={{ color: 'white' }}>
+              {item.label}
+            </Typography>
+          </Box>
+          <Box sx={{ width: '70%' }}>
+            {item.key === 'status' ? (
+              <StatusChip status={item.value} />
+            ) : (
+              <Typography variant='body2' sx={{ color: 'white' }}>
+                {item.value}
+              </Typography>
+            )}
+          </Box>
+        </Box>
+      ))}
+    </Box>
   );
 }
 
