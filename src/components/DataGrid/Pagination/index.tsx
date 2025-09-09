@@ -13,7 +13,7 @@ const PaginationComponent = ({
   sizeOfPage,
   // pageSizeOptions
 }: any) => {
-  // const { t } = useTranslation();
+  // const { t } = useTranslation();  
   const totalPage: number = useMemo(() => Math.ceil(total / sizeOfPage), [total, sizeOfPage]);
 
   const handleChangePage = (_, value: number) => {

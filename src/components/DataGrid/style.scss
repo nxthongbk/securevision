@@ -16,7 +16,8 @@
 }
 
 .rows-selected {
-  background-color: var(--turquoise-60) !important;
+  background-color: var(--turquoise-60) !important
+  ;
 }
 
 .pagination {
@@ -25,8 +26,9 @@
   position: relative;
   bottom: 0;
   padding: 16px;
-  border-top: 1px solid var(--border-color);
 }
+
+// rgba(255, 255, 255, 0.2)
 .MuiDataGrid-columnHeaders {
   position: -webkit-sticky;
   position: sticky !important;
@@ -85,7 +87,7 @@
     font-weight: 600;
     font-family: Inter;
     background-color: var(--grey-primary-60);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid pink;
   }
 }
 
@@ -107,8 +109,8 @@
 }
 
 .table-grid__header {
-  border-top: 1px solid var(--grey-primary-100);
-  border-right: 1px solid var(--grey-primary-100);
+  // border-top: 1px solid var(--grey-primary-100);
+  // border-right: 1px solid var(--grey-primary-100);
   background-color: var(--grey-primary-80);
   padding: 0px 16px !important;
   border-radius: 0 !important;

@@ -93,7 +93,7 @@ const CustomDataGrid = (props: CustomDataGridProps) => {
         borderBottom='1px solid var(--grey-neutral-100)'
         boxSizing='border-box'
         className='empty-record-message'
-        sx={{ overflow: 'hidden' }}
+        sx={{ overflow: 'hidden' }}        
       >
         <Typography variant='body3'>{emptyMessage}</Typography>
       </Stack>
@@ -101,8 +101,10 @@ const CustomDataGrid = (props: CustomDataGridProps) => {
   }
 
   return (
-    <div className='flex-1 table__wrapper flex justify-between flex-col border '>
+    
+    <div className='flex-1 table__wrapper flex justify-between flex-col'>
       <DataGrid
+        autoHeight
         sortingOrder={['desc', 'asc']}
         onRowSelectionModelChange={onSelectionModelChange}
         checkboxSelection={checkboxSelection}
@@ -120,7 +122,6 @@ const CustomDataGrid = (props: CustomDataGridProps) => {
         sx={{
           display: 'flex',
           ...dataGridCustomStyle,
-          height: '100%',
           fontSize: '14px !important'
         }}
         loading={loading}
@@ -155,7 +156,8 @@ export default CustomDataGrid;
 
 const dataGridCustomStyle: SxProps<Theme> = {
   '& .MuiDataGrid-cell': {
-    borderRight: 'none',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.2)', // only row separators
+    borderRight: 'none', // remove column borders
     padding: '0px 16px',
     whiteSpace: 'wrap !important',
     '& .MuiTypography-root': {
@@ -168,11 +170,16 @@ const dataGridCustomStyle: SxProps<Theme> = {
     }
   },
   '& .MuiDataGrid-columnHeader': {
-    borderRight: 'none' // <- remove border between header columns
+    borderRight: 'none', // no border between header columns
+  },
+  '& .MuiDataGrid-columnHeaders': {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)', // header background
+  },
+  '& .MuiDataGrid-columnHeaderTitle': {
+    color: 'rgba(255, 255, 255, 0.87)', // header text (optional, tweak contrast)
   },
   borderRadius: 0,
-  border: 'none',
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--blue-80)' // Change this to your desired hover color
+    backgroundColor: 'var(--blue-80)' // hover effect
   }
 };
