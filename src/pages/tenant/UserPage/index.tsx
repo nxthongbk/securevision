@@ -201,8 +201,8 @@ export default function userPage() {
         filterFullwidth={isBelowDesktop}
         // title={'user-page.management'}
         btnPopup={
-          <Box className='flex gap-4'>
-            <PermisisonConfigDrawer tenantCode={tenantCode} />
+          <Box className='flex gap-4 '>
+            <PermisisonConfigDrawer tenantCode={tenantCode}   />
             {hasEdit && <PopupUpsertEmployee />}
           </Box>
         }
