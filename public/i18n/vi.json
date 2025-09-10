@@ -373,6 +373,12 @@
     "select-alarm-type": "Chọn loại cảnh báo",
     "no-alarm": "Hiện không có cảnh báo nào."
   },
+  "alarm-status" :{
+    "ignore": "Bỏ qua",
+    "confirm": "Xác minh",
+    "pending": "Chờ xác minh",
+    "alarm": "Cảnh báo"
+  },
   "user-page": {
     "management": "Quản lý nhân sự",
     "location": "Địa điểm",

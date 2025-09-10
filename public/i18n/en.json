@@ -356,6 +356,12 @@
     "select-alarm-type": "Select alarm type",
     "no-alarm": "No alarm"
   },
+  "alarm-status" :{
+    "ignore": "Ignore",
+    "confirm": "Confirm",
+    "pending": "Pending",
+    "alarm": "Alarm"
+  },
   "user-page": {
     "management": "User Management",
     "location": "Location",

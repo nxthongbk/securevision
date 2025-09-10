@@ -9,22 +9,22 @@ export const statusFilterOptions = [
   {
     id: '1',
     value: AlarmStatus.IGNORE,
-    name: 'Bỏ qua'
+    name: 'alarm-status.ignore'
   },
   {
     id: '2',
     value: AlarmStatus.CONFIRM,
-    name: 'Xác minh'
+    name: 'alarm-status.confirm'
   },
   {
     id: '3',
     value: AlarmStatus.PENDING,
-    name: 'Chờ xác minh'
+    name: 'alarm-status.pending'
   },
   {
     id: '4',
     value: AlarmStatus.ALARM,
-    name: 'Cảnh báo'
+    name: 'alarm-status.alarm'
   }
 ];
 

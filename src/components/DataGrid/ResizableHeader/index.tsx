@@ -257,7 +257,7 @@ const ResizableHeader = ({
                       value={opt.value}
                       sx={{ fontSize: 13, color: 'white' }}
                     >
-                      {opt.name}
+                      {t(opt.name)}
                     </MenuItem>
                   ))}
                 </Select>
