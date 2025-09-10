@@ -198,7 +198,7 @@ export default function userPage() {
         isSearch
         disableResetFilter={disableResetFilter}
         handleResetFilter={handleResetFilter}
-        filterFullwidth={isBelowDesktop}
+        // filterFullwidth={isBelowDesktop}
         // title={'user-page.management'}
         btnPopup={
           <Box className='flex gap-4 '>

@@ -180,6 +180,6 @@ const dataGridCustomStyle: SxProps<Theme> = {
   },
   borderRadius: 0,
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--blue-80)' // hover effect
+    backgroundColor: 'dark-blue' // hover effect
   }
 };

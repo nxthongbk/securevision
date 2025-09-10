@@ -107,9 +107,9 @@ export default function PopupDeviceInfor({ props, hasEdit }: { props: Record<str
         <Typography variant='button3'>{translationCapitalFirst('show-infos')}</Typography>
       </div>
       <Drawer open={open} onClose={toggleDrawer(false)} anchor='right'>
-        <Box sx={{ width: 1024 }} className='flex flex-col flex-1 gap-4 p-6' role='presentation'>
+        <Box sx={{ width: 1024, bgcolor: 'var(--bg)' }} className='flex flex-col flex-1 gap-4 p-6' role='presentation'>
           <div className='h-10'>
-            <Typography variant='h4'>{props?.name}</Typography>
+            <Typography variant='h4' color="var(--text-primary)">{props?.name}</Typography>
           </div>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>

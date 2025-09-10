@@ -4,15 +4,15 @@ import {
   Grid,
   MenuItem,
   Select,
-  Stack,
+  // Stack,
   TextField,
   Typography,
   menuItemClasses
 } from '@mui/material';
 import { ReactNode } from 'react';
-import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr';
-import ButtonCustom from '../ButtonCustom';
-import DateRangePicker from '../DatePicker';
+// import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr';
+// import ButtonCustom from '../ButtonCustom';
+// import DateRangePicker from '../DatePicker';
 import SearchBox from '../SearchBox';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -52,8 +52,8 @@ const DataGridHeader = ({
   filter,
   isSearch,
   keyword,
-  disableResetFilter,
-  handleResetFilter,
+  // disableResetFilter,
+  // handleResetFilter,
   setKeyword,
   btnPopup
 }: Props) => {

@@ -193,10 +193,10 @@ export default function DevicePage() {
         keyword={keyword}
         setKeyword={setKeyword}
         filter={filter}
-        filterFullwidth
+        // filterFullwidth
         disableResetFilter={checkDisableFilter}
         handleResetFilter={handleResetFilter}
-        title={deviceTranslate('devices-management')}
+        // title={deviceTranslate('devices-management')}
       />
       {isTablet ? (
         <ListCard>
