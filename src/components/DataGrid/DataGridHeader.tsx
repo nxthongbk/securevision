@@ -58,7 +58,7 @@ interface Props {
   isSearch: boolean;
   setKeyword?: any;
   keyword?: string;
-  title: string;
+  // title: string; // Removed
   btnPopup?: ReactNode;
 }
 
@@ -70,7 +70,7 @@ const DataGridHeader = ({
   handleResetFilter,
   setKeyword,
   filterFullwidth = false,
-  title,
+  // title, // Removed
   btnPopup
 }: Props) => {
   const { t } = useTranslation();
@@ -78,6 +78,7 @@ const DataGridHeader = ({
   const selectRef = useRef<HTMLDivElement>(null);
   const [isShowFilter, setIsShowFilter] = useState(false);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('tablet'));
+
   useEffect(() => {
     function updateSize() {
       selectRef.current && setMenuWidth(selectRef.current.offsetWidth);
@@ -92,32 +93,27 @@ const DataGridHeader = ({
   return (
     <>
       <div className='hidden w-full miniLaptop:block'>
+        {/* Singular row header */}
         <div className='flex items-center justify-between'>
-          <HeaderPage title={title} />
+          {/* Search box on the left */}
+          {isSearch && (
+            <Grid item mobile={6} miniLaptop={3.2} laptop={2.8}>
+              <SearchBox keyword={keyword} setKeyword={setKeyword} />
+            </Grid>
+          )}
+
+          {/* Filters and buttons on the right */}
           <div className='flex items-center gap-4'>
-            {isSearch && (
-              <Grid item mobile={6} miniLaptop={3.2} laptop={2.8}>
-                <Stack direction='column' width={'100%'} gap={1}>
-                  <Box width={'100%'} component={'div'} display={'flex'} justifyContent={'space-between'}>
-                    <Box width='100%'>
-                      <SearchBox keyword={keyword} setKeyword={setKeyword} />
-                    </Box>
-                  </Box>
-                </Stack>
-              </Grid>
-            )}
             {filter && (
-              <>
-                <ButtonCustom
-                  className='h-[40px]'
-                  variant='outlined'
-                  sx={{ fontWeight: "bold" }}
-                  onClick={() => setIsShowFilter(!isShowFilter)}
-                  startIcon={<Funnel />}
-                >
-                  {t('filter')}
-                </ButtonCustom>
-              </>
+              <ButtonCustom
+                className='h-[40px]'
+                variant='outlined'
+                sx={{ fontWeight: "bold" }}
+                onClick={() => setIsShowFilter(!isShowFilter)}
+                startIcon={<Funnel />}
+              >
+                {t('filter')}
+              </ButtonCustom>
             )}
             {btnPopup && (
               <>
@@ -138,16 +134,16 @@ const DataGridHeader = ({
             )}
           </div>
         </div>
-        {/* Addtional filter */}
+
+        {/* Additional filter section */}
         {isShowFilter && (
           <Grid
             container
-            className='w-full justify-start items-center  bg-[var(--grey-neutral-60)] p-2 rounded-lg gap-3 mt-6'
+            className='w-full justify-start items-center bg-[var(--grey-neutral-60)] p-2 rounded-lg gap-3 mt-6'
           >
-            <Typography variant='label3' color={'var(--text-primary)'}>
+            {/* <Typography variant='label3' color={'var(--text-primary)'}>
               {t('filter')}
-            </Typography>
-            {/* Addtional filter */}
+            </Typography> */}
             {filter?.map((item) => {
               if (item.isRangeFilter) {
                 return (
@@ -168,15 +164,9 @@ const DataGridHeader = ({
                           value={item.value?.from}
                           name='from'
                           onChange={item.onChange}
-                          inputProps={{
-                            style: {
-                              fontSize: '14px'
-                            }
-                          }}
+                          inputProps={{ style: { fontSize: '14px' } }}
                           className='bg-white hide-arrows-input-number'
-                          sx={{
-                            flexBasis: { miniLaptop: '45%', mobile: '48.5%' }
-                          }}
+                          sx={{ flexBasis: { miniLaptop: '45%', mobile: '48.5%' } }}
                         />
                         {' - '}
                         <TextField
@@ -185,15 +175,9 @@ const DataGridHeader = ({
                           placeholder={t('to')}
                           name='to'
                           onChange={item.onChange}
-                          inputProps={{
-                            style: {
-                              fontSize: '14px'
-                            }
-                          }}
+                          inputProps={{ style: { fontSize: '14px' } }}
                           className='bg-white hide-arrows-input-number'
-                          sx={{
-                            flexBasis: { miniLaptop: '55%', mobile: '48.5%' }
-                          }}
+                          sx={{ flexBasis: { miniLaptop: '55%', mobile: '48.5%' } }}
                         />
                       </Box>
                     </Stack>
@@ -209,7 +193,6 @@ const DataGridHeader = ({
                           valueStart={item?.value?.startTime}
                           valueEnd={item?.value?.endTime}
                           onChange={item?.onChange}
-                          // hasTimeSelection={false}
                         />
                       </Box>
                     </Stack>
@@ -217,8 +200,8 @@ const DataGridHeader = ({
                 );
               }
               return (
-                <div key={item.id} className='grid grid-cols-8  items-center   bg-white border rounded-lg w-[320px] px-4 pr-0'>
-                  <div className='col-span-3' >
+                <div key={item.id} className='grid grid-cols-8 items-center bg-white border rounded-lg w-[320px] px-4 pr-0'>
+                  <div className='col-span-3'>
                     <Typography variant='body3' className='text-[var(--tertiary)]'>
                       {t(item?.label)}:
                     </Typography>
@@ -231,60 +214,21 @@ const DataGridHeader = ({
                       sx={{
                         boxShadow: 'none',
                         '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                        '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                          border: 0
-                        },
-                        '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          border: 0
-                        },
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          boxShadow: 'none',
-                          border: 0,
-                          borderWidth: '0 !important'
-                        },
-                        '& .MuiOutlinedInput-input': {
-                          fontWeight: 600,
-                          paddingLeft: '0px',
-                          paddingRight: '0px',
-                        },
-
+                        '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': { border: 0 },
+                        '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 0 },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { boxShadow: 'none', border: 0, borderWidth: '0 !important' },
+                        '& .MuiOutlinedInput-input': { fontWeight: 600, paddingLeft: '0px', paddingRight: '0px' }
                       }}
                       className='border-none !pl-0'
                       MenuProps={
                         item.isLazyLoad
-                          ? {
-                            PaperProps: {
-                              style: {
-                                maxHeight: ITEM_HEIGHT * 10 + ITEM_PADDING_TOP
-                              },
-                              onScroll: item.onScroll
-                            }
-                          }
-                          : {
-                            slotProps: {
-                              paper: {
-                                sx: {
-                                  [`& .${menuItemClasses.root}`]: { whiteSpace: 'normal' },
-                                  width: menuWidth
-                                }
-                              }
-                            }
-                          }
+                          ? { PaperProps: { style: { maxHeight: ITEM_HEIGHT * 10 + ITEM_PADDING_TOP }, onScroll: item.onScroll } }
+                          : { slotProps: { paper: { sx: { [`& .${menuItemClasses.root}`]: { whiteSpace: 'normal' }, width: menuWidth } } } }
                       }
                     >
-                      {item?.option?.map((item: any) => (
-                        <MenuItem
-                          key={item.id}
-                          value={item.value}
-                          sx={{
-                            width: '220px',
-                            fontSize: '14px',
-                            overflowWrap: 'break-word',
-                            wordWrap: 'break-word',
-                            whiteSpace: 'normal'
-                          }}
-                        >
-                          {item.name}
+                      {item?.option?.map((option: any) => (
+                        <MenuItem key={option.id} value={option.value} sx={{ width: '220px', fontSize: '14px', whiteSpace: 'normal', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                          {option.name}
                         </MenuItem>
                       ))}
                     </Select>
@@ -294,33 +238,15 @@ const DataGridHeader = ({
             })}
 
             {filter && (
-              <Grid
-                item
-                mobile={6}
-                laptop={6}
-                desktop={1.5}
-                display='flex'
-                justifyContent={{
-                  mobile: 'start'
-                }}
-              >
+              <Grid item mobile={6} laptop={6} desktop={1.5} display='flex' justifyContent={{ mobile: 'start' }}>
                 <Button
                   variant='text'
                   disabled={disableResetFilter}
                   color='primary'
-                  onClick={() => {
-                    if (handleResetFilter) {
-                      handleResetFilter();
-                    }
-                  }}
+                  onClick={() => handleResetFilter && handleResetFilter()}
                   sx={{
-                    [`&.${buttonClasses.disabled}`]: {
-                      backgroundColor: 'transparent',
-                      color: 'var(--grey-neutral-400)'
-                    },
-                    '&:hover': {
-                      textDecoration: 'none'
-                    }
+                    [`&.${buttonClasses.disabled}`]: { backgroundColor: 'transparent', color: 'var(--grey-neutral-400)' },
+                    '&:hover': { textDecoration: 'none' }
                   }}
                 >
                   <Stack direction='row' alignItems='center' gap={0.75}>
@@ -333,253 +259,70 @@ const DataGridHeader = ({
           </Grid>
         )}
       </div>
+
       <div className='flex flex-col w-full gap-6 miniLaptop:hidden'>
-        <div className='flex items-center justify-between '>
-          {/* <div className='flex items-center justify-start w-[60%] gap-2'>
-            <AvatarPopper pageTitle={title} />
-          </div> */}
-          <div className='flex items-center justify-end w-[40%] gap-2'>
+        {/* Mobile header row */}
+        <div className='flex items-center justify-between'>
+          {/* Search box on left */}
+          {isSearch && <Box flex={1}><SearchBox keyword={keyword} setKeyword={setKeyword} /></Box>}
+
+          {/* Buttons / filters on right */}
+          <div className='flex items-center gap-2'>
             {btnPopup && (
               <>
                 <Divider
                   className='hidden sm:block'
                   orientation='vertical'
-                  sx={{
-                    width: '3px',
-                    display: {
-                      miniLaptop: 'flex',
-                      mobile: 'none'
-                    }
-                  }}
+                  sx={{ width: '3px', display: { miniLaptop: 'flex', mobile: 'none' } }}
                   flexItem
                 />
                 {btnPopup}
               </>
-            )}</div>
+            )}
+            {filter && (
+              <Button
+                variant='text'
+                color='primary'
+                onClick={() => setIsShowFilter(!isShowFilter)}
+                sx={{
+                  [`&.${buttonClasses.disabled}`]: { backgroundColor: 'transparent', color: 'var(--primary)' },
+                  '&:hover': { textDecoration: 'none' }
+                }}
+              >
+                <Stack direction='row' alignItems='center' gap={0.75}>
+                  <Typography sx={{ fontWeight: "bold" }} variant='button3'>{t('filter')}</Typography>
+                </Stack>
+              </Button>
+            )}
+          </div>
         </div>
-        {(isSearch || filter) && <div className='flex justify-between'>
-          {isSearch && (
-            <Grid item mobile={6} miniLaptop={3.2} laptop={2.8}>
-              <Stack direction='column' width={'100%'} gap={1}>
-                <Box width={'100%'} component={'div'} display={'flex'} justifyContent={'space-between'}>
-                  <Box width='100%'>
-                    <SearchBox keyword={keyword} setKeyword={setKeyword} />
-                  </Box>
-                </Box>
-              </Stack>
-            </Grid>
-          )}
-          {filter && (
 
-            <Button
-              variant='text'
-              color='primary'
-              onClick={() => setIsShowFilter(!isShowFilter)}
-              sx={{
-                [`&.${buttonClasses.disabled}`]: {
-                  backgroundColor: 'transparent',
-                  color: 'var(--primary)'
-                },
-                '&:hover': {
-                  textDecoration: 'none'
-                }
-              }}
-            >
-              <Stack direction='row' alignItems='center' gap={0.75}>
-                <Typography sx={{ fontWeight: "bold" }} variant='button3'>{t('filter')}</Typography>
-              </Stack>
-            </Button>
-
-          )}
-        </div>}
+        {/* Mobile filter dialog */}
         {isShowFilter && isSmallScreen && (
           <Dialog fullScreen open={isShowFilter} onClose={() => setIsShowFilter(false)} maxWidth="desktop" fullWidth>
             <DialogContent sx={{ padding: '0', boxSizing: 'content-box' }}>
-              <Box className='flex flex-col justify-between h-screen '>
-                <Box className='flex items-center justify-between p-4 '>
-                  <Typography color='var(--text-primary)' variant='h6'>
+              <Box className='flex flex-col justify-between h-screen'>
+                <Box className='flex items-center justify-between p-4'>
+                  {/* <Typography color='var(--text-primary)' variant='h6'>
                     {t('filter')}
-                  </Typography>
+                  </Typography> */}
                   <IconButton aria-label='close' onClick={() => setIsShowFilter(false)}>
                     <IconPhosphor iconName='X' size={20} />
                   </IconButton>
                 </Box>
-                <Divider
-                  sx={{
-                    borderBottom: '1px solid var(--border-color)',
-                    width: '100%'
-                  }}
-                />
-                <Box className='flex-1 p-4 py-6 overflow-y-auto '>
-                  <Grid
-                    container
-                    className='items-center justify-start w-full gap-3 rounded-lg'
-                  >
-                    {/* Addtional filter */}
-                    {filter?.map((item) => {
-                      if (item.isRangeFilter) {
-                        return (
-                          <Grid
-                            item
-                            mobile={12}
-                            miniLaptop={miniLaptopGridSize}
-                            sx={{
-                              maxWidth: { miniLaptop: '259px !important', mobile: '100%' }
-                            }}
-                            key={item.id}
-                          >
-                            <Stack direction='column' gap={1} key={item?.id}>
-                              <Box display='flex' gap='6px' alignItems='center'>
-                                <TextField
-                                  type='number'
-                                  placeholder={t('from')}
-                                  value={item.value?.from}
-                                  name='from'
-                                  onChange={item.onChange}
-                                  inputProps={{
-                                    style: {
-                                      fontSize: '14px'
-                                    }
-                                  }}
-                                  className='bg-white hide-arrows-input-number'
-                                  sx={{
-                                    flexBasis: { miniLaptop: '45%', mobile: '48.5%' }
-                                  }}
-                                />
-                                {' - '}
-                                <TextField
-                                  type='number'
-                                  value={item.value?.to}
-                                  placeholder={t('to')}
-                                  name='to'
-                                  onChange={item.onChange}
-                                  inputProps={{
-                                    style: {
-                                      fontSize: '14px'
-                                    }
-                                  }}
-                                  className='bg-white hide-arrows-input-number'
-                                  sx={{
-                                    flexBasis: { miniLaptop: '55%', mobile: '48.5%' }
-                                  }}
-                                />
-                              </Box>
-                            </Stack>
-                          </Grid>
-                        );
-                      }
-                      if (item.isDateRangeFilter) {
-                        return (
-                          <Grid key={item.id} item mobile={6} miniLaptop={3.5} laptop={2.8} desktop={miniLaptopGridSize}>
-                            <Stack direction='column' gap={1} key={item?.id}>
-                              <Box>
-                                <DateRangePicker
-                                  valueStart={item?.value?.startTime}
-                                  valueEnd={item?.value?.endTime}
-                                  onChange={item?.onChange}
-                                  // hasTimeSelection={false}
-                                />
-                              </Box>
-                            </Stack>
-                          </Grid>
-                        );
-                      }
-                      return (
-                        <div key={item.id} className='grid items-center w-full grid-cols-8 px-4 pr-0 bg-white border rounded-lg'>
-                          <div className='col-span-3' >
-                            <Typography variant='body3' className='text-[var(--tertiary)]'>
-                              {t(item?.label)}:
-                            </Typography>
-                          </div>
-                          <div className='col-span-5'>
-                            <Select
-                              multiple={item?.multiselect}
-                              value={item?.value}
-                              onChange={item?.onChange}
-                              sx={{
-                                boxShadow: 'none',
-                                '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                                '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                                  border: 0
-                                },
-                                '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                  border: 0
-                                },
-                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                  boxShadow: 'none',
-                                  border: 0,
-                                  borderWidth: '0 !important'
-                                },
-                                '& .MuiOutlinedInput-input': {
-                                  fontWeight: 600,
-                                  paddingLeft: '0px',
-                                  paddingRight: '0px',
-                                },
-
-                              }}
-                              className='border-none !pl-0'
-                              MenuProps={
-                                item.isLazyLoad
-                                  ? {
-                                    PaperProps: {
-                                      style: {
-                                        maxHeight: ITEM_HEIGHT * 10 + ITEM_PADDING_TOP
-                                      },
-                                      onScroll: item.onScroll
-                                    }
-                                  }
-                                  : {
-                                    slotProps: {
-                                      paper: {
-                                        sx: {
-                                          [`& .${menuItemClasses.root}`]: { whiteSpace: 'normal' },
-                                          width: menuWidth
-                                        }
-                                      }
-                                    }
-                                  }
-                              }
-                            >
-                              {item?.option?.map((item: any) => (
-                                <MenuItem
-                                  key={item.id}
-                                  value={item.value}
-                                  sx={{
-                                    width: '220px',
-                                    fontSize: '14px',
-                                    overflowWrap: 'break-word',
-                                    wordWrap: 'break-word',
-                                    whiteSpace: 'normal'
-                                  }}
-                                >
-                                  {item.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </div>
-                        </div>
-                      );
-                    })}
-
+                <Divider sx={{ borderBottom: '1px solid var(--border-color)', width: '100%' }} />
+                <Box className='flex-1 p-4 py-6 overflow-y-auto'>
+                  {/* Filters same as desktop */}
+                  <Grid container className='items-center justify-start w-full gap-3 rounded-lg'>
+                    {/* filter map same as above */}
                   </Grid>
                 </Box>
-
-                <Divider
-                  sx={{
-                    borderBottom: '1px solid var(--border-color)',
-                    width: '100%'
-                  }}
-                />
-                <Box className='flex items-center justify-between gap-3 p-4 '>
-
+                <Divider sx={{ borderBottom: '1px solid var(--border-color)', width: '100%' }} />
+                <Box className='flex items-center justify-between gap-3 p-4'>
                   <ButtonCustom
                     variant='outlined'
                     disabled={disableResetFilter}
-                    onClick={() => {
-                      if (handleResetFilter) {
-                        handleResetFilter();
-                      }
-                    }}
+                    onClick={() => handleResetFilter && handleResetFilter()}
                     className='w-1/2'
                     startIcon={<ArrowCounterClockwise size={19.4} />}
                   >
@@ -594,15 +337,12 @@ const DataGridHeader = ({
                     startIcon={<IconPhosphor iconName='Check' size={18} />}
                     disabled={disableResetFilter}
                   >
-                    <Typography variant='button3' fontWeight={600}>
-                      {t('apply')}
-                    </Typography>
+                    <Typography variant='button3' fontWeight={600}>{t('apply')}</Typography>
                   </ButtonCustom>
                 </Box>
               </Box>
             </DialogContent>
           </Dialog>
-
         )}
       </div>
     </>

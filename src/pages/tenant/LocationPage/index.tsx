@@ -104,8 +104,8 @@ export default function LocationPage() {
         keyword={keyword}
         setKeyword={setKeyword}
         isSearch
-        title={'locationPage.location-management'}
-        btnPopup={hasEdit && <PopupManipulateLocation userRole={userRole} tenantCode={tenantCode} />}
+        // title={'locationPage.location-management'} no longer needed
+        btnPopup={hasEdit && <PopupManipulateLocation userRole={userRole} tenantCode={tenantCode} />} 
       />
       <CustomDataGrid
         rows={tableRows}
