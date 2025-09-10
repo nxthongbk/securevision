@@ -199,7 +199,7 @@ export default function userPage() {
         disableResetFilter={disableResetFilter}
         handleResetFilter={handleResetFilter}
         filterFullwidth={isBelowDesktop}
-        title={'user-page.management'}
+        // title={'user-page.management'}
         btnPopup={
           <Box className='flex gap-4'>
             <PermisisonConfigDrawer tenantCode={tenantCode} />

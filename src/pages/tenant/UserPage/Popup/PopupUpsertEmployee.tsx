@@ -219,9 +219,10 @@ const PopupUpsertEmployee = ({ staffId, tenantCode, forceOpen, onClose }: Upsert
         onClose={handleClose}
         sx={{
           '& .MuiPaper-root': {
-            borderRadius: '8px',
+            // borderRadius: '8px',
             width: 800,
-            height: 1000
+            height: 1000,
+            background: "var(--bg)"
           }
         }}
         disableRestoreFocus

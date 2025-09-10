@@ -585,7 +585,7 @@ const PopupManipulateLocation = ({
                   '& .MuiAutocomplete-inputRoot': {
                     p: '0px !important',
                     height: '40px',
-                    background: 'white',
+                    background: 'var(--bg)',
                     position: 'absolute',
                     top: '20px',
                     width: '95%',

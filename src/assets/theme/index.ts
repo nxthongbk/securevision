@@ -465,7 +465,21 @@ const components = {
         }
       }
     }
-  }
+  },
+  MuiIconButton: {
+    styleOverrides: {
+      root: {
+        color: '#00BCFF', // main color
+        '&:hover': {
+          backgroundColor: 'transparent', // or rgba(0,188,255,0.08) if you want subtle bg
+        },
+        '&:active': {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
+  },
+
 };
 
 const theme = createTheme({
