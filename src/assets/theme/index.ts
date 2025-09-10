@@ -106,10 +106,11 @@ const components = {
   MuiOutlinedInput: {
     styleOverrides: {
       input: {
-        padding: '10px 16px'
+        padding: '10px 16px',
+        borderRadius: "0px"
       },
       root: {
-        borderRadius: '6px',
+        borderRadius: '0px',
         borderWidth: '1px!important',
         borderColor: 'var(--neutral)',
         '&.Mui-focused': {
@@ -150,7 +151,7 @@ const components = {
 
         '&.MuiInputBase-root': {
           height: '40px',
-          borderRadius: '6px',
+          borderRadius: '0px',
           borderWidth: '0px !important'
         },
 
@@ -202,7 +203,7 @@ const components = {
           }
         },
         '& .MuiOutlinedInput-root': {
-          borderRadius: '6px',
+          borderRadius: '0px',
           '& input': {
             color: 'var(--text-primary)',
             '&::placeholder': {
@@ -275,7 +276,7 @@ const components = {
       },
 
       root: ({ ownerState }) => ({
-        borderRadius: 6,
+        borderRadius: 0,
         textTransform: 'none',
         fontWeight: 500,
         boxShadow: 'none',
@@ -442,10 +443,10 @@ const components = {
       root: {
         // Example of style overrides
         padding: '8px',
-        borderRadius: '8px',
+        borderRadius: '0px',
         '& .MuiMenuItem-root': {
           // Styling ListItem within the List
-          borderRadius: '6px'
+          borderRadius: '0px'
         },
         '& .Mui-selected': {
           backgroundColor: 'var(--grey-primary-80) !important'
@@ -460,7 +461,7 @@ const components = {
         padding: '8px !important',
         '& .MuiAutocomplete-option': {
           // Styling options within the listbox
-          borderRadius: '6px'
+          borderRadius: '0px'
         }
       }
     }

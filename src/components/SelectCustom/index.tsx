@@ -28,7 +28,7 @@ export default function SelectCustom(props: SSelectProps) {
     isRequired,
     children,
     classNameContainer,
-    placeholderText,
+    placeholderText,  
     slotProps,
     helperText,
     isSelectAll,
@@ -40,7 +40,7 @@ export default function SelectCustom(props: SSelectProps) {
 
   return (
     <div className={classNameCont}>
-      <Typography variant='label3' className='!mb-1'>
+      <Typography variant='label3' className='!mb-1'color="var(--text-primary)">
         {label} {isRequired && <span className='text-[var(--semantic-alert)]'>*</span>}
       </Typography>
       {control ? (
@@ -66,7 +66,6 @@ export default function SelectCustom(props: SSelectProps) {
                         value=''
                         sx={{
                           mb: '5px',
-                          borderRadius: '0px !important',
                           borderBottom: '1px solid var(--divider-color)',
                           backgroundColor: 'var(--white) !important',
                           '&:hover': {

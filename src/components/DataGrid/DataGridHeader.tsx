@@ -22,7 +22,7 @@ import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr';
 import ButtonCustom from '../ButtonCustom';
 import DateRangePicker from '../DatePicker';
 import { Funnel } from '@phosphor-icons/react';
-import HeaderPage from '../HeaderPage';
+// import HeaderPage from '../HeaderPage';
 import IconPhosphor from '~/assets/iconPhosphor';
 import SearchBox from '../SearchBox';
 import theme from '~/assets/theme';

@@ -454,9 +454,10 @@ const PopupManipulateLocation = ({
         onClose={handleClose}
         sx={{
           '& .MuiPaper-root': {
-            borderRadius: '8px',
+            // borderRadius: '8px',
             width: 800,
-            height: 1000
+            height: 1000,
+            backgroundColor: "var(--bg)",
           }
         }}
         disableRestoreFocus
@@ -481,7 +482,7 @@ const PopupManipulateLocation = ({
             </Box>
             <Divider
               sx={{
-                borderBottom: '1px solid var(--border-color)',
+                borderBottom: '1px solid #FFFFFF33',
                 width: '100%'
               }}
             />
@@ -491,8 +492,8 @@ const PopupManipulateLocation = ({
               <AvatarUpload
                 src={locationId ? imageBlob : null}
                 onFileUpload={handleFileUpload}
-                avatarSx={{ borderRadius: '8px' }}
-                inputSx={{ borderRadius: '8px' }}
+                avatarSx={{ borderRadius: '0px' }}
+                inputSx={{ borderRadius: '0px' }}
                 asyncLoadAvatar
               />
             </div>
@@ -621,7 +622,7 @@ const PopupManipulateLocation = ({
                   search(newInputValue);
                 }}
               />
-              <div className='w-full h-[472px] border border-[var(--grey-neutral-100)] rounded-lg overflow-hidden'>
+              <div className='w-full h-[472px] border border-[var(--grey-neutral-100)] overflow-hidden'>
                 <MapBox
                   initialViewState={{
                     latitude: getValues('latLng')?.[0],
