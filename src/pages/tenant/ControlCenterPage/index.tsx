@@ -160,7 +160,7 @@ export default function ControlCenterPage() {
         <DataGridHeader
           isSearch={false}
           setKeyword={setKeyword}
-          title={t('monitoring')}
+          // title={t('monitoring')}
           btnPopup={
             <div onClick={handleDialogOpen} className="p-2 rounded-md bg-primary">
               <ListMagnifyingGlass size={20} color="white" />

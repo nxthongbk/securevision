@@ -233,7 +233,8 @@ export default function AlertPopup() {
       {/* Right column: Alarm panel */}
       <div className="bg-[#0D1117] p-3">
         <div className="flex flex-col gap-4">
-          <Typography variant="label1" className='text-white'>{t('alarm-page.warning')}</Typography>
+          <div className='bg-red-600'>
+          <Typography variant="label1" className='text-white'>{t('alarm-page.warning')}</Typography></div>
           {alarms.map((alarm) => (
             <Box className= 'border border-white' key={alarm.id}>{renderAlarmPanel(alarm)}</Box>
           ))}
