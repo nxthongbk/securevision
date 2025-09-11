@@ -19,7 +19,7 @@ export default function PopupConfigDetail({
   onEdit: () => void;
   onClose: () => void;
 }>) {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const { data: permissionConfigDetail, isLoading: loadingPermissionConfigDetail } =
     useGetPermissionConfigDetail(permissionGroupId);
   const configDetail = permissionConfigDetail?.data || {};
@@ -105,7 +105,7 @@ export default function PopupConfigDetail({
     return (
       <div
         key={key}
-        className={`flex w-full px-[12px] py-[12px] ${order % 2 === 0 ? ' bg-[var(--grey-primary-60)] rounded-md' : ''}`}
+        className={`flex w-full px-[12px] py-[12px] ${order % 2 === 0 ? ' bg-[#031f2f]' : 'bg-[#031523]'}`}
       >
         <Typography variant='label3' className='w-[38%] flex-shrink-0'>
           {label}

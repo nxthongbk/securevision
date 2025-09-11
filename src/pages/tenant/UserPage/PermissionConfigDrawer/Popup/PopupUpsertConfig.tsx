@@ -40,7 +40,7 @@ const PermissionFormControlLabel = styled(FormControlLabel)(() => ({
 }));
 
 const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }: UpsertPermissionGroupProps) => {
-  const [hrPageTranslate] = useTranslation('', { keyPrefix: 'hr-page' });
+  const [userPageTranslate] = useTranslation('', { keyPrefix: 'user-page' });
   const [open, setOpen] = useState(false);
 
   const { mutate } = useCreatePermissionConfig();
@@ -50,8 +50,8 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
   const validationSchema = yup.object().shape({
     configName: yup
       .string()
-      .required(hrPageTranslate('please-enter-config-name'))
-      .max(255, hrPageTranslate('config-name-max-length'))
+      .required(userPageTranslate('please-enter-config-name'))
+      .max(255, userPageTranslate('config-name-max-length'))
       .trim(),
     permissionIds: yup.array().of(yup.string().uuid()).nullable()
   });
@@ -112,7 +112,7 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
   const renderFunctionGroupPermisison = (data: { name: string; permissions: { id: string; name: string }[] }) => {
     const { name, permissions } = data;
     return (
-      <Stack className='bg-[var(--grey-neutral-60)] p-4 pb-0 rounded-md'>
+      <Stack className='bg-[var(--bg)] p-4 pb-0 '>
         <Typography variant='label3'>{name}</Typography>
         <Box className='flex ml-[-16px]'>
           {(permissions || []).map((permisison) => (
@@ -162,7 +162,7 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
           startIcon={<Plus size={20} color='white' />}
         >
           <Typography variant='button3' color='white'>
-            {hrPageTranslate('add-new')}
+            {userPageTranslate('add-new')}
           </Typography>
         </Button>
       )}
@@ -171,9 +171,10 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
         onClose={handleClose}
         sx={{
           '& .MuiPaper-root': {
-            borderRadius: '8px',
+            borderRadius: '0px',
             width: 800,
-            height: 1000
+            height: 1000,
+            backgroundColor: "var(--bg)"
           }
         }}
         disableRestoreFocus
@@ -190,7 +191,7 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
           <Box>
             <Box className='flex justify-between items-center px-4 py-2.5'>
               <Typography color='var(--text-primary)' variant='h6'>
-                {hrPageTranslate(permissionGroupId ? 'update-config' : 'add-new-config')}
+                {userPageTranslate(permissionGroupId ? 'update-config' : 'add-new-config')}
               </Typography>
               <IconButton aria-label='close' onClick={handleClose}>
                 <X size={20} />
@@ -207,10 +208,10 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
             <InputCustom
               sx={{ width: '100%' }}
               classNameContainer='w-full'
-              label={hrPageTranslate('config-name')}
+              label={userPageTranslate('config-name')}
               control={control}
               name='configName'
-              placeholder={hrPageTranslate('enter-config-name')}
+              placeholder={userPageTranslate('enter-config-name')}
               isRequired
               isError={!!getError('configName')}
               helperText={errors?.configName?.message}
@@ -231,7 +232,7 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
                   }}
                 >
                   <Stack className='w-full gap-3'>
-                    <Typography variant='label3'>{hrPageTranslate('permission-setting')}</Typography>
+                    <Typography variant='label3'>{userPageTranslate('permission-setting')}</Typography>
                     {(functionGroupPermissions?.data?.content || []).map((item) => renderFunctionGroupPermisison(item))}
                   </Stack>
                 </FormGroup>
@@ -248,7 +249,7 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
             <Box className='flex justify-end items-center p-4 gap-3'>
               <ButtonCustom variant='outlined' color='primary' onClick={handleClose} startIcon={<X size={18} />}>
                 <Typography variant='button3' fontWeight={600}>
-                  {hrPageTranslate('cancel')}
+                  {userPageTranslate('cancel')}
                 </Typography>
               </ButtonCustom>
               <ButtonCustom
@@ -260,7 +261,7 @@ const PopupUpsertConfig = ({ permissionGroupId, tenantCode, forceOpen, onClose }
                 disabled={!isValid}
               >
                 <Typography variant='button3' fontWeight={600}>
-                  {hrPageTranslate('save')}
+                  {userPageTranslate('save')}
                 </Typography>
               </ButtonCustom>
             </Box>
