@@ -135,7 +135,7 @@ export default function SysTenantManagementPage() {
         disableResetFilter={!curStatus}
         filter={filter}
         handleResetFilter={handleResetFilter}
-        title={translationCapitalFirst('tenant-management', 'tenantPage')}
+        // title={translationCapitalFirst('tenant-management', 'tenantPage')}
         btnPopup={<PopupAddTenant />}
       />
       {isTablet ? (

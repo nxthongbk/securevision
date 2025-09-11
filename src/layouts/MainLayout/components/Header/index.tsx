@@ -18,10 +18,9 @@ export default function TopHeader() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Alarm state
-  const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
-  // New: state to represent actual ringing
-  const [isRinging, setIsRinging] = useState(false);
+  // Alarm states
+  const [isBellRingAlarm, setIsBellRingAlarm] = useState(true); // toggle on/off
+  const [isRinging, setIsRinging] = useState(false); // actual ringing status
 
   const handleAlarmToggle = () => {
     const newValue = !isBellRingAlarm;
@@ -43,6 +42,16 @@ export default function TopHeader() {
       window.removeEventListener('localStorageChange', checkLocalStorage);
     };
   }, []);
+
+  // Example: simulate ringing state (you can replace with real logic)
+  useEffect(() => {
+    if (isBellRingAlarm) {
+      const timer = setInterval(() => setIsRinging((prev) => !prev), 5000); // toggle every 5s
+      return () => clearInterval(timer);
+    } else {
+      setIsRinging(false);
+    }
+  }, [isBellRingAlarm]);
 
   // Logout mutation
   const logoutMutation = useMutation({
@@ -80,7 +89,7 @@ export default function TopHeader() {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch avatar image like in AvatarPopper
+  // Fetch avatar image
   const { data: img } = useQuery({
     queryKey: ['userImg', userInfo?.avatarUrl],
     queryFn: async () => {
@@ -98,8 +107,8 @@ export default function TopHeader() {
   const bellColor = !isBellRingAlarm
     ? 'var(--grey-primary-200)' // disabled
     : isRinging
-      ? '#f87171' 
-      : '#22d3ee'; 
+      ? '#f87171' // red-400
+      : '#22d3ee'; // cyan-400
 
   return (
     <div className="relative w-full">
@@ -158,7 +167,7 @@ export default function TopHeader() {
             onClick={handleOpenControl}
             className="!w-[22px] !h-[22px] cursor-pointer"
             alt={userInfo?.name || userInfo?.username || 'User'}
-            src={img || undefined} // use fetched Blob URL
+            src={img || undefined}
           >
             {!img && (userInfo?.name?.[0] || 'U')}
           </Avatar>

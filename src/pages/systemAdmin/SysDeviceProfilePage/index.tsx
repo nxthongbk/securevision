@@ -128,7 +128,7 @@ export default function SysDeviceProfilePage() {
         filter={filter}
         disableResetFilter={!types.length}
         handleResetFilter={handleResetFilter}
-        title={translationCapitalFirst('device-profile', 'deviceProfile')}
+        // title={translationCapitalFirst('device-profile', 'deviceProfile')}
         btnPopup={<PopupAdd />}
       />
       {isTablet ? (

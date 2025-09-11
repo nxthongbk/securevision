@@ -229,7 +229,7 @@ export default function AlertPopup() {
       );
     }
 
-    const formattedDate = dayjs(alarmDateTime).format('YYYY-MM-DD_HH:mm:ss');
+    // const formattedDate = dayjs(alarmDateTime).format('YYYY-MM-DD_HH:mm:ss');
     // const videoUrl = `https://wulu.innovation.com.vn/get_video?datetime=${formattedDate}`;
     const videoUrl = 'https://wulu.innovation.com.vn/get_video?datetime=2025-09-10_12:07:56';
     console.log('Generated video URL:', videoUrl);
