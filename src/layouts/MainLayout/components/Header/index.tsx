@@ -20,6 +20,9 @@ export default function TopHeader() {
 
   // Alarm state
   const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
+  // New: state to represent actual ringing
+  const [isRinging, setIsRinging] = useState(false);
+
   const handleAlarmToggle = () => {
     const newValue = !isBellRingAlarm;
     setIsBellRingAlarm(newValue);
@@ -91,6 +94,13 @@ export default function TopHeader() {
   const canBeOpen = open && Boolean(anchorEl);
   const id = canBeOpen ? 'transition-popper' : undefined;
 
+  // Bell color logic
+  const bellColor = !isBellRingAlarm
+    ? 'var(--grey-primary-200)' // disabled
+    : isRinging
+      ? '#f87171' 
+      : '#22d3ee'; 
+
   return (
     <div className="relative w-full">
       {/* TopBar SVG */}
@@ -133,7 +143,7 @@ export default function TopHeader() {
             height: 32,
             borderRadius: '6px',
             backgroundColor: 'transparent',
-            color: isBellRingAlarm ? 'var(--primary-main)' : 'var(--grey-primary-200)',
+            color: bellColor,
             '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' },
           }}
         >

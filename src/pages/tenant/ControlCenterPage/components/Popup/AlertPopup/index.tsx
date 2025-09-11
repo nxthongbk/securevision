@@ -217,6 +217,35 @@ export default function AlertPopup() {
     );
   };
 
+  
+  // 🔹 New: renderVideoSection
+  const renderVideoSection = () => {
+    const alarmDateTime = alarms[0]?.createdAlarmBy?.date;
+    if (!alarmDateTime) {
+      return (
+        <Typography variant="body2" className="text-[var(--text-secondary)]">
+          No alarm datetime found
+        </Typography>
+      );
+    }
+
+    const formattedDate = dayjs(alarmDateTime).format('YYYY-MM-DD_HH:mm:ss');
+    // const videoUrl = `https://wulu.innovation.com.vn/get_video?datetime=${formattedDate}`;
+    const videoUrl = 'https://wulu.innovation.com.vn/get_video?datetime=2025-09-10_12:07:56';
+    console.log('Generated video URL:', videoUrl);
+
+    return (
+      <div className="h-[253px] relative border border-gray-700  overflow-hidden">
+        <div className="w-full h-full bg-black flex items-center justify-center">
+          <video className="w-full h-full" controls autoPlay loop>
+            <source src={videoUrl} type="video/mp4"/>
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    );
+  };
+
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
   const title = alarmTranslate('location-information');
@@ -224,22 +253,43 @@ export default function AlertPopup() {
   const renderBody = () => (
   <div className="flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6">
 
-    {/* Top row: Common Info (left) + Alarms (right) */}
+    {/* Top row */}
     <div className="tablet:grid grid-cols-2 gap-6 tablet:gap-12">
-      {/* Left column: Common Info */}
-      <div className="bg-[#161B29] p-3">      
-      <CommonInfoLocation info={status === 'error' ? { ...openAlertPopup, status: 'CONFIRM' } : openAlertPopup} />
+      <div className="bg-[#161B29] p-3">
+        <CommonInfoLocation
+          info={
+            status === 'error'
+              ? { ...openAlertPopup, status: 'CONFIRM' }
+              : openAlertPopup
+          }
+        />
       </div>
-      {/* Right column: Alarm panel */}
-      <div className="bg-[#0D1117] p-3">
-        <div className="flex flex-col gap-4">
-          <div className='bg-red-600'>
-          <Typography variant="label1" className='text-white'>{t('alarm-page.warning')}</Typography></div>
+
+      <div className="bg-[#0D1117]">
+        {/* Full-width red header */}
+        <div className="bg-[#FF6467] w-full py-3">
+          <Typography variant="label1" className="text-white px-3 py-2">
+            {t('alarm-page.warning')}
+          </Typography>
+        </div>
+
+        {/* Content section with padding */}
+        <div className="p-3 flex flex-col gap-4">
           {alarms.map((alarm) => (
-            <Box className= 'border border-white' key={alarm.id}>{renderAlarmPanel(alarm)}</Box>
+            <Box className="border border-white" key={alarm.id}>
+              {renderAlarmPanel(alarm)}
+            </Box>
           ))}
         </div>
       </div>
+    </div>
+  
+    {/* Video panel row (full width) */}
+    <div className="bg-[#0D1117] p-3">
+      <Typography variant="label1" className="text-white mb-2">
+        Alarm Video
+      </Typography>
+      {renderVideoSection()}
     </div>
 
     {/* Device panel row (full width) */}
