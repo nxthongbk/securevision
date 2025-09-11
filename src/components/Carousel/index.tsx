@@ -50,7 +50,7 @@ const CarouselCustom = ({ children }) => {
           disableElevation
           onClick={handlePrev}
           className='h-[32px] !min-w-[32px] !p-0 !text-[var(--text-primary)]'
-          sx={{ bgcolor: 'var(--grey-primary-80)', '&:hover': { bgcolor: alpha('#d9e1e8', 0.8) } }}
+          sx={{ bgcolor: '#00BCFF', '&:hover': { bgcolor: alpha('#d9e1e8', 0.8) } }}
         >
           <IconPhosphor iconName='CaretLeft' size={20} />
         </Button>
@@ -61,7 +61,7 @@ const CarouselCustom = ({ children }) => {
           disableElevation
           onClick={handleNext}
           className='h-[32px] !min-w-[32px] !p-0 !text-[var(--text-primary)]'
-          sx={{ bgcolor: 'var(--grey-primary-80)', '&:hover': { bgcolor: alpha('#d9e1e8', 0.8) } }}
+          sx={{ bgcolor: '#00BCFF', '&:hover': { bgcolor: alpha('#d9e1e8', 0.8) } }}
         >
           <IconPhosphor iconName='CaretRight' size={20} />
         </Button>

@@ -328,7 +328,7 @@ export default function AlertPopup() {
             />
           ))
         ) : (
-          <Typography variant="body2" className="text-[var(--text-secondary)]">
+          <Typography variant="body2" className="text-[var(--text-primary)]">
             No dashboards
           </Typography>
         )}
