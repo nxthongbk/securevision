@@ -491,7 +491,7 @@ const theme = createTheme({
       main: '#fff'
     },
     text: {
-      primary: '#3A3D41',
+      primary: '#FFFFFF',
       secondary: '#737982'
     }
   },
