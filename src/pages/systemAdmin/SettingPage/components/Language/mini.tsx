@@ -6,7 +6,8 @@ import { LANG_OPTIONS } from '~/constants/rule.constant';
 // Map language codes to flag SVG URLs
 const FLAG_URLS: Record<string, string> = {
   VI: 'https://flagicons.lipis.dev/flags/4x3/vn.svg',
-  EN: 'https://flagicons.lipis.dev/flags/4x3/us.svg'
+  EN: 'https://flagicons.lipis.dev/flags/4x3/us.svg',
+  JA: 'https://flagicons.lipis.dev/flags/4x3/jp.svg'
 };
 
 export default function LanguageMini() {
@@ -66,6 +67,10 @@ export default function LanguageMini() {
         <MenuItem onClick={() => handleClose(LANG_OPTIONS.LANG_ENG)}>
           <img src={FLAG_URLS.EN} alt="EN" className="w-5 h-5 rounded-full mr-2" />
           EN
+        </MenuItem>
+        <MenuItem onClick={() => handleClose(LANG_OPTIONS.LANG_JA)}>
+          <img src={FLAG_URLS.JA} alt="JA" className="w-5 h-5 rounded-full mr-2" />
+          JA
         </MenuItem>
       </Menu>
     </>

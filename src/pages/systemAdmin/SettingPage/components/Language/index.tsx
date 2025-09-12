@@ -11,6 +11,7 @@ export default function Language() {
     i18next.changeLanguage(event.target.value);
     localStorage.setItem('cft-language', event.target.value);
   };
+
   return (
     <div className='min-w-[640px]'>
       <Typography variant='h4'>{t('language')}</Typography>
@@ -21,6 +22,9 @@ export default function Language() {
           </MenuItem>
           <MenuItem value={LANG_OPTIONS.LANG_ENG}>
             <Typography variant='body3'>{t('en')}</Typography>
+          </MenuItem>
+          <MenuItem value={LANG_OPTIONS.LANG_JA}>
+            <Typography variant='body3'>{t('ja')}</Typography>
           </MenuItem>
         </SelectCustom>
       </div>

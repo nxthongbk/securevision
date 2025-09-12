@@ -17,20 +17,20 @@ import ROUTES from '~/constants/routes.constant';
 // labels for sidebar
 const LABELS = {
   // tenant sidebar
-  monitor: { en: "MONITOR", vi: "GIÁM SÁT" },
-  dashboard: { en: "DASHBOARD", vi: "DASHBOARD" },
-  alerts: { en: "ALERTS", vi: "CẢNH BÁO" },
-  location: { en: "LOCATION", vi: "ĐỊA ĐIỂM" },
-  users: { en: "USERS", vi: "NGƯỜI DÙNG" },
-  devices: { en: "DEVICES", vi: "THIẾT BỊ" },
-  settings: { en: "SETTINGS", vi: "CÀI ĐẶT" },
-  reports: { en: "REPORTS", vi: "BÁO CÁO" },
+  monitor: { en: "MONITOR", vi: "GIÁM SÁT", ja: "モニター" },
+  dashboard: { en: "DASHBOARD", vi: "DASHBOARD", ja: "ダッシュボード" },
+  alerts: { en: "ALERTS", vi: "CẢNH BÁO", ja: "アラート" },
+  location: { en: "LOCATION", vi: "ĐỊA ĐIỂM", ja: "場所" },
+  users: { en: "USERS", vi: "NGƯỜI DÙNG", ja: "ユーザー" },
+  devices: { en: "DEVICES", vi: "THIẾT BỊ", ja: "デバイス" },
+  settings: { en: "SETTINGS", vi: "CÀI ĐẶT", ja: "設定" },
+  reports: { en: "REPORTS", vi: "BÁO CÁO", ja: "レポート" },
 
   // sysadmin sidebar
-  "customer-management": { en: "CUSTOMERS", vi: "KHÁCH HÀNG" },
-  "device-profile": { en: "DEVICE PROFILE", vi: "HỒ SƠ THIẾT BỊ" },
-  "device-management": { en: "DEVICE MANAGEMENT", vi: "QUẢN LÝ THIẾT BỊ" },
-  tool: { en: "TOOLS", vi: "CÔNG CỤ" }
+  "customer-management": { en: "CUSTOMERS", vi: "KHÁCH HÀNG", ja: "顧客" },
+  "device-profile": { en: "DEVICE PROFILE", vi: "HỒ SƠ THIẾT BỊ", ja: "デバイスプロファイル" },
+  "device-management": { en: "DEVICE MANAGEMENT", vi: "QUẢN LÝ THIẾT BỊ", ja: "デバイス管理" },
+  tool: { en: "TOOLS", vi: "CÔNG CỤ", ja: "ツール" }
 };
 
 export function useSidebarOptions() {
