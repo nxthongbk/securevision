@@ -124,14 +124,14 @@ const components = {
       }
     }
   },
-  // Override maxHeight for select MUI globally
-  MuiMenu: {
-    styleOverrides: {
-      paper: {
-        maxHeight: 500 // Override maxHeight globally
-      }
-    }
-  },
+  // // Override maxHeight for select MUI globally
+  // MuiMenu: {
+  //   styleOverrides: {
+  //     paper: {
+  //       maxHeight: 500 // Override maxHeight globally
+  //     }
+  //   }
+  // },
   MuiSelect: {
     defaultProps: {
       fullWidth: true,
@@ -282,7 +282,8 @@ const components = {
         boxShadow: 'none',
 
         '&.Mui-disabled': {
-          background: 'var(--disable-btn)',
+          // background: 'var(--disable-btn)',
+          background: '#64748B',
           color: 'var(--text-disable)'
         },
         ...(ownerState.variant === 'contained' &&
@@ -479,6 +480,23 @@ const components = {
       },
     },
   },
+  MuiMenu: {
+    styleOverrides: {
+      paper: {
+        maxHeight: 500,
+        backgroundColor: "#101828",
+        color: "#fff"
+      }
+    }
+  },
+  MuiPopover: {
+    styleOverrides: {
+      paper: {
+        backgroundColor: "#101828",
+        color: "#fff"
+      }
+    }
+  }
 
 };
 
