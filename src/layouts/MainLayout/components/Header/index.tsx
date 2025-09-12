@@ -12,6 +12,7 @@ import LanguageMini from '~/pages/systemAdmin/SettingPage/components/Language/mi
 import { useTranslation } from "react-i18next";
 import fileStorageService from '~/services/fileStorage.service';
 import { useQuery } from '@tanstack/react-query';
+import './TopHeader.css'; // For animations
 
 export default function TopHeader() {
   const { userInfo, reset } = useContext(AppContext);
@@ -19,8 +20,8 @@ export default function TopHeader() {
   const { t } = useTranslation();
 
   // Alarm states
-  const [isBellRingAlarm, setIsBellRingAlarm] = useState(true); // toggle on/off
-  const [isRinging, setIsRinging] = useState(false); // actual ringing status
+  const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
+  const [isRinging, setIsRinging] = useState(false);
 
   const handleAlarmToggle = () => {
     const newValue = !isBellRingAlarm;
@@ -43,10 +44,9 @@ export default function TopHeader() {
     };
   }, []);
 
-  // Example: simulate ringing state (you can replace with real logic)
   useEffect(() => {
     if (isBellRingAlarm) {
-      const timer = setInterval(() => setIsRinging((prev) => !prev), 5000); // toggle every 5s
+      const timer = setInterval(() => setIsRinging((prev) => !prev), 5000);
       return () => clearInterval(timer);
     } else {
       setIsRinging(false);
@@ -60,7 +60,6 @@ export default function TopHeader() {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
-
   const avatarRef = useRef<HTMLDivElement | null>(null);
 
   const handleOpenControl = (event: React.MouseEvent<HTMLElement>) => {
@@ -105,10 +104,10 @@ export default function TopHeader() {
 
   // Bell color logic
   const bellColor = !isBellRingAlarm
-    ? 'var(--grey-primary-200)' // disabled
+    ? 'var(--grey-primary-200)'
     : isRinging
-      ? '#f87171' // red-400
-      : '#22d3ee'; // cyan-400
+      ? '#f87171'
+      : '#22d3ee';
 
   return (
     <div className="relative w-full">
@@ -120,36 +119,26 @@ export default function TopHeader() {
       />
 
       {/* Title */}
+      <div className="fixed top-2 left-1/2 z-50 flex flex-col items-center w-full leading-none -space-y-2 -translate-x-1/2 ">
+        {/* Main title with animation */}
+        <Typography
+          className="font-saira font-bold uppercase text-[18px] text-white animate-title-glow"
+          style={{ textAlign: 'center' }}
+        >
+          Secure Vision
+        </Typography>
 
-      {/* Title */}
-<div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center w-full leading-none -space-y-2 ">
-  <Typography
-    className="font-saira font-bold uppercase text-[18px] text-white"
-    style={{
-      textShadow: `
-        0 0 6px rgba(124, 212, 253, 0.9),
-        0 0 12px rgba(124, 212, 253, 0.7),
-        0 0 18px rgba(124, 212, 253, 0.5)
-      `,
-    }}
-  >
-    Secure Vision
-  </Typography>
+        {/* Smaller subtitle */}
+        {/* Subheader (wave) */}
+{/* Subheader with torchlight effect */}
+<Typography
+  className="font-saira opacity-70 tracking-wider subheader-torch"
+  style={{ textAlign: 'center', fontSize: '12px' }}
+>
+  securevision.innovation.com.vn
+</Typography>
 
-  <Typography
-    className="font-saira text-[11px] text-white opacity-90"
-    style={{
-      textShadow: `
-        0 0 4px rgba(124, 212, 253, 0.8),
-        0 0 8px rgba(124, 212, 253, 0.6)
-      `,
-    }}
-  >
-    securevision.innovation.com.vn
-  </Typography>
-</div>
-
-
+      </div>
 
       {/* Date and Time */}
       <div className="fixed top-3 left-[25%] -translate-x-1/2 z-50 flex items-center gap-2">
@@ -163,10 +152,8 @@ export default function TopHeader() {
 
       {/* Profile + Language + Alarm */}
       <div className="fixed top-2 left-[70%] z-50 flex items-center gap-2 scale-90">
-        {/* Language selector */}
         <LanguageMini />
 
-        {/* Alarm toggle */}
         <IconButton
           onClick={handleAlarmToggle}
           sx={{
@@ -183,7 +170,6 @@ export default function TopHeader() {
 
         <div className="w-[1px] h-5 bg-white/20 rounded-full" />
 
-        {/* Profile avatar */}
         <div ref={avatarRef} className="flex items-center gap-2">
           <Avatar
             onClick={handleOpenControl}
@@ -198,7 +184,6 @@ export default function TopHeader() {
           </Typography>
         </div>
 
-        {/* Popper */}
         <ClickAwayListener
           onClickAway={(event) => {
             if (avatarRef.current && avatarRef.current.contains(event.target as Node)) return;
@@ -208,7 +193,7 @@ export default function TopHeader() {
           <Popper id={id} open={open} anchorEl={anchorEl} transition sx={{ zIndex: 1001, bgcolor: "#101828" }}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <div className=" px-4 min-w-[200px] shadow-md mt-4 bg-[#030912]/80 backdrop-blur-md " style={{ backgroundColor: '#101828' }}>
+                <div className=" px-4 min-w-[200px] shadow-md mt-4 bg-[#030912]/80 backdrop-blur-md ">
                   <div className="flex py-2 gap-3 items-center">
                     <Avatar className="!w-[28px] !h-[28px]" alt={userInfo?.name || userInfo?.username} src={img || undefined}>
                       {!img && (userInfo?.name?.[0] || 'U')}
