@@ -78,10 +78,10 @@ export default function Header({
                   <img
                     src={
                       lang === 'en'
-                        ? '/public/flag_en_icon.svg'
+                        ? '/flag_en_icon.svg'
                         : lang === 'vi'
-                          ? '/public/flag_vn_icon.svg'
-                          : '/public/flag_jp_icon.svg'
+                        ? '/flag_vn_icon.svg'
+                        : '/flag_jp_icon.svg'
                     }
                     alt={lang}
                     className='mr-2 h-5 w-6 object-cover align-middle'
@@ -108,7 +108,7 @@ export default function Header({
                       role='option'
                       aria-selected={lang === 'en'}
                     >
-                      <img src={'/public/flag_en_icon.svg'} className='mr-2 h-5 w-5' alt='English' />{' '}
+                      <img src={'/flag_en_icon.svg'} className='mr-2 h-5 w-5' alt='English' />{' '}
                       {t('secureLandingPage.languages.en')}
                     </li>
                     <li
@@ -120,7 +120,7 @@ export default function Header({
                       role='option'
                       aria-selected={lang === 'vi'}
                     >
-                      <img src={'/public/flag_vn_icon.svg'} className='mr-2 h-5 w-5' alt='Tiếng Việt' />{' '}
+                      <img src={'/flag_vn_icon.svg'} className='mr-2 h-5 w-5' alt='Tiếng Việt' />{' '}
                       {t('secureLandingPage.languages.vi')}
                     </li>
                     <li
@@ -132,7 +132,7 @@ export default function Header({
                       role='option'
                       aria-selected={lang === 'ja'}
                     >
-                      <img src={'/public/flag_jp_icon.svg'} className='mr-2 h-5 w-5' alt='日本語' />{' '}
+                      <img src={'/flag_jp_icon.svg'} className='mr-2 h-5 w-5' alt='日本語' />{' '}
                       {t('secureLandingPage.languages.ja')}
                     </li>
                   </ul>

@@ -120,14 +120,36 @@ export default function TopHeader() {
       />
 
       {/* Title */}
-      <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 flex justify-center w-full">
-        <Typography
-          className="font-saira font-bold uppercase text-[24px] leading-[32px] tracking-normal text-white"
-          style={{ textShadow: '0 0 8px rgba(124, 212, 253, 0.7), 0 0 16px rgba(124, 212, 253, 0.5)' }}
-        >
-          Secure Vision
-        </Typography>
-      </div>
+
+      {/* Title */}
+<div className="fixed top-2 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center w-full leading-none -space-y-2 ">
+  <Typography
+    className="font-saira font-bold uppercase text-[18px] text-white"
+    style={{
+      textShadow: `
+        0 0 6px rgba(124, 212, 253, 0.9),
+        0 0 12px rgba(124, 212, 253, 0.7),
+        0 0 18px rgba(124, 212, 253, 0.5)
+      `,
+    }}
+  >
+    Secure Vision
+  </Typography>
+
+  <Typography
+    className="font-saira text-[11px] text-white opacity-90"
+    style={{
+      textShadow: `
+        0 0 4px rgba(124, 212, 253, 0.8),
+        0 0 8px rgba(124, 212, 253, 0.6)
+      `,
+    }}
+  >
+    securevision.innovation.com.vn
+  </Typography>
+</div>
+
+
 
       {/* Date and Time */}
       <div className="fixed top-3 left-[25%] -translate-x-1/2 z-50 flex items-center gap-2">
@@ -171,7 +193,7 @@ export default function TopHeader() {
           >
             {!img && (userInfo?.name?.[0] || 'U')}
           </Avatar>
-          <Typography className="font-saira font-small uppercase text-white text-[12px] leading-[18px]">
+          <Typography className="font-saira font-xs uppercase text-white text-[12px] leading-[18px]">
             {userInfo?.name || userInfo?.username}
           </Typography>
         </div>
@@ -183,10 +205,10 @@ export default function TopHeader() {
             setOpen(false);
           }}
         >
-          <Popper id={id} open={open} anchorEl={anchorEl} transition sx={{ zIndex: 1001 }}>
+          <Popper id={id} open={open} anchorEl={anchorEl} transition sx={{ zIndex: 1001, bgcolor: "#101828" }}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <div className=" px-4 min-w-[200px] shadow-md mt-4 bg-[#030912A3] backdrop-blur ">
+                <div className=" px-4 min-w-[200px] shadow-md mt-4 bg-[#030912]/80 backdrop-blur-md " style={{ backgroundColor: '#101828' }}>
                   <div className="flex py-2 gap-3 items-center">
                     <Avatar className="!w-[28px] !h-[28px]" alt={userInfo?.name || userInfo?.username} src={img || undefined}>
                       {!img && (userInfo?.name?.[0] || 'U')}
