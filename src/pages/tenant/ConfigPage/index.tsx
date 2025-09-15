@@ -5,30 +5,38 @@ import { TabCondition } from './tabs/tab-condition';
 import { useTranslation } from 'react-i18next';
 
 function ConfigPage() {
-  const [activeTab, setActiveTab] = useState('Phương tiện');
   const [t] = useTranslation();
 
   const tabs = {
     vehicle: t('vehicle'),
     condition: t('condition'),
-    schedule: t('schedule')
+    schedule: t('schedule'),
   };
+
+  // dynamically take the first tab label as default
+  const firstTab = Object.values(tabs)[0];
+  const [activeTab, setActiveTab] = useState(firstTab);
+
   return (
-    <div className='p-6'>
-      <div className='bg-[var(--grey-primary-60)] w-fit px-2  py-1 rounded-md flex gap-2'>
+    <div className="min-h-screen p-6 pt-[7vh] bg-[var(--bg)]">
+      <div className="bg-[#031f2f] w-fit px-2 py-1 flex gap-2 text-white border border-[#FFFFFF33]">
         {Object.entries(tabs).map(([key, label]) => (
           <div
             key={key}
-            className={`px-4 py-2 rounded-md  cursor-pointer ${activeTab === label ? 'shadow-md bg-white' : ''}`}
+            className={`px-4 py-2 cursor-pointer ${
+              activeTab === label ? 'shadow-md bg-[#232a39]' : ''
+            }`}
             onClick={() => setActiveTab(label)}
           >
-            <Typography variant='button3'>{label}</Typography>
+            <Typography variant="button3">{label}</Typography>
           </div>
         ))}
       </div>
-      <div className='py-6'>
+
+      <div className="py-6">
         {activeTab === tabs.vehicle && <TabFacility />}
         {activeTab === tabs.condition && <TabCondition />}
+        {/* schedule tab can be rendered here once implemented */}
       </div>
     </div>
   );
