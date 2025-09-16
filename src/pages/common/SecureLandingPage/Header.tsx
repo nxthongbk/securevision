@@ -63,9 +63,22 @@ export default function Header({
             >
               {t('secureLandingPage.header.signIn')}
             </button>
-            <button className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'>
+            <button
+              onClick={() => {
+                const scrollContainer = document.querySelector('.secure-landing-page');
+                const targetSection = document.querySelector('#contact');
+                if (scrollContainer && targetSection) {
+                  scrollContainer.scrollTo({
+                    top: targetSection.getBoundingClientRect().top + scrollContainer.scrollTop,
+                    behavior: 'smooth'
+                  });
+                }
+              }}
+              className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'
+            >
               {t('secureLandingPage.header.freeConsultation')}
             </button>
+
             {lang && handleChangeLang && (
               <div className='relative'>
                 <button
@@ -204,14 +217,16 @@ export default function Header({
                 <button className='text-gray-700 hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
                   {t('secureLandingPage.header.signIn')}
                 </button>
-                <a
-                  className='mt-2 w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700 transition'
+                <button
                   onClick={() => {
                     setMenuOpen(false);
+                    const section = document.querySelector('#contact');
+                    section?.scrollIntoView({ behavior: 'smooth' });
                   }}
+                  className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'
                 >
                   {t('secureLandingPage.header.freeConsultation')}
-                </a>
+                </button>
               </nav>
             </div>
           </div>
