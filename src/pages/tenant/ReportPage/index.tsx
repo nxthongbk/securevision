@@ -1,4 +1,7 @@
-import AlarmSummary from './components/alarmSummary';
+import AlarmSummary from "./components/alarmSummary";
+import LocationsSummary from "./components/locationSummary";
+import UserSummary from "./components/userSummary";
+import DeviceSummary from "./components/deviceSummary";
 
 export default function ReportPage() {
   return (
@@ -10,10 +13,26 @@ export default function ReportPage() {
         </div>
       </div>
 
-      {/* Keep the rest empty or remove if not needed */}
-      <div className="flex items-center justify-center border border-gray-700" />
-      <div className="flex items-center justify-center border border-gray-700" />
-      <div className="flex items-center justify-center border border-gray-700" />
+      {/* Quarter 2 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <LocationsSummary />
+        </div>
+      </div>
+
+      {/* Quarter 3 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <UserSummary/>
+        </div>
+      </div>
+
+      {/* Quarter 4 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <DeviceSummary/>
+        </div>
+      </div>
     </div>
   );
 }
