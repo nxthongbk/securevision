@@ -491,6 +491,17 @@
     "vi": "Vietnamese",
     "en": "English"
   },
+  "config": {
+    "email-alerts": "Email Alerts",
+    "email-description": "Receive security alerts and notification via email",
+    "SMS-alerts": "SMS Alerts",
+    "SMS-description": "Get instant SMS notification for critical alerts",
+    "push-notification": "Push Notification",
+    "push-description": "Browser push notification for real-time updates",
+    "sound-alerts": "Sound Alerts",
+    "sound-description": "Audio notifications for immediate attention",
+    "call-alerts": "Call Alerts"
+  },
   "next": "Next",
   "previous": "Previous",
   "monitoring": "Monitoring",
