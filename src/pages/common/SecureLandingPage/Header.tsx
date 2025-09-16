@@ -59,7 +59,7 @@ export default function Header({
           <div className='hidden smallLaptop:flex items-center space-x-4'>
             <button
               onClick={handleSignIn}
-              className='px-4 py-2 rounded-lg font-medium text-inherit hover:bg-gray-100 transition-colors duration-300'
+              className='px-4 py-2 rounded-lg border border-[#00BCFF] font-medium text-inherit hover:bg-gray-100 transition-colors duration-300'
             >
               {t('secureLandingPage.header.signIn')}
             </button>
@@ -214,7 +214,7 @@ export default function Header({
                   </a>
                 ))}
                 <hr className='my-2' />
-                <button className='text-gray-700 hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
+                <button className='text-gray-700  border border-[#00BCFF] hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
                   {t('secureLandingPage.header.signIn')}
                 </button>
                 <button
