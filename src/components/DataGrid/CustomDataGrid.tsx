@@ -104,7 +104,7 @@ const CustomDataGrid = (props: CustomDataGridProps) => {
     
     <div className='flex-1 table__wrapper flex justify-between flex-col'>
       <DataGrid
-        autoHeight
+        // autoHeight
         sortingOrder={['desc', 'asc']}
         onRowSelectionModelChange={onSelectionModelChange}
         checkboxSelection={checkboxSelection}
