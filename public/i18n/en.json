@@ -492,15 +492,21 @@
     "en": "English"
   },
   "config": {
+    "call-alerts": "Call Alerts",
+    "call-description": "Receive calls for critical alerts",
     "email-alerts": "Email Alerts",
-    "email-description": "Receive security alerts and notification via email",
+    "email-description": "Receive security alerts and notifications via email",
     "SMS-alerts": "SMS Alerts",
     "SMS-description": "Get instant SMS notification for critical alerts",
     "push-notification": "Push Notification",
     "push-description": "Browser push notification for real-time updates",
     "sound-alerts": "Sound Alerts",
     "sound-description": "Audio notifications for immediate attention",
-    "call-alerts": "Call Alerts"
+    "zalo-alerts": "Zalo Alerts",
+    "zalo-description": "Send messages via Zalo",
+    "header-description": "Description",
+    "header-medium": "Medium",
+    "header-toggle": "On/Off"
   },
   "next": "Next",
   "previous": "Previous",

@@ -514,6 +514,23 @@
     "vi": "Tiếng Việt",
     "en": "Tiếng Anh"
   },
+  "config": {
+      "call-alerts": "Thông báo cuộc gọi",
+      "call-description": "Nhận cuộc gọi cho các cảnh báo quan trọng",
+      "email-alerts": "Thông báo Email",
+      "email-description": "Nhận cảnh báo và thông báo bảo mật qua email",
+      "SMS-alerts": "Thông báo SMS",
+      "SMS-description": "Nhận tin nhắn SMS ngay lập tức cho các cảnh báo quan trọng",
+      "push-notification": "Thông báo Push",
+      "push-description": "Thông báo push trên trình duyệt cho các cập nhật thời gian thực",
+      "sound-alerts": "Thông báo âm thanh",
+      "sound-description": "Thông báo âm thanh để chú ý ngay lập tức",
+      "zalo-alerts": "Thông báo Zalo",
+      "zalo-description": "Gửi tin nhắn qua Zalo",
+      "header-description": "Mô tả",
+      "header-medium": "Phương tiện",
+      "header-toggle": "Bật/Tắt"
+    },
   "next": "Tiếp tục",
   "previous": "Trở lại",
   "monitoring": "Giám sát",
