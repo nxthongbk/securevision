@@ -218,24 +218,36 @@ export default function AlertPopup() {
   };
 
   
-  // 🔹 New: renderVideoSection
   const renderVideoSection = () => {
-    const alarmDateTime = alarms[0]?.createdAlarmBy?.date;
-    if (!alarmDateTime) {
+    if (alarms.length === 0) {
       return (
         <Typography variant="body2" className="text-[var(--text-secondary)]">
-          No alarm datetime found
+          No alarms found
+        </Typography>
+      );
+    }
+
+    const alarm = alarms[0]; // Take the first alarm for simplicity
+    const alarmDateTime = alarm?.createdAlarmBy?.date;
+
+    // Get device ID from the first device in the alarm
+    const deviceId = alarm?.alarms?.[0]?.deviceInfo?.id;
+
+    if (!alarmDateTime || !deviceId) {
+      return (
+        <Typography variant="body2" className="text-[var(--text-secondary)]">
+          Missing alarm date or device ID
         </Typography>
       );
     }
 
     const formattedDate = dayjs(alarmDateTime).format('YYYY-MM-DD_HH:mm:ss');
-    const videoUrl = `https://wulu.innovation.com.vn/get_video?datetime=${formattedDate}`;
-    // const videoUrl = 'https://wulu.innovation.com.vn/get_video?datetime=2025-09-10_12:07:56';
+    const videoUrl = `https://scity-dev.innovation.com.vn/api/media/get_video?alarm_time=${formattedDate}&camera=camera-${deviceId}`;
+
     console.log('Generated video URL:', videoUrl);
 
     return (
-      <div className="h-[253px] relative border border-gray-700  overflow-hidden">
+      <div className="h-[253px] relative border border-gray-700 overflow-hidden">
         <div className="w-full h-full bg-black flex items-center justify-center">
           <video className="w-full h-full" controls autoPlay loop>
             <source src={videoUrl} type="video/mp4"/>
@@ -245,6 +257,7 @@ export default function AlertPopup() {
       </div>
     );
   };
+
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
