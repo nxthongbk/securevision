@@ -8,6 +8,8 @@ import TabsInforDevice from '../DrawerDevice/TenantView/TabInfo';
 import { translationCapitalFirst } from '~/utils/translate';
 import { useState } from 'react';
 import TabConfiguration from '../DrawerDevice/TenantView/TabConfiguration';
+import TabCredentials from '../DrawerDevice/TenantView/TabCredentials'; 
+
 
 // import TabsInforDeviceSysAdminView from '../DrawerDevice/SysAdminView/TabInfo';
 // import TabAttributesDeviceSysAdminView from '../DrawerDevice/SysAdminView/TabAttributes';
@@ -83,18 +85,21 @@ export default function PopupDeviceInfor({ props, hasEdit }: { props: Record<str
           <TabsInforDevice props={props} hasEdit={hasEdit} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <TabAttributesDevice deviceId={props?.id} />
+          <TabCredentials  props={props} hasEdit={hasEdit} /> 
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
-          <TabLastTelemetry deviceId={props?.id} deviceName={props?.name} />
+          <TabAttributesDevice deviceId={props?.id} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={3}>
-          <TabAlarmDevice token={props?.token} />
+          <TabLastTelemetry deviceId={props?.id} deviceName={props?.name} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={4}>
-          <TabNotification deviceId={props?.id} token={props?.token} />
+          <TabAlarmDevice token={props?.token} />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={5}>
+          <TabNotification deviceId={props?.id} token={props?.token} />
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={6}>
           <TabConfiguration deviceId={props?.id} />
         </CustomTabPanel>
       </>
@@ -114,11 +119,12 @@ export default function PopupDeviceInfor({ props, hasEdit }: { props: Record<str
           <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
             <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
               <Tab label={translate('info')} {...a11yProps(0)} />
-              <Tab label={'Attributes'} {...a11yProps(1)} />
-              <Tab label={'Latest telemetry'} {...a11yProps(2)} />
-              <Tab label={translate('warning')} {...a11yProps(3)} />
-              <Tab label={translate('notification')} {...a11yProps(4)} />
-              <Tab label={translate('configuration')} {...a11yProps(5)} />
+              <Tab label={"Credentials"} {...a11yProps(1)} />
+              <Tab label={'Attributes'} {...a11yProps(2)} />
+              <Tab label={'Latest telemetry'} {...a11yProps(3)} />
+              <Tab label={translate('warning')} {...a11yProps(4)} />
+              <Tab label={translate('notification')} {...a11yProps(5)} />
+              <Tab label={translate('configuration')} {...a11yProps(6)} />
             </Tabs>
           </Box>
           {renderTabPanel()}

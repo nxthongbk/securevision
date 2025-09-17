@@ -1,13 +1,13 @@
-import { IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
-import AvatarTableRow from '~/components/AvatarTableRow';
-import DrawerUpdateDevice from '../../Drawer/DrawerUpdateDevice';
-import DrawerWrapper from '~/components/Drawer/DrawerWrapper';
-import IconPhosphor from '~/assets/iconPhosphor';
-import PopupEdit from '../../Popup/TenantView/PupupEdit';
-import StatusChip from '~/components/StatusChip';
-import StatusConnect from '~/components/StatusConnect';
-import { translationCapitalFirst } from '~/utils/translate';
-import { useGetDataDeviceType } from '~/pages/systemAdmin/SysDeviceProfilePage/handleApi';
+import { Typography } from '@mui/material';
+// import AvatarTableRow from '~/components/AvatarTableRow';
+// import DrawerUpdateDevice from '../../Drawer/DrawerUpdateDevice';
+// import DrawerWrapper from '~/components/Drawer/DrawerWrapper';
+// import IconPhosphor from '~/assets/iconPhosphor';
+// import PopupEdit from '../../Popup/TenantView/PupupEdit';
+// import StatusChip from '~/components/StatusChip';
+// import StatusConnect from '~/components/StatusConnect';
+// import { translationCapitalFirst } from '~/utils/translate';
+// import { useGetDataDeviceType } from '~/pages/systemAdmin/SysDeviceProfilePage/handleApi';
 
 type Data = {
   key: string;
@@ -15,38 +15,40 @@ type Data = {
   value: string | JSX.Element;
 };
 
-export default function TabsInforDevice({ props, hasEdit }: { props: Record<string, any>; hasEdit: boolean }) {
-  const translate = (text: string) => translationCapitalFirst(text, 'devicePage');
-  const { dataDeviceTypeR } = useGetDataDeviceType({ keyword: '', page: 0, size: 1000 });
-  console.log("Device props received in TabsInforDevice:", props);
+export default function TabsInforDevice({ props }: { props: Record<string, any>; hasEdit: boolean }) {
+  // const translate = (text: string) => translationCapitalFirst(text, 'devicePage');
+  // const { dataDeviceTypeR } = useGetDataDeviceType({ keyword: '', page: 0, size: 1000 });
+  // console.log("Device props received in TabsInforDevice:", props);
   // console.log("Device token:", props?.token);
+  const token = props?.token
 
-  const { code, id, deviceProfile, status, alarmStatus, locationInfo } = props;
+  // const { code, id, deviceProfile, status, alarmStatus, locationInfo } = props;
 
   const data: Data[] = [
-    { key: 'status', lable: translate('status'), value: <StatusChip status={alarmStatus} /> },
-    { key: 'connect', lable: translate('device-status'), value: <StatusConnect isConnect={status === 'CONNECTED'} /> },
-    { key: 'iddevice', lable: translate('label-device-id'), value: String(code).padStart(4, '0') },
-    { key: 'uiiddevice', lable: 'UIID', value: String(id) },
-    { key: 'location', lable: translate('location'), value: locationInfo?.name || '---' },
-    { key: 'deviceProfile', lable: translate('device-profile'), value: deviceProfile?.name },
-    {
-      key: 'type',
-      lable: translate('device-type'),
-      value:
-        (dataDeviceTypeR?.data?.content || []).find((type) => type.id === deviceProfile?.typeId)?.label || ''
-    },
-    { key: 'waitingTime', lable: translate('time-waiting'), value: deviceProfile?.signalWaitingTime / 60000 + ' phút' },
-    { key: 'description', lable: translate('description'), value: deviceProfile?.description }
+    // { key: 'status', lable: translate('status'), value: <StatusChip status={alarmStatus} /> },
+    // { key: 'connect', lable: translate('device-status'), value: <StatusConnect isConnect={status === 'CONNECTED'} /> },
+    // { key: 'iddevice', lable: translate('label-device-id'), value: String(code).padStart(4, '0') },
+    // { key: 'uiiddevice', lable: 'UIID', value: String(id) },
+    // { key: 'location', lable: translate('location'), value: locationInfo?.name || '---' },
+    // { key: 'deviceProfile', lable: translate('device-profile'), value: deviceProfile?.name },
+    // {
+    //   key: 'type',
+    //   lable: translate('device-type'),
+    //   value:
+    //     (dataDeviceTypeR?.data?.content || []).find((type) => type.id === deviceProfile?.typeId)?.label || ''
+    // },
+    // { key: 'waitingTime', lable: translate('time-waiting'), value: deviceProfile?.signalWaitingTime / 60000 + ' phút' },
+    // { key: 'description', lable: translate('description'), value: deviceProfile?.description }
+    { key: 'token', lable: 'Token', value: token || '---' },
   ];
 
-  const theme = useTheme();
-  const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
+  // const theme = useTheme();
+  // const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
 
   return (
     <div className='w-full flex flex-col justify-start'>
       {/* Top Avatar + Edit Button */}
-      <div className='h-[132px] flex justify-between items-start'>
+      {/* <div className='h-[132px] flex justify-between items-start'>
         <AvatarTableRow avatarUrl={deviceProfile?.imageUrl} sx={{ width: '120px', height: '120px' }} />
         {isTablet ? (
           <DrawerWrapper>
@@ -62,7 +64,7 @@ export default function TabsInforDevice({ props, hasEdit }: { props: Record<stri
         ) : (
           <div className='flex justify-end items-center gap-4'>{hasEdit && <PopupEdit props={props} />}</div>
         )}
-      </div>
+      </div> */}
 
       {/* Table rows */}
       {data?.map((item: Data, idx: number) => {

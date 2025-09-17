@@ -5,7 +5,6 @@ import TabAttributesDevice from '../DrawerDevice/TenantView/TabAttributes';
 import TabLastTelemetry from '../DrawerDevice/TenantView/TabLastTelemetry';
 import TabNotification from '~/pages/tenant/DevicePage/DrawerDevice/TenantView/TabNotification';
 import TabsInforDevice from '../DrawerDevice/TenantView/TabInfo';
-// import TabCredentials from '../DrawerDevice/TenantView/TabCredentials'; 
 import { X } from '@phosphor-icons/react';
 import { translationCapitalFirst } from '~/utils/translate';
 import { useState } from 'react';
@@ -69,7 +68,7 @@ export default function DrawerDeviceDetails(props: DrawerDeviceDetailsProps) {
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
           <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
             <Tab label={translate('info')} {...a11yProps(0)} />
-            {/* <Tab label={'Credentials'} {...a11yProps(1)} />  */}
+            <Tab label={'Credentials'} {...a11yProps(1)} /> 
             <Tab label={'Attributes'} {...a11yProps(2)} />
             <Tab label={'Latest telemetry'} {...a11yProps(3)} />
             <Tab label={translate('warning')} {...a11yProps(4)} />
@@ -80,9 +79,6 @@ export default function DrawerDeviceDetails(props: DrawerDeviceDetailsProps) {
         <CustomTabPanel value={value} index={0}>
           <TabsInforDevice props={props} hasEdit={hasEdit} />
         </CustomTabPanel>
-        {/* <CustomTabPanel value={value} index={1}>
-          <TabCredentials  props={props} hasEdit={hasEdit} /> 
-        </CustomTabPanel> */}
         <CustomTabPanel value={value} index={2}>
           <TabAttributesDevice deviceId={props.id} />
         </CustomTabPanel>
