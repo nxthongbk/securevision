@@ -5,7 +5,7 @@ import DeviceSummary from "./components/deviceSummary";
 
 export default function ReportPage() {
   return (
-    <div className="grid grid-cols-2 grid-rows-2 w-screen h-screen pt-[7vh] bg-[var(--bg)]">
+    <div className="grid grid-cols-2 grid-rows-2 w-screen h-screen overflow-y-auto pt-[7vh] bg-[var(--bg)]">
       {/* Quarter 1 */}
       <div className="flex items-center justify-center border border-gray-700">
         <div className="w-full h-full">
