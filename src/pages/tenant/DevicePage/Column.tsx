@@ -55,7 +55,7 @@ export default function ColumnsTable(hasEdit: boolean) {
       }
     },
     {
-      minWidth: 160,
+      minWidth: 140,
       field: 'deviceName',
       headerName: translationCapitalFirst('devices', 'devicePage'),
       flex: 4.07,
@@ -72,7 +72,7 @@ export default function ColumnsTable(hasEdit: boolean) {
       }
     },
     {
-      minWidth: 160,
+      minWidth: 140,
       field: 'deviceProfileName',
       headerName: translationCapitalFirst('device-profile', 'deviceProfile'),
       flex: 4.07,
@@ -92,7 +92,7 @@ export default function ColumnsTable(hasEdit: boolean) {
       }
     },
     {
-      minWidth: 160,
+      minWidth: 130,
       field: 'location',
       headerName: translationCapitalFirst('device-location', 'devicePage'),
       flex: 4.07,
@@ -109,7 +109,7 @@ export default function ColumnsTable(hasEdit: boolean) {
       }
     },
     {
-      width: 79,
+      width: 120,
       field: 'status',
       headerName: translationCapitalFirst('connect', 'devicePage'),
       editable: false,
@@ -121,7 +121,7 @@ export default function ColumnsTable(hasEdit: boolean) {
       }
     },
     {
-      width: 140,
+      width: 120,
       field: 'alarmStatus',
       headerName: translationCapitalFirst('warning', 'devicePage'),
       editable: false,
