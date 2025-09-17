@@ -1,6 +1,6 @@
 import { useGetLatestTelemetry } from '../../handleApi';
 import useSocketLatestTelemetry from '~/utils/hooks/socket/useSocketLatestTelemetry';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface IProps {
   deviceId: string;
@@ -22,36 +22,46 @@ export default function TabConfiguration(props: IProps) {
     connectHeaders: {}
   });
 
-  const partitionsTelemetry = rows?.find((row) => row.key === 'partitions');
+  const [partitionList, setPartitionList] = useState<any[]>([]);
+  const [zoneList, setZoneList] = useState<any[]>([]);
 
-  let partitionList: any[] = [];
-  if (partitionsTelemetry?.value) {
+  const partitionsTelemetry = rows?.find((row) => row.key === 'partitions');
+  const zonesTelemetry = rows?.find((row) => row.key === 'zones');
+
+  useEffect(() => {
+    if (!partitionsTelemetry?.value) return;
+
+    let parsedPartitions: any[] = [];
     try {
       const parsed = JSON.parse(partitionsTelemetry.value);
-      if (Array.isArray(parsed.value)) {
-        partitionList = parsed.value;
-      }
-    } catch (e) {
-      partitionList = [];
-    }
-  }
+      parsedPartitions = Array.isArray(parsed.value) ? parsed.value : [];
+    } catch {}
 
-  const zonesTelemetry = rows?.find((row) => row.key === 'zones');
-  let zoneList: any[] = [];
-  if (zonesTelemetry?.value) {
+    setPartitionList((prev) =>
+      JSON.stringify(prev) !== JSON.stringify(parsedPartitions)
+        ? parsedPartitions
+        : prev
+    );
+  }, [partitionsTelemetry?.value]);
+
+  useEffect(() => {
+    if (!zonesTelemetry?.value) return;
+
+    let parsedZones: any[] = [];
     try {
       const parsed = JSON.parse(zonesTelemetry.value);
-      if (Array.isArray(parsed.value)) {
-        zoneList = parsed.value;
-      }
-    } catch (e) {
-      zoneList = [];
-    }
-  }
+      parsedZones = Array.isArray(parsed.value) ? parsed.value : [];
+    } catch {}
+
+    setZoneList((prev) =>
+      JSON.stringify(prev) !== JSON.stringify(parsedZones) ? parsedZones : prev
+    );
+  }, [zonesTelemetry?.value]);
 
   const [selectedPartition, setSelectedPartition] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedMode, setSelectedMode] = useState<string>('Arm');
+  const [isSaving, setIsSaving] = useState(false);
 
   const openDialog = (partition: any) => {
     setSelectedPartition(partition);
@@ -64,13 +74,41 @@ export default function TabConfiguration(props: IProps) {
     setSelectedPartition(null);
   };
 
-  const handleSave = () => {
-    if (selectedPartition) {
-      setSelectedPartition((prev: any) =>
-        prev ? { ...prev, name: prev.name || '', mode: selectedMode } : prev
+  const handleSave = async () => {
+    if (!selectedPartition) return;
+
+    setIsSaving(true);
+
+    const updatedPartition = { ...selectedPartition, mode: selectedMode };
+
+    // Update UI immediately
+    setSelectedPartition(updatedPartition);
+    setPartitionList((prev) =>
+      prev.map((p) => (p.id === updatedPartition.id ? updatedPartition : p))
+    );
+
+    // Call API
+    try {
+      const response = await fetch(
+        'https://scity-dev.innovation.com.vn/api/alarm/setArm',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            site_id: 1639201,
+            partition_id: updatedPartition.id,
+            action: selectedMode.toLowerCase()
+          })
+        }
       );
+      const data = await response.json();
+      console.log('API response:', data);
+    } catch (err) {
+      console.error('Failed to update partition:', err);
+    } finally {
+      setIsSaving(false);
+      closeDialog();
     }
-    closeDialog();
   };
 
   return (
@@ -81,7 +119,7 @@ export default function TabConfiguration(props: IProps) {
         {partitionList.map((p) => (
           <div
             key={p.id}
-            className="bg-white rounded-lg shadow p-4 min-w-[200px] flex flex-col items-center"
+            className="bg-[#031f2f] border border-[#FFFFFF33] shadow p-4 min-w-[200px] flex flex-col items-center"
           >
             <div className="font-semibold mb-2">{p.name}</div>
             <div
@@ -89,7 +127,7 @@ export default function TabConfiguration(props: IProps) {
                 p.status.includes('Ready to Arm')
                   ? 'bg-green-400'
                   : p.status.includes('Alarm')
-                  ? 'bg-red-400' // 🔴 chỉ màu đỏ
+                  ? 'bg-red-400'
                   : p.status.includes('Arm')
                   ? 'bg-red-400'
                   : p.status.includes('Trouble')
@@ -120,7 +158,7 @@ export default function TabConfiguration(props: IProps) {
               bgClass = 'bg-green-400';
               break;
             case 'Alarm':
-              bgClass = 'bg-red-400'; // 🔴 chỉ màu đỏ
+              bgClass = 'bg-red-400';
               break;
             case 'Open':
               bgClass = 'bg-yellow-400';
@@ -132,7 +170,6 @@ export default function TabConfiguration(props: IProps) {
               bgClass = 'bg-yellow-300';
               break;
           }
-
           return (
             <div
               key={zone.id}
@@ -147,7 +184,7 @@ export default function TabConfiguration(props: IProps) {
 
       {isDialogOpen && selectedPartition && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+          <div className="bg-[#101828] p-6 rounded-lg shadow-lg w-[400px]">
             <div className="text-lg font-bold mb-4">
               Configure: {selectedPartition.name}
             </div>
@@ -156,20 +193,22 @@ export default function TabConfiguration(props: IProps) {
               <label className="block text-sm font-medium mb-1">Partition Name</label>
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border border-[#FFFFFF33] bg-[#232a39] px-3 py-2"
                 value={selectedPartition.name}
                 onChange={(e) =>
                   setSelectedPartition({ ...selectedPartition, name: e.target.value })
                 }
+                disabled={isSaving}
               />
             </div>
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">Mode</label>
               <select
-                className="w-full border border-gray-300 rounded px-3 py-2"
+                className="w-full border border-gray-300 bg-[#232a39] px-2 py-2"
                 value={selectedMode}
                 onChange={(e) => setSelectedMode(e.target.value)}
+                disabled={isSaving}
               >
                 <option value="Arm">Arm</option>
                 <option value="DisArm">DisArm</option>
@@ -180,16 +219,18 @@ export default function TabConfiguration(props: IProps) {
 
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 text-sm"
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-none text-sm"
                 onClick={closeDialog}
+                disabled={isSaving}
               >
                 Cancel
               </button>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
                 onClick={handleSave}
+                disabled={isSaving}
               >
-                Save
+                {isSaving ? 'Saving...' : 'Save'}
               </button>
             </div>
           </div>
