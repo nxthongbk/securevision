@@ -125,13 +125,13 @@ export default function TabConfiguration(props: IProps) {
             <div
               className={`px-3 py-1 rounded-full text-white text-sm font-bold mb-2 ${
                 p.status.includes('Ready to Arm')
-                  ? 'bg-green-400'
+                  ? 'bg-[#00D492]'
                   : p.status.includes('Alarm')
-                  ? 'bg-red-400'
+                  ? 'bg-[#FF6467]'
                   : p.status.includes('Arm')
-                  ? 'bg-red-400'
+                  ? 'bg-[#FF6467]'
                   : p.status.includes('Trouble')
-                  ? 'bg-yellow-400'
+                  ? 'bg-[#FDC700]'
                   : p.status.includes('Exist')
                   ? 'bg-pink-400'
                   : 'bg-yellow-300'
@@ -155,19 +155,19 @@ export default function TabConfiguration(props: IProps) {
           let bgClass = '';
           switch (zone.status) {
             case 'Normal':
-              bgClass = 'bg-green-400';
+              bgClass = 'bg-[#00D492]';
               break;
             case 'Alarm':
-              bgClass = 'bg-red-400';
+              bgClass = 'bg-[#FF6467]';
               break;
             case 'Open':
-              bgClass = 'bg-yellow-400';
+              bgClass = 'bg-[#FDC700]';
               break;
             case 'Not used':
               bgClass = 'bg-gray-400';
               break;
             default:
-              bgClass = 'bg-yellow-300';
+              bgClass = 'bg-[#FDC700]';
               break;
           }
           return (
