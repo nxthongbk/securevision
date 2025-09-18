@@ -1,6 +1,5 @@
-import { Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Tabs, Tab, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useContext, useEffect, useMemo, useState } from 'react';
-
 import { AppContext } from '~/contexts/app.context';
 import { CameraDetail } from '../AlertPopup';
 import CarouselCustom from '~/components/Carousel';
@@ -16,96 +15,91 @@ import { useGetDashboards } from '../../../handleApi';
 
 export default function LocationPopup() {
   const [locationTranslate] = useTranslation('', { keyPrefix: 'locationPage' });
+  const { t } = useTranslation()
   const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
   const { openLocationPopup, setOpenLocationPopup } = useContext(AppContext);
   const [cameraList, setCameraList] = useState([]);
   const { tenantCode } = useTenantCode();
   const { data: detail } = useGetLocationDetail(openLocationPopup?.id, tenantCode);
-  const handleClose = () => {
-    setOpenLocationPopup(null);
-  };
-
-  const navigate = useNavigate();
-
   const { data } = useGetDashboards(detail?.data?.id, tenantCode);
   const dashboards = useMemo(() => data?.data || [], [data?.data]);
-
-  useEffect(() => {
-    if (detail) {
-      setCameraList(detail?.data?.cameraList);
-    }
-  }, [detail?.data]);
+  const navigate = useNavigate();
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
-  const title = alarmTranslate('location-information');
+  const title = locationTranslate('location-information');
+
+  const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    if (detail) setCameraList(detail?.data?.cameraList || []);
+  }, [detail?.data]);
+
+  const handleClose = () => setOpenLocationPopup(null);
 
   const renderBody = () => (
-    <div className="flex flex-col gap-4 p-3 tablet:px-4 tablet:py-4">
+    <Box>
+      {/* Tabs */}
+      <Tabs value={tabIndex} onChange={(_, newValue) => setTabIndex(newValue)} sx={{ borderBottom: '1px solid var(--border-color)' }}>
+        <Tab label={t('alarm-page.location')} />
+        <Tab label={t('alarm-page.device')} />
+        <Tab label={("Dashboard")} />
+      </Tabs>
 
-      {/* Top row: Common Info + Warning */}
-      <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
-        {/* Common Info */}
-        <div className="bg-[#161B29] p-3">
-          <CommonInfoLocation info={openLocationPopup} />
-        </div>
-
-        {/* Warning */}
-        <div className="bg-[#0D1117] p-3">
-          <Typography variant="label1" className="text-white">
-            {alarmTranslate("warning")}
-          </Typography>
-          <Typography variant="body2" className="text-[var(--text-secondary)]">
-            {alarmTranslate("no-alarm")}
-          </Typography>
-        </div>
-      </div>
-
-      {/* Dashboard full row */}
-      <div className="bg-[#161B29] p-3 flex flex-col flex-1">
-        <Typography variant="label1" className="text-white mb-2">
-          Dashboard
-        </Typography>
-        <div className="overflow-y-auto max-h-56 flex flex-col gap-1">
-          {dashboards.length > 0 ? (
-            dashboards.map((item) => (
-              <MenuItem
-                key={item.id}
-                title={item.name}
-                img={item.imageUrl}
-                onClick={() => navigate(`/dashboard/${item.id}`)}
-                tenantCode={tenantCode}
-                data={item}
-              />
-            ))
-          ) : (
-            <Typography variant="body2" className="text-[var(--text-secondary)]">
-              No dashboards
-            </Typography>
-          )}
-        </div>
-      </div>
-
-      {/* Camera Section */}
-      {cameraList?.length > 0 && (
-        <div className="bg-[#0D1117] p-3">
-          <Typography variant="label1" className="text-white mb-2">
-            Camera
-          </Typography>
-          <CarouselCustom>
-            {cameraList.map((deviceInfo, index) => (
-              <div key={index} className="mx-2">
-                <CameraDetail deviceInfo={deviceInfo} />
-              </div>
-            ))}
-          </CarouselCustom>
-        </div>
+      {/* Location Tab */}
+      {tabIndex === 0 && (
+        <Box className="flex flex-col gap-4 p-4">
+          <Box className="bg-[#161B29] p-3">
+            <CommonInfoLocation info={openLocationPopup} />
+          </Box>
+          <Box className="bg-[#0D1117] p-3 rounded-md">
+            <Typography variant="label1" className="text-white">{alarmTranslate("warning")}</Typography>
+            <Typography variant="body2" className="text-[var(--text-secondary)]">{alarmTranslate("no-alarm")}</Typography>
+          </Box>
+        </Box>
       )}
-    </div>
 
+      {/* Devices Tab */}
+      {tabIndex === 1 && (
+        <Box className="bg-[#0D1117] p-3">
+          {cameraList?.length > 0 ? (
+            <CarouselCustom>
+              {cameraList.map((deviceInfo, index) => (
+                <div key={index} className="mx-2">
+                  <CameraDetail deviceInfo={deviceInfo} />
+                </div>
+              ))}
+            </CarouselCustom>
+          ) : (
+            <Typography className="text-[var(--text-secondary)]">No devices found</Typography>
+          )}
+        </Box>
+      )}
 
+      {/* Dashboards Tab */}
+      {tabIndex === 2 && (
+        <Box className="flex flex-col gap-3 bg-[#161B29] p-3">
+          <Typography variant="label1" className="text-white">Dashboard</Typography>
+          <div className="overflow-y-auto max-h-56 flex flex-col gap-1">
+            {dashboards.length > 0 ? (
+              dashboards.map((item) => (
+                <MenuItem
+                  key={item.id}
+                  title={item.name}
+                  img={item.imageUrl}
+                  onClick={() => navigate(`/dashboard/${item.id}`)}
+                  tenantCode={tenantCode}
+                  data={item}
+                />
+              ))
+            ) : (
+              <Typography variant="body2" className="text-[var(--text-secondary)]">No dashboards</Typography>
+            )}
+          </div>
+        </Box>
+      )}
+    </Box>
   );
-
 
   return (
     <>
@@ -116,8 +110,8 @@ export default function LocationPopup() {
       ) : (
         <DialogCustom
           open={Boolean(openLocationPopup)}
-          title={locationTranslate('location-information')}
-          maxWidth='1280px'
+          title={title}
+          maxWidth={1280}
           handleClose={handleClose}
           content={renderBody()}
         />
