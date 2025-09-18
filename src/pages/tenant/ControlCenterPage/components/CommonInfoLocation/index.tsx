@@ -24,7 +24,17 @@ export default function CommonInfoLocation({ info }: IProps) {
 
       {/* Right column: details */}
       <div className="flex flex-col flex-1 pr-6">
-        <div className="flex w-full px-4 py-2">
+
+        <div className="flex w-full px-4 py-2 ">
+          <Typography variant="label2" className="w-[26%] text-white">
+            {t('locationPage.name')}
+          </Typography>
+          <Typography variant="body2" className="flex-1 text-white">
+            {info?.name}
+          </Typography>
+        </div>
+
+        <div className="flex w-full px-4 py-2 bg-[#00BCFF12]">
           <Typography variant="label2" className="w-[26%] text-white">
             {t('alarm-page.status')}
           </Typography>
@@ -33,14 +43,7 @@ export default function CommonInfoLocation({ info }: IProps) {
           </Typography>
         </div>
 
-        <div className="flex w-full px-4 py-2 bg-[#00BCFF12]">
-          <Typography variant="label2" className="w-[26%] text-white">
-            {t('locationPage.name')}
-          </Typography>
-          <Typography variant="body2" className="flex-1 text-white">
-            {info?.name}
-          </Typography>
-        </div>
+        
 
         <div className="flex w-full px-4 py-2">
           <Typography variant="label2" className="w-[26%] text-white">
