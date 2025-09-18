@@ -15,13 +15,22 @@ export default function TabConfiguration(props: IProps) {
     entityId: deviceId
   });
 
+  console.log('Device ID:', deviceId);
+
+  // FOR DEBUGGING LATER ON
+  // useEffect(() => {
+  //   if (initLatestTelemetry) {
+  //     console.log('Latest telemetry API response:', initLatestTelemetry);
+  //   }
+  // }, [initLatestTelemetry]);
+
   const { rows } = useSocketLatestTelemetry({
     dependency: [deviceId],
     topic: `/topic/${deviceId}`,
     initData: initLatestTelemetry?.data?.data,
     connectHeaders: {}
   });
-
+  
   const [partitionList, setPartitionList] = useState<any[]>([]);
   const [zoneList, setZoneList] = useState<any[]>([]);
 
@@ -116,38 +125,41 @@ export default function TabConfiguration(props: IProps) {
       <div className="mb-2 font-bold text-lg">Partitions</div>
 
       <div className="flex gap-4 mb-6">
-        {partitionList.map((p) => (
-          <div
-            key={p.id}
-            className="bg-[#031f2f] border border-[#FFFFFF33] shadow p-4 min-w-[200px] flex flex-col items-center"
-          >
-            <div className="font-semibold mb-2">{p.name}</div>
+        {partitionList.map((p) => {
+          // Normalize status to always be an array
+          const statuses = Array.isArray(p.status) ? p.status : [p.status || ''];
+
+          // Determine background color based on priority
+          let bgClass = 'bg-yellow-300'; // default/fallback
+          if (statuses.includes('Arm')) bgClass = 'bg-[#FF6467]';        // red
+          else if (statuses.includes('Alarm')) bgClass = 'bg-[#FDC700]'; // yellow
+          else if (statuses.includes('Ready to Arm')) bgClass = 'bg-[#00D492]'; // green
+          else if (statuses.includes('Disarmed')) bgClass = 'bg-[#00D492]'; // green
+          else if (statuses.includes('Trouble')) bgClass = 'bg-[#FDC700]'; // yellow
+          else if (statuses.includes('Exist')) bgClass = 'bg-pink-400';   // pink
+
+          return (
             <div
-              className={`px-3 py-1 rounded-full text-white text-sm font-bold mb-2 ${
-                p.status.includes('Ready to Arm')
-                  ? 'bg-[#00D492]'
-                  : p.status.includes('Alarm')
-                  ? 'bg-[#FF6467]'
-                  : p.status.includes('Arm')
-                  ? 'bg-[#FF6467]'
-                  : p.status.includes('Trouble')
-                  ? 'bg-[#FDC700]'
-                  : p.status.includes('Exist')
-                  ? 'bg-pink-400'
-                  : 'bg-yellow-300'
-              }`}
+              key={p.id}
+              className={`bg-[#031f2f] border border-[#FFFFFF33] shadow p-4 min-w-[200px] flex flex-col items-center`}
             >
-              {Array.isArray(p.status) ? p.status.join(', ') : p.status}
+              <div className="font-semibold mb-2">{p.name}</div>
+              <div
+                className={`px-3 py-1 rounded-full text-black text-sm font-bold mb-2 ${bgClass}`}
+              >
+                {statuses.join(', ')}
+              </div>
+              <button
+                className="w-full bg-white text-gray-700 text-sm font-bold py-2 rounded mb-2 border mt-2 shadow-sm"
+                onClick={() => openDialog(p)}
+              >
+                Configure
+              </button>
             </div>
-            <button
-              className="w-full bg-white text-gray-700 text-sm font-bold py-2 rounded mb-2 border mt-2 shadow-sm"
-              onClick={() => openDialog(p)}
-            >
-              Configure
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
+
 
       <div className="mb-2 font-bold text-lg">Zones</div>
       <div className="grid grid-cols-8 gap-2">
@@ -219,7 +231,7 @@ export default function TabConfiguration(props: IProps) {
 
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-none text-sm"
+                className="px-4 py-2 bg-gray-800 rounded hover:bg-none text-sm"
                 onClick={closeDialog}
                 disabled={isSaving}
               >
