@@ -1,41 +1,41 @@
-import { Box, Drawer, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Drawer, Typography } from '@mui/material';
 import { Check, X } from '@phosphor-icons/react';
 import ButtonCustom from '~/components/ButtonCustom';
-import TabAlertDevice from '../DrawerAlert/TenantView/TabAlertDevice';
+// import TabAlertDevice from '../DrawerAlert/TenantView/TabAlertDevice';
 import TabInfo from '../DrawerAlert/TenantView/TabInfo';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { AlarmStatus } from '../utils';
 import { useGetAlarmLocationByAlarmLocationId } from '../handleApi';
 import { useTranslation } from 'react-i18next';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
+// interface TabPanelProps {
+//   children?: React.ReactNode;
+//   index: number;
+//   value: number;
+// }
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+// function CustomTabPanel(props: TabPanelProps) {
+//   const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      className={`flex-1 ${value === index ? ' flex' : 'hidden'}`}
-      role='tabpanel'
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box className='flex-1 flex' sx={{ backgroundColor: '#0B1118', color: 'white' }}>{children}</Box>}
-    </div>
-  );
-}
+//   return (
+//     <div
+//       className={`flex-1 ${value === index ? ' flex' : 'hidden'}`}
+//       role='tabpanel'
+//       id={`simple-tabpanel-${index}`}
+//       aria-labelledby={`simple-tab-${index}`}
+//       {...other}
+//     >
+//       {value === index && <Box className='flex-1 flex' sx={{ backgroundColor: '#0B1118', color: 'white' }}>{children}</Box>}
+//     </div>
+//   );
+// }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
+// function a11yProps(index: number) {
+//   return {
+//     id: `simple-tab-${index}`,
+//     'aria-controls': `simple-tabpanel-${index}`
+//   };
+// }
 
 export default function PopupAlertInfor({
   open,
@@ -55,13 +55,13 @@ export default function PopupAlertInfor({
   hasEdit: boolean;
 }>) {
   const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
-  const [value, setValue] = useState(0);
+  // const [value, setValue] = useState(0);
   const { data } = useGetAlarmLocationByAlarmLocationId(alarmLocationId, tenantCode);
   const alarmDetail = data?.data || {};
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  // const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
+  //   setValue(newValue);
+  // };
 
   const handleSkipAlarm = () => {
     alarmLocationId && onSkip(alarmLocationId);
@@ -90,7 +90,7 @@ export default function PopupAlertInfor({
       >
         <div className='h-10 flex justify-between items-start'>
           <Typography variant='h4' sx={{ color: 'white' }}>
-            {alarmTranslate('warning')}
+            {alarmTranslate('info')}
           </Typography>
           {showAlarmAction && (
             <div className='flex gap-4'>
@@ -103,7 +103,8 @@ export default function PopupAlertInfor({
             </div>
           )}
         </div>
-
+        <TabInfo alertDetail={alarmDetail} />
+{/* 
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={value}
@@ -118,14 +119,14 @@ export default function PopupAlertInfor({
             <Tab label={alarmTranslate('alarm-device')} {...a11yProps(1)} />
             <Tab label={'Camera'} {...a11yProps(2)} />
           </Tabs>
-        </Box>
-
-        <CustomTabPanel value={value} index={0}>
+        </Box> */}
+{/* 
+        <CustomTabPanel index={0}>
           <TabInfo alertDetail={alarmDetail} />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
+        </CustomTabPanel> */}
+        {/* <CustomTabPanel value={value} index={1}>
           <TabAlertDevice deviceAlarms={alarmDetail?.alarms || []} />
-        </CustomTabPanel>
+        </CustomTabPanel> */}
       </Box>
     </Drawer>
   );
