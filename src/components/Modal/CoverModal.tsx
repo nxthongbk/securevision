@@ -45,7 +45,8 @@ const PopupCover = ({
             '& .MuiPaper-root': {
               borderRadius: '8px',
               width: '600px',
-              maxHeight: '100vh'
+              maxHeight: '100vh',
+              backgroundColor: '#101828'
             }
           }
         }

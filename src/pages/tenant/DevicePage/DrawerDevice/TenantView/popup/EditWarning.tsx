@@ -134,10 +134,10 @@ function EditWarning({
         <DropDownActionTable
           mainBtn={
             <div
-              className='h-8 flex w-full  justify-center rounded items-center bg-[var(--grey-primary-80)] hover:bg-[var(--grey-primary-100)] cursor-pointer'
+              className='h-8 flex w-full  justify-center rounded items-center hover:bg-[var(--grey-primary-100)] cursor-pointer'
               onClick={handleClickOpen}
             >
-              <Typography variant='button3' fontWeight={600}>
+              <Typography variant='button3' fontWeight={600} className='text-[#00BCFF]'>
                 {deviceTranslate('edit-warning')}
               </Typography>
             </div>
@@ -151,10 +151,10 @@ function EditWarning({
         />
       ) : (
         <div
-          className='h-8 flex w-full  justify-center rounded items-center bg-[var(--grey-primary-80)] hover:bg-[var(--grey-primary-100)] cursor-pointer'
+          className='h-8 flex w-full  justify-center rounded items-center hover:bg-[var(--grey-primary-100)] cursor-pointer'
           onClick={handleClickOpen}
         >
-          <Typography variant='button3' fontWeight={600}>
+          <Typography variant='button3' fontWeight={600} className='text-[#00BCFF]'>
             {deviceTranslate('edit-warning')}
           </Typography>
         </div>
@@ -167,7 +167,8 @@ function EditWarning({
             borderRadius: '8px',
             width: '600px',
             maxHeight: '90vh',
-            height: '1000px'
+            height: '1000px',
+            backgroundColor: "#101828"
           }
         }}
       >

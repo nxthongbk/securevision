@@ -165,7 +165,8 @@ const PopupUpsertAttribute = ({
             borderRadius: '8px',
             width: 600,
             minHeight: 500,
-            maxHeight: 640
+            maxHeight: 640,
+            backgroundColor: "#101828"
           }
         }}
         disableRestoreFocus
