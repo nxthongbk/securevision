@@ -490,6 +490,12 @@
     "tool": "Công cụ",
     "setting": "Cấu hình/ Cài đặt"
   },
+  "report": {
+  "alarm-summary": "Tóm tắt cảnh báo",
+  "user-summary": "Tóm tắt người dùng",
+  "device-summary": "Tóm tắt thiết bị",
+  "location-summary": "Tóm tắt địa điểm"
+  },
   "setting": {
     "setting": "Cài đặt",
     "version": "Phiên bản",

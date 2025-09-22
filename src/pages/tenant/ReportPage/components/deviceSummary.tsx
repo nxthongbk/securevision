@@ -1,5 +1,4 @@
-"use client";
-
+import  { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -40,7 +39,7 @@ const useGetDevicesSummary = (tenantCode: string | null) => {
 export default function DeviceSummary() {
   const { tenantCode } = useTenantCode();
   console.log("TenantCode from hook (DeviceSummary):", tenantCode);
-
+  const  { t } = useTranslation();
   const { data, isLoading, error } = useGetDevicesSummary(tenantCode);
 
   const chartData = useMemo(() => {
@@ -69,7 +68,7 @@ export default function DeviceSummary() {
   return (
     <div className="p-4 w-full h-full">
       <h2 className="text-lg font-bold mb-4 text-white">
-        Device Summary (by Status)
+        {t("report.device-summary")}
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>

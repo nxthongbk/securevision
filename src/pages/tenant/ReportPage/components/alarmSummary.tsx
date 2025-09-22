@@ -3,13 +3,14 @@ import { useTenantCode } from '~/utils/hooks/useTenantCode';
 import alarmService from '~/services/alarm.service';
 import dayjs from 'dayjs';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import  { useTranslation } from "react-i18next";
 
 export default function AlarmSummary() {
   const { tenantCode } = useTenantCode();
 
   const start = dayjs().subtract(7, 'day').startOf('day');
   const end = dayjs().endOf('day');
-
+  const  { t } = useTranslation();
   const { data, isLoading, error } = useQuery({
     queryKey: ['alarmSummary', tenantCode, start.valueOf(), end.valueOf()],
     queryFn: async () => {
@@ -40,7 +41,7 @@ export default function AlarmSummary() {
       });
     }
   });
-
+  console.log(alarms);
   // Group alarms by day
   const grouped = alarms.reduce((acc: Record<string, number>, alarm: any) => {
     const dateStr = alarm.createdAlarmBy?.date || alarm.createdAlarmBy?.createdAt;
@@ -59,7 +60,10 @@ export default function AlarmSummary() {
 
   return (
     <div className="p-4 w-full h-full">
-      <h2 className="text-lg font-bold mb-4 text-white">Alarm Summary (Past 7 Days)</h2>
+      <h2 className="text-lg font-bold mb-4 text-white">
+        {t("report.alarm-summary")}
+
+      </h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />

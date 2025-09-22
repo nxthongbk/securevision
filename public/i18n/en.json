@@ -467,6 +467,12 @@
     "tool": "Tool",
     "setting": "Setting"
   },
+  "report": {
+    "alarm-summary": "Alarm Summary",
+    "user-summary": "User Summary",
+    "device-summary": "Device Summary",
+    "location-summary": "Location Summary"
+  },
   "setting": {
     "setting": "Setting",
     "version": "Version",

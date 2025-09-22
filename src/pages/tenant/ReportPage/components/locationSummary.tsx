@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from "react-i18next";
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
 import locationService from '~/services/location.service';
 import {
@@ -14,6 +15,7 @@ import {
 
 export default function LocationSummary() {
   const { tenantCode } = useTenantCode();
+  const { t } = useTranslation();
 
   // Fetch all locations (limit 1000 just in case)
   const { data, isLoading, error } = useQuery({
@@ -40,7 +42,9 @@ export default function LocationSummary() {
 
   return (
     <div className="p-4 w-full h-full">
-      <h2 className="text-lg font-bold mb-4 text-white">Top 3 Locations by Devices</h2>
+      <h2 className="text-lg font-bold mb-4 text-white">
+        {t("report.location-summary")}
+      </h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
           data={locations}

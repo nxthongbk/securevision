@@ -1,6 +1,4 @@
-// src/components/UserSummary.tsx
-"use client";
-
+import  { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -18,6 +16,7 @@ const COLORS = ["#4CAF50", "#FF9800", "#F44336", "#2196F3", "#9C27B0"];
 
 export default function UserSummary() {
   const { tenantCode } = useTenantCode();
+  const { t } = useTranslation();
 
   console.log("TenantCode from hook:", tenantCode);
 
@@ -64,7 +63,7 @@ export default function UserSummary() {
   return (
     <div className="p-4 w-full h-[400px]">
       <h2 className="text-lg font-bold mb-4 text-white">
-        User Summary (by Status)
+        {t("report.user-summary")}
       </h2>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
