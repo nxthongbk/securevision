@@ -1,34 +1,29 @@
-// import { BellRinging, BellSlash } from '@phosphor-icons/react';
-// import { Button, Typography } from '@mui/material';
-import  { ILocationLog } from '../LocationLog';
+import { ILocationLog } from '../LocationLog';
 import mapboxgl from 'mapbox-gl';
-import { useCallback, useContext, useEffect, useMemo,  useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import AlertPopup from '../Popup/AlertPopup';
 import { AppContext } from '~/contexts/app.context';
 import CancelPopup from '../Popup/CancelPopup';
 import LocationPopup from '../Popup/LocationPopup';
 import MapBox from '~/components/MapBox';
-import MarkerMap from '../../../../../components/Marker';
 import PendingPopup from '../Popup/PendingPopup';
 import PopupMarker from '../Popup/PopupMarker';
-// import { useTranslation } from 'react-i18next';
+import './style.css';
 
 function MapRight({
   data,
   mapRef,
   socketData,
-  setLogs // accept logs setter
+  setLogs
 }: {
   data: any[];
   mapRef: any;
   socketData: any;
   setLogs: React.Dispatch<React.SetStateAction<ILocationLog[]>>;
 }) {
-  // const [isBellRingAlarm, setIsBellRingAlarm] = useState(true);
-  // const { t } = useTranslation();
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
-  // const logContainerRef = useRef<HTMLDivElement>(null); // optional if needed for scrolling
+  const initialFitDoneRef = useRef(false); // <-- ensure fitBounds only runs once
 
   const {
     openLocationPopup,
@@ -61,7 +56,6 @@ function MapRight({
   }, [socketData]);
 
   useEffect(() => {
-    // keep logs capped at 100
     setLogs((prev) => (prev.length > 100 ? prev.slice(-50) : prev));
   }, [socketData]);
 
@@ -79,17 +73,67 @@ function MapRight({
     [markerData]
   ) as mapboxgl.LngLatLike[];
 
+  // 🟢 Add pins whenever markerData changes (native markers)
   useEffect(() => {
-    if (map && coordinates.length > 0) {
-      const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
-      for (const coord of coordinates) bounds.extend(coord);
-      if (bounds['_ne'] && bounds['_sw']) {
-        map.fitBounds(bounds, { padding: { top: 150, bottom: 20, left: 20, right: 20 }, maxZoom: 13});
-      }
-    }
-  }, [coordinates, map]);
+    if (!map) return;
 
-  // const [isSatelliteView, setIsSatelliteView] = useState(false);
+    const markers: mapboxgl.Marker[] = [];
+
+    markerData.forEach((item) => {
+      const el = document.createElement('div');
+      el.className = item.status === 'ALARM' ? 'alarm-marker' : 'normal-marker';
+
+      const marker = new mapboxgl.Marker({ element: el })
+        .setLngLat([item?.location?.longitude, item?.location?.latitude])
+        .addTo(map);
+
+      // Click handler: fly to marker (center + offset) and open popup
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // center marker + offset so popup sits nicely centered
+        map.flyTo({
+          center: [item.location.longitude, item.location.latitude],
+          zoom: 17,
+          speed: 1.2,
+          curve: 1.4,
+          
+        });
+
+        setOpenMarkerPopup(item);
+      });
+
+      markers.push(marker);
+    });
+
+    return () => {
+      markers.forEach((m) => m.remove());
+    };
+  }, [map, markerData, setOpenMarkerPopup]);
+
+  // 🗺️ Fit bounds — run only once when map + coordinates first appear
+  useEffect(() => {
+    if (!map) return;
+    if (!coordinates || coordinates.length === 0) return;
+    if (initialFitDoneRef.current) return; // already fitted once
+
+    const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
+    for (const coord of coordinates) bounds.extend(coord);
+
+    // check bounds validity
+    if (!bounds || (bounds && bounds.isEmpty && bounds.isEmpty())) return;
+
+    // do initial fit (symmetric padding so it actually centers visually)
+    map.fitBounds(bounds, {
+      padding: { top: 80, bottom: 80, left: 60, right: 60 },
+      maxZoom: 13
+    });
+
+    initialFitDoneRef.current = true;
+    // helpful debug
+    // console.log('initial fitBounds applied');
+  }, [map, coordinates]);
+
+  // If you still want a dynamic fit when there are no previous markers, you can later clear `initialFitDoneRef.current = false`
 
   return (
     <MapBox
@@ -97,22 +141,7 @@ function MapRight({
       initialViewState={viewportMapRight}
       onMove={(evt) => setViewportMapRight(evt.viewState)}
       onLoad={onLoadMap}
-      // mapStyle={isSatelliteView ? 'mapbox://styles/mapbox/satellite-v9' : 'mapbox://styles/mapbox/streets-v12'}
     >
-      {markerData?.map((item) => (
-        <MarkerMap
-          key={item.id}
-          status={item?.status}
-          longitude={item?.location?.longitude}
-          latitude={item?.location?.latitude}
-          avatarUrl={item?.imageUrl}
-          onClick={(e) => {
-            e.originalEvent.stopPropagation();
-            setOpenMarkerPopup(item);
-          }}
-        />
-      ))}
-
       {openMarkerPopup && <PopupMarker />}
       {openLocationPopup && <LocationPopup />}
       {openCancelPopup && <CancelPopup />}
@@ -123,5 +152,3 @@ function MapRight({
 }
 
 export default MapRight;
-
-

@@ -83,7 +83,15 @@ export default function ListBuilding({ data, mapRef, closeDialog }: { data: any[
     if (mapRef.current) {
       const longitude = item?.location?.longitude;
       const latitude = item?.location?.latitude;
-      mapRef.current?.flyTo({ center: [longitude, latitude], duration: 1500, essential: true, zoom: 17, curve:1.5, pitch: 55, bearing: 30,    });
+      mapRef.current?.flyTo({ 
+        center: [longitude, latitude], 
+        duration: 1500, 
+        essential: true, 
+        zoom: 17, curve:1.5,
+        pitch: 55, 
+        bearing: 30,
+        
+      });
       setOpenMarkerPopup(item);
     }
   };
