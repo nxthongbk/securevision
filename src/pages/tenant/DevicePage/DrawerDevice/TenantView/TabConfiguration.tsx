@@ -15,22 +15,13 @@ export default function TabConfiguration(props: IProps) {
     entityId: deviceId
   });
 
-  console.log('Device ID:', deviceId);
-
-  // FOR DEBUGGING LATER ON
-  // useEffect(() => {
-  //   if (initLatestTelemetry) {
-  //     console.log('Latest telemetry API response:', initLatestTelemetry);
-  //   }
-  // }, [initLatestTelemetry]);
-
   const { rows } = useSocketLatestTelemetry({
     dependency: [deviceId],
     topic: `/topic/${deviceId}`,
     initData: initLatestTelemetry?.data?.data,
     connectHeaders: {}
   });
-  
+
   const [partitionList, setPartitionList] = useState<any[]>([]);
   const [zoneList, setZoneList] = useState<any[]>([]);
 
@@ -45,6 +36,18 @@ export default function TabConfiguration(props: IProps) {
       const parsed = JSON.parse(partitionsTelemetry.value);
       parsedPartitions = Array.isArray(parsed.value) ? parsed.value : [];
     } catch {}
+
+    // Standardize status to 'Arm', 'Disarm', or 'Alarm'
+    parsedPartitions = parsedPartitions.map((p) => ({
+      ...p,
+      status: Array.isArray(p.status)
+        ? p.status.map((s: string) => {
+            if (s.toLowerCase() === 'disarmed') return 'Disarm';
+            if (s.toLowerCase() === 'alarm') return 'Alarm';
+            return 'Arm';
+          })
+        : [p.status?.toLowerCase() === 'disarmed' ? 'Disarm' : p.status?.toLowerCase() === 'alarm' ? 'Alarm' : 'Arm']
+    }));
 
     setPartitionList((prev) =>
       JSON.stringify(prev) !== JSON.stringify(parsedPartitions)
@@ -74,7 +77,7 @@ export default function TabConfiguration(props: IProps) {
 
   const openDialog = (partition: any) => {
     setSelectedPartition(partition);
-    setSelectedMode(partition.mode || 'Arm');
+    setSelectedMode(partition.status?.[0] || 'Arm'); // Use first status
     setIsDialogOpen(true);
   };
 
@@ -87,16 +90,8 @@ export default function TabConfiguration(props: IProps) {
     if (!selectedPartition) return;
 
     setIsSaving(true);
+    const action = selectedMode.toLowerCase(); // API expects 'arm' or 'disarm'
 
-    const updatedPartition = { ...selectedPartition, mode: selectedMode };
-
-    // Update UI immediately
-    setSelectedPartition(updatedPartition);
-    setPartitionList((prev) =>
-      prev.map((p) => (p.id === updatedPartition.id ? updatedPartition : p))
-    );
-
-    // Call API
     try {
       const response = await fetch(
         'https://scity-dev.innovation.com.vn/api/alarm/setArm',
@@ -105,8 +100,8 @@ export default function TabConfiguration(props: IProps) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             site_id: 1639201,
-            partition_id: updatedPartition.id,
-            action: selectedMode.toLowerCase()
+            partition_id: selectedPartition.id,
+            action
           })
         }
       );
@@ -126,17 +121,21 @@ export default function TabConfiguration(props: IProps) {
 
       <div className="flex gap-4 mb-6">
         {partitionList.map((p) => {
-          // Normalize status to always be an array
           const statuses = Array.isArray(p.status) ? p.status : [p.status || ''];
 
-          // Determine background color based on priority
-          let bgClass = 'bg-yellow-300'; // default/fallback
-          if (statuses.includes('Arm')) bgClass = 'bg-[#FF6467]';        // red
-          else if (statuses.includes('Alarm')) bgClass = 'bg-[#FDC700]'; // yellow
-          else if (statuses.includes('Ready to Arm')) bgClass = 'bg-[#00D492]'; // green
-          else if (statuses.includes('Disarmed')) bgClass = 'bg-[#00D492]'; // green
-          else if (statuses.includes('Trouble')) bgClass = 'bg-[#FDC700]'; // yellow
-          else if (statuses.includes('Exist')) bgClass = 'bg-pink-400';   // pink
+          let bgClass = 'bg-[#00D492]'; // default green
+          let displayText = statuses.join(', ');
+
+          if (statuses.includes('Arm')) {
+            bgClass = 'bg-[#FF6467]'; // red
+            displayText = 'Arm';
+          } else if (statuses.includes('Disarm')) {
+            bgClass = 'bg-[#00D492]'; // green
+            displayText = 'Disarm';
+          } else if (statuses.includes('Alarm')) {
+            bgClass = 'bg-[#FDC700]'; // yellow
+            displayText = 'Alarm';
+          }
 
           return (
             <div
@@ -147,7 +146,7 @@ export default function TabConfiguration(props: IProps) {
               <div
                 className={`px-3 py-1 rounded-full text-black text-sm font-bold mb-2 ${bgClass}`}
               >
-                {statuses.join(', ')}
+                {displayText}
               </div>
               <button
                 className="w-full bg-white text-gray-700 text-sm font-bold py-2 rounded mb-2 border mt-2 shadow-sm"
@@ -159,7 +158,6 @@ export default function TabConfiguration(props: IProps) {
           );
         })}
       </div>
-
 
       <div className="mb-2 font-bold text-lg">Zones</div>
       <div className="grid grid-cols-8 gap-2">
@@ -223,9 +221,7 @@ export default function TabConfiguration(props: IProps) {
                 disabled={isSaving}
               >
                 <option value="Arm">Arm</option>
-                <option value="DisArm">DisArm</option>
-                <option value="Partial">Partial</option>
-                <option value="ByPass">ByPass</option>
+                <option value="Disarm">Disarm</option>
               </select>
             </div>
 
