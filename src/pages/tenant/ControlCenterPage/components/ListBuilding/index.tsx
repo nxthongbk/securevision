@@ -82,15 +82,16 @@ export default function ListBuilding({ data, mapRef, closeDialog }: { data: any[
   const moveToBuilding = (item) => {
     if (mapRef.current) {
       const longitude = item?.location?.longitude;
-      const latitude = item?.location?.latitude;
-      mapRef.current?.flyTo({ 
-        center: [longitude, latitude], 
-        duration: 1500, 
-        essential: true, 
-        zoom: 17, curve:1.5,
-        pitch: 55, 
+      const latitude = item?.location?.latitude ;
+      mapRef.current?.easeTo({
+        center: [longitude, latitude],
+        zoom: 17,
+        pitch: 55,
         bearing: 30,
-        
+        duration: 1500,
+        curve: 1.5,
+        offset: [0, 150],
+        essential: true
       });
       setOpenMarkerPopup(item);
     }

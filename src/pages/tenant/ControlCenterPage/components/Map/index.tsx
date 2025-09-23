@@ -23,7 +23,7 @@ function MapRight({
   setLogs: React.Dispatch<React.SetStateAction<ILocationLog[]>>;
 }) {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
-  const initialFitDoneRef = useRef(false); // <-- ensure fitBounds only runs once
+  const initialFitDoneRef = useRef(false); // fitbounds run once 
 
   const {
     openLocationPopup,
@@ -33,11 +33,9 @@ function MapRight({
     openPendingPopup,
     viewportMapRight,
     setViewportMapRight,
-    setOpenMarkerPopup,
     selectedFilter
   } = useContext(AppContext);
 
-  // Update logs from socket
   useEffect(() => {
     if (!socketData) return;
 
@@ -73,7 +71,7 @@ function MapRight({
     [markerData]
   ) as mapboxgl.LngLatLike[];
 
-  // 🟢 Add pins whenever markerData changes (native markers)
+  // marker gets added here
   useEffect(() => {
     if (!map) return;
 
@@ -87,30 +85,14 @@ function MapRight({
         .setLngLat([item?.location?.longitude, item?.location?.latitude])
         .addTo(map);
 
-      // Click handler: fly to marker (center + offset) and open popup
-      el.addEventListener('click', (e) => {
-        e.stopPropagation();
-        // center marker + offset so popup sits nicely centered
-        map.flyTo({
-          center: [item.location.longitude, item.location.latitude],
-          zoom: 17,
-          speed: 1.2,
-          curve: 1.4,
-          
-        });
-
-        setOpenMarkerPopup(item);
-      });
-
       markers.push(marker);
     });
 
     return () => {
       markers.forEach((m) => m.remove());
     };
-  }, [map, markerData, setOpenMarkerPopup]);
+  }, [map, markerData]);
 
-  // 🗺️ Fit bounds — run only once when map + coordinates first appear
   useEffect(() => {
     if (!map) return;
     if (!coordinates || coordinates.length === 0) return;
@@ -119,21 +101,20 @@ function MapRight({
     const bounds = new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]);
     for (const coord of coordinates) bounds.extend(coord);
 
-    // check bounds validity
-    if (!bounds || (bounds && bounds.isEmpty && bounds.isEmpty())) return;
+    if (!bounds || (bounds.isEmpty && bounds.isEmpty())) return;
 
-    // do initial fit (symmetric padding so it actually centers visually)
-    map.fitBounds(bounds, {
-      padding: { top: 80, bottom: 80, left: 60, right: 60 },
-      maxZoom: 13
+    map.resize();
+
+    map.once('idle', () => {
+      map.fitBounds(bounds, {
+        padding: { top: 80, bottom: 80, left: 60, right: 60 },
+        maxZoom: 13,
+        duration: 1000
+      });
+      initialFitDoneRef.current = true;
     });
 
-    initialFitDoneRef.current = true;
-    // helpful debug
-    // console.log('initial fitBounds applied');
-  }, [map, coordinates]);
-
-  // If you still want a dynamic fit when there are no previous markers, you can later clear `initialFitDoneRef.current = false`
+  }, [map, coordinates, markerData]);
 
   return (
     <MapBox
