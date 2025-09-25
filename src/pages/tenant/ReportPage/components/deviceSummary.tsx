@@ -29,7 +29,7 @@ const useGetDevicesSummary = (tenantCode: string | null) => {
         status: "",
         alarmStatus: "",
       });
-      console.log("Device API raw response:", res);
+      // console.log("Device API raw response:", res);
       return res;
     },
     enabled: !!tenantCode,
@@ -38,14 +38,14 @@ const useGetDevicesSummary = (tenantCode: string | null) => {
 
 export default function DeviceSummary() {
   const { tenantCode } = useTenantCode();
-  console.log("TenantCode from hook (DeviceSummary):", tenantCode);
+  // console.log("TenantCode from hook (DeviceSummary):", tenantCode);
   const  { t } = useTranslation();
   const { data, isLoading, error } = useGetDevicesSummary(tenantCode);
 
   const chartData = useMemo(() => {
     if (!data?.data?.content) return [];
 
-    console.log("Device API content:", data.data.content);
+    // console.log("Device API content:", data.data.content);
 
     const statusCount: Record<string, number> = {};
 
@@ -54,7 +54,7 @@ export default function DeviceSummary() {
       statusCount[status] = (statusCount[status] || 0) + 1;
     });
 
-    console.log("Device status tally:", statusCount);
+    // console.log("Device status tally:", statusCount);
 
     return Object.entries(statusCount).map(([status, value]) => ({
       name: status,

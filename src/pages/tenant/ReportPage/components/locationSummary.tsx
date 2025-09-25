@@ -1,7 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from "react-i18next";
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
-import locationService from '~/services/location.service';
+import { useGetAlarmLocations } from '../../AlarmPage/handleApi'; // ✅ import your existing hook
+import dayjs from 'dayjs';
+
 import {
   BarChart,
   Bar,
@@ -17,27 +19,36 @@ export default function LocationSummary() {
   const { tenantCode } = useTenantCode();
   const { t } = useTranslation();
 
-  // Fetch all locations (limit 1000 just in case)
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['locationSummary', tenantCode],
-    queryFn: async () => {
-      const res = await locationService.getLocations(0, 1000, '', tenantCode ?? '');
-      return res.data;
-    },
-    enabled: !!tenantCode,
-  });
+  // Calculate 7-day range
+  const startTs = dayjs().subtract(7, 'day').startOf('day').valueOf();
+  const endTs = dayjs().endOf('day').valueOf();
+
+  // Fetch alarms in the last 7 days
+  const { data, isLoading, error } = useGetAlarmLocations(
+    0, // page
+    1000, // size (fetch enough to cover 7 days of alarms)
+    '', // keyword
+    tenantCode,
+    '', // locationFilter
+    '', // status
+    startTs,
+    endTs
+  );
 
   if (isLoading) return <div>Loading location summary…</div>;
-  if (error) return <div>Error loading locations: {(error as Error).message}</div>;
+  if (error) return <div>Error loading alarms: {(error as Error).message}</div>;
 
-  // Process data: get top 3 locations by device count
-  const locations = (data?.content || [])
-    .map((item: any) => ({
-      name: item.name,
-      totalDevices: item.devices?.total || 0,
-      totalActiveDevices: item.devices?.totalActive || 0,
-    }))
-    .sort((a, b) => b.totalDevices - a.totalDevices)
+  // Group alarms by location
+  const alarmCounts: Record<string, number> = {};
+  (data?.data?.content || []).forEach((alarm: any) => {
+    const loc = alarm.locationInfo?.name || "Unknown";
+    alarmCounts[loc] = (alarmCounts[loc] || 0) + 1;
+  });
+
+  // Sort & take top 3
+  const topLocations = Object.entries(alarmCounts)
+    .map(([name, count]) => ({ name, alarmCount: count }))
+    .sort((a, b) => b.alarmCount - a.alarmCount)
     .slice(0, 3);
 
   return (
@@ -47,7 +58,7 @@ export default function LocationSummary() {
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
-          data={locations}
+          data={topLocations}
           margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -55,8 +66,7 @@ export default function LocationSummary() {
           <YAxis tick={{ fill: 'white', fontSize: 12 }} allowDecimals={false} />
           <Tooltip />
           <Legend />
-          <Bar dataKey="totalDevices" fill="#60a5fa" name="Total Devices" />
-          <Bar dataKey="totalActiveDevices" fill="#34d399" name="Active Devices" />
+          <Bar dataKey="alarmCount" fill="#f87171" name="Alarm Records" />
         </BarChart>
       </ResponsiveContainer>
     </div>

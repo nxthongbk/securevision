@@ -41,7 +41,7 @@ export default function AlarmSummary() {
       });
     }
   });
-  console.log(alarms);
+  // console.log(alarms);
   // Group alarms by day
   const grouped = alarms.reduce((acc: Record<string, number>, alarm: any) => {
     const dateStr = alarm.createdAlarmBy?.date || alarm.createdAlarmBy?.createdAt;
