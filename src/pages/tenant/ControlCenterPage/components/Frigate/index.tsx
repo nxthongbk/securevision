@@ -14,9 +14,11 @@ export default function CameraViewPage({
     'wss://cloud.innovation.com.vn/live/jsmpeg/camera213',
   ];
 
+  console.log('🎬 Active Camera URLs:', wsUrls);
+
   return (
     <div className="relative flex flex-col h-screen bg-black text-white overflow-hidden">
-      {/* Toggle at top-left, flush with camera grid */}
+      {/* Toggle between views */}
       <div className="absolute top-10 left-4 z-20 bg-[#0a0f1d]/80 px-5 py-2.5 rounded-lg border border-[#36BFFA]/30 flex items-center gap-3 shadow-md backdrop-blur-sm">
         <span className="text-sm font-medium">
           {isCameraView ? 'Camera View' : 'Map View'}
@@ -49,7 +51,9 @@ export default function CameraViewPage({
           </div>
         </div>
       ) : (
-        <h1 className="text-center mt-20 text-2xl font-bold">Map View Placeholder</h1>
+        <h1 className="text-center mt-20 text-2xl font-bold">
+          Map View Placeholder
+        </h1>
       )}
     </div>
   );
