@@ -18,7 +18,7 @@ export default function CameraViewPage({
 
   return (
     <div className="relative flex flex-col h-screen bg-black text-white overflow-hidden">
-      {/* Toggle between views */}
+      {/* camera/location toggle */}
       <div className="absolute top-10 left-4 z-20 bg-[#0a0f1d]/80 px-5 py-2.5 rounded-lg border border-[#36BFFA]/30 flex items-center gap-3 shadow-md backdrop-blur-sm">
         <span className="text-sm font-medium">
           {isCameraView ? 'Camera View' : 'Map View'}

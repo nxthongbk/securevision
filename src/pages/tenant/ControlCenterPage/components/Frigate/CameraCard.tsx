@@ -15,7 +15,6 @@ export function CameraCard({
   const [error, setError] = useState(false);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
 
-  // ✅ Debug overlay toggles
   const [showBBox, setShowBBox] = useState(false);
   const [showTimestamp, setShowTimestamp] = useState(false);
   const [showRegions, setShowRegions] = useState(false);
@@ -26,7 +25,6 @@ export function CameraCard({
   const isDebugMode =
     showBBox || showTimestamp || showRegions || showZones || showMotion || showMask;
 
-  // Build snapshot URL for debug/fallback mode
   const buildSnapshotUrl = () => {
     const base = wsUrl
       .replace("/live/jsmpeg/", "/api/")
@@ -53,7 +51,7 @@ export function CameraCard({
 
     const updateImage = () => setImgUrl(buildSnapshotUrl());
     updateImage();
-    const interval = setInterval(updateImage, 300); // adjust to control refresh rate
+    const interval = setInterval(updateImage, 200); 
     return () => clearInterval(interval);
   }, [isActive, isDebugMode, showBBox, showTimestamp, showRegions, showZones, showMotion, showMask, wsUrl]);
 
@@ -61,7 +59,7 @@ export function CameraCard({
   useEffect(() => {
     const JSMpeg = (window as any).JSMpeg;
 
-    // Cleanup if switching to debug or on unmount
+    // Cleanup 
     if (playerRef.current) {
       try {
         playerRef.current.destroy?.();
@@ -100,7 +98,7 @@ export function CameraCard({
       <div className="flex items-center justify-between p-3">
         <div className="text-sm font-semibold text-gray-200">{title}</div>
 
-        {/* ✅ Overlay Toggle Controls */}
+        {/* control toggles */}
         <div className="flex gap-1 flex-wrap">
           <button onClick={() => setShowBBox((v) => !v)} className={`text-xs px-2 py-1 rounded ${showBBox ? "bg-[#36BFFA]" : "bg-gray-700"}`}>BBox</button>
           <button onClick={() => setShowTimestamp((v) => !v)} className={`text-xs px-2 py-1 rounded ${showTimestamp ? "bg-[#36BFFA]" : "bg-gray-700"}`}>Timestamp</button>
@@ -110,8 +108,7 @@ export function CameraCard({
           <button onClick={() => setShowMask((v) => !v)} className={`text-xs px-2 py-1 rounded ${showMask ? "bg-[#36BFFA]" : "bg-gray-700"}`}>Mask</button>
         </div>
       </div>
-
-      {/* Render stream or snapshot depending on debug/error */}
+      
       {isDebugMode || error ? (
         <img
           src={imgUrl || buildSnapshotUrl()}
@@ -122,7 +119,6 @@ export function CameraCard({
         <canvas ref={canvasRef} className="w-full h-full object-cover" />
       )}
 
-      {/* Optional: overlay message if stream failed */}
       {error && !isDebugMode && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-gray-300 text-sm">
           Stream unavailable, showing snapshot
