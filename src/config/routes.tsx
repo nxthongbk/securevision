@@ -2,7 +2,7 @@ import { Navigate, Outlet, RouteObject, createBrowserRouter, useLocation } from 
 
 import { AppContext } from '~/contexts/app.context';
 import AuthLayout from '~/layouts/AuthLayout';
-import ControlCenterPage from '~/pages/tenant/ControlCenterPage';
+// import ControlCenterPage from '~/pages/tenant/ControlCenterPage';
 import DevicePage from '~/pages/tenant/DevicePage';
 import AlarmPage from '~/pages/tenant/AlarmPage';
 import UserPage from '~/pages/tenant/UserPage';
@@ -21,6 +21,7 @@ import { useContext } from 'react';
 import DashboardPage from '~/pages/tenant/Dashboard/index.page';
 import ConfigPage from '~/pages/tenant/ConfigPage';
 import SecureLandingPage from '~/pages/common/SecureLandingPage/Index';
+import ControlCenterPageWrapper from '~/pages/tenant/ControlCenterPage/wrapper';
 
 const Guard = () => {
   const { isAuthenticated } = useContext(AppContext);
@@ -34,7 +35,7 @@ const CheckRoleSYSAdmin = () => {
   const searchParams = new URLSearchParams(location.search);
   const tenantCode = searchParams.get('tenantCode');
   return userInfo?.roles?.[0] !== 'SYSADMIN' || (userInfo?.roles?.[0] === 'SYSADMIN' && tenantCode) ? (
-    <ControlCenterPage />
+    <ControlCenterPageWrapper />
   ) : (
     <Navigate to={ROUTES.CUSTOMER_MANAGEMENT} />
   );
@@ -43,11 +44,11 @@ const CheckRoleSYSAdmin = () => {
 const tenantRoutes: RouteObject[] = [
   {
     path: '',
-    element: <ControlCenterPage />
+    element: <ControlCenterPageWrapper />
   },
   {
     path: ROUTES.HISTORY,
-    element: <ControlCenterPage />
+    element: <ControlCenterPageWrapper />
   },
   {
     path: ROUTES.DEVICE,
@@ -115,7 +116,7 @@ const systemAdminRoutes: RouteObject[] = [
   // Review to avoid SysAdmin Routes overriding TenantRoutes when accessing the customer page.
   {
     path: ROUTES.HISTORY,
-    element: <ControlCenterPage />
+    element: <ControlCenterPageWrapper />
   },
   {
     path: ROUTES.DEVICE,

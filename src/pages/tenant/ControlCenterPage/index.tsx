@@ -1,50 +1,57 @@
-import { Dialog, DialogTitle, IconButton, useMediaQuery } from '@mui/material';
+import { Dialog, DialogTitle, IconButton, Typography, useMediaQuery } from '@mui/material';
 import { difference, isEmpty } from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ListMagnifyingGlass } from '@phosphor-icons/react';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+import { MapRef } from 'react-map-gl';
+import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { AppContext } from '~/contexts/app.context';
 import DataGridHeader from '~/components/DataGrid/DataGridHeader';
 import IconPhosphor from '~/assets/iconPhosphor';
 import ListBuilding from './components/ListBuilding';
-import { ListMagnifyingGlass } from '@phosphor-icons/react';
-import { MapRef } from 'react-map-gl';
-import MapRight from './components/Map/index';
+import MapRight from './components/Map';
 import SearchBox from './components/SearchBox';
-import SockJS from 'sockjs-client';
 import Sound from '~/assets/videos/fire-alarm-33770.mp3';
-import Stomp from 'stompjs';
 import theme from '~/assets/theme';
 import useDebounce from '~/utils/hooks/useDebounce';
 import { useGetLocationMap } from './handleApi';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
-import { useTranslation } from 'react-i18next';
 import LocationLog, { ILocationLog } from './components/LocationLog';
-import { Typography } from '@mui/material';
 
 const SOCKET_URL = import.meta.env.VITE_API_HOST + '/websocket/ws';
 
-export default function ControlCenterPage() {
+export default function ControlCenterPage({
+  onToggle,
+  isCameraView
+}: {
+  onToggle: (checked: boolean) => void;
+  isCameraView: boolean;
+}) {
   const queryClient = useQueryClient();
   const { tenantCode } = useTenantCode();
   const { userInfo, setOpenMarkerPopup } = useContext(AppContext);
   const { t } = useTranslation();
+
   const alarmLocationIdsRef = useRef<string[]>([]);
   const hasNewAlarmRef = useRef<boolean>(false);
   const mapRef = useRef<MapRef>();
+  const timeoutId = useRef<NodeJS.Timeout>();
+
   const [keyword, setKeyword] = useState('');
   const keywordDebounce = useDebounce(keyword, 500);
   const { data } = useGetLocationMap({ tenantCode, keyword: keywordDebounce });
-  const timeoutId = useRef<NodeJS.Timeout>();
-  const socket = new SockJS(SOCKET_URL);
   const [socketData, setSocketData] = useState<any>();
-
-  // NEW: lifted logs state
   const [logs, setLogs] = useState<ILocationLog[]>([]);
   const logContainerRef = useRef<HTMLDivElement>(null);
 
+  const socket = new SockJS(SOCKET_URL);
+
   const locations = useMemo(() => data?.data?.content || [], [data?.data?.content]);
 
+  // 🔌 WebSocket setup
   useEffect(() => {
     const topic = '/topic/' + userInfo?.tenant?.id;
     const connectHeaders = {};
@@ -70,7 +77,6 @@ export default function ControlCenterPage() {
     return () => {
       clearTimeout(timeoutId.current);
       if (stompClient.connected) {
-        stompClient.unsubscribe('sub-0');
         stompClient.disconnect(() => {
           stompClient = null;
         });
@@ -78,6 +84,7 @@ export default function ControlCenterPage() {
     };
   }, []);
 
+  // 🔔 Alarm detection and focus on map
   useEffect(() => {
     const locationIdsWithAlarmStatus = locations
       .filter((location) => location.status === 'ALARM')
@@ -105,7 +112,7 @@ export default function ControlCenterPage() {
     alarmLocationIdsRef.current = locationIdsWithAlarmStatus;
   }, [locations, setOpenMarkerPopup]);
 
-  // Alarm sound
+  // 🔊 Alarm sound
   useEffect(() => {
     const alarmSound = new Audio(Sound);
     alarmSound.loop = true;
@@ -160,7 +167,6 @@ export default function ControlCenterPage() {
         <DataGridHeader
           isSearch={false}
           setKeyword={setKeyword}
-          // title={t('monitoring')}
           btnPopup={
             <div onClick={handleDialogOpen} className="p-2 rounded-md bg-primary">
               <ListMagnifyingGlass size={20} color="white" />
@@ -175,10 +181,10 @@ export default function ControlCenterPage() {
           data={locations}
           socketData={socketData}
           mapRef={mapRef}
-          setLogs={setLogs} // Pass setter
+          setLogs={setLogs}
         />
 
-        {/* Left panel */}
+        {/* Left panel with toggle */}
         {!isSmallScreen && (
           <div
             className="absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-md scrollbar-hide"
@@ -190,6 +196,22 @@ export default function ControlCenterPage() {
               border: '1px solid #36BFFA3D',
             }}
           >
+            {/* 🔘 Toggle control */}
+            <div className="flex items-center justify-between px-4 py-2 border-b border-[#36BFFA3D] bg-[rgba(8,16,26,0.8)]">
+              <Typography variant="label2" className="text-[#36BFFA]">
+                {isCameraView ? 'Camera View' : 'Map View'}
+              </Typography>
+              <label className="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  checked={isCameraView}
+                  onChange={(e) => onToggle(e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 relative after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:h-5 after:w-5 after:rounded-full after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
+            </div>
+
             <ListBuilding data={locations} mapRef={mapRef} />
           </div>
         )}
@@ -198,11 +220,11 @@ export default function ControlCenterPage() {
         <div
           className="absolute top-[10%] right-4 overflow-hidden z-10 backdrop-blur-md"
           style={{
-              width: '320px',
-              height: '80%',
-              backgroundColor: '#030912A3',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-              border: '1px solid #36BFFA3D',
+            width: '320px',
+            height: '80%',
+            backgroundColor: '#030912A3',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
+            border: '1px solid #36BFFA3D',
           }}
         >
           <div className="flex flex-col h-full">
