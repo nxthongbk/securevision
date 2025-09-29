@@ -187,7 +187,7 @@ export default function ControlCenterPage({
         {/* Left panel with toggle */}
         {!isSmallScreen && (
           <div
-            className="absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-md scrollbar-hide"
+            className="absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-none scrollbar-hide"
             style={{
               width: '320px',
               height: '80%',
@@ -218,7 +218,7 @@ export default function ControlCenterPage({
 
         {/* Right panel for logs */}
         <div
-          className="absolute top-[10%] right-4 overflow-hidden z-10 backdrop-blur-md"
+          className="absolute top-[10%] right-4 overflow-hidden z-10 backdrop-blur-none"
           style={{
             width: '320px',
             height: '80%',
