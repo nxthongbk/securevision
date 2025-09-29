@@ -10,7 +10,7 @@ export default function CameraViewPage({
   const wsUrls = [
     'wss://cloud.innovation.com.vn/live/jsmpeg/camera-1f834933-16fa-4ee1-ba5d-6d084389374e',
     'wss://cloud.innovation.com.vn/live/jsmpeg/camera-1f834933-16fa-4ee1-ba5d-6d084389374e',
-    'wss://cloud.innovation.com.vn/live/jsmpeg/camera-1f834933-16fa-4ee1-ba5d-6d084389374e',
+    'wss://cloud.innovation.com.vn/live/jsmpeg/camera118',
     'wss://cloud.innovation.com.vn/live/jsmpeg/camera213',
   ];
 

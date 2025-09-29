@@ -51,7 +51,7 @@ export function CameraCard({
 
     const updateImage = () => setImgUrl(buildSnapshotUrl());
     updateImage();
-    const interval = setInterval(updateImage, 200); 
+    const interval = setInterval(updateImage, 250); 
     return () => clearInterval(interval);
   }, [isActive, isDebugMode, showBBox, showTimestamp, showRegions, showZones, showMotion, showMask, wsUrl]);
 
