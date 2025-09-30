@@ -1,13 +1,5 @@
 import { FormatTime } from '~/utils/formatDateTime';
-import {
-  WifiHigh,
-  WifiMedium,
-  WifiLow,
-  Plug,
-  BatteryLow,
-  BatteryMedium,
-  BatteryFull
-} from '@phosphor-icons/react';
+import { WifiHigh, WifiMedium, WifiLow, Plug, BatteryLow, BatteryMedium, BatteryFull } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import deviceService from '~/services/device.service';
 
@@ -40,51 +32,26 @@ export interface LocationLogProps {
 
 const LocationLog = (props: LocationLogProps) => {
   const { log } = props;
-  const [locationName, setLocationName] = useState<string>(
-    log.alarmSocketData?.locationName || 'Loading...'
-  );
-
-  const fetchLocationName = async () => {
-    const deviceId = log.deviceSocketData?.deviceId;
-    if (!deviceId) return;
-
-    try {
-      const response = await deviceService.getDeviceById(deviceId);
-
-      // Check for expired token via status codes
-      if (response?.status === 401 || response?.status === 403) {
-        window.alert('⚠️ Your token appears to have expired. Please refresh the page.');
-        return;
-      }
-
-      setLocationName(response?.data?.locationInfo?.name || 'Unknown Location');
-    } catch (err: any) {
-      const status = err?.response?.status;
-      const message = err?.response?.data?.message || err?.message || 'Unknown error occurred';
-
-      // Detect token expiry or unauthorized errors
-      if (status === 401 || status === 403 || /token/i.test(message)) {
-        window.alert('⚠️ Token expired! Please refresh the page.');
-        return;
-      }
-
-      // For all other errors, show popup alert for debugging
-      window.alert(
-        `❌ Failed to fetch location:\n\nStatus: ${status || 'N/A'}\nMessage: ${message}`
-      );
-
-      // Keep showing Loading... for debugging
-      setLocationName('Loading...');
-    }
-  };
+  const [locationName, setLocationName] = useState<string>(log.alarmSocketData?.locationName || 'Loading...');
 
   useEffect(() => {
-    fetchLocationName();
-    const interval = setInterval(fetchLocationName, 10 * 60 * 1000); // every 10 minutes
-    return () => clearInterval(interval);
-  }, [log.deviceSocketData?.deviceId]);
+    const fetchLocationName = async () => {
+      if (log.deviceSocketData?.deviceId) {
+        const device = await deviceService.getDeviceById(log.deviceSocketData.deviceId);
+        setLocationName(device?.data?.locationInfo?.name || 'Unknown Location');
+      }
+    };
 
-  // --- Icon helpers ---
+    // Initial fetch
+    fetchLocationName();
+
+    // Refetch every 1 hour (3600000 ms)
+    const interval = setInterval(fetchLocationName, 3600000);
+
+    // Cleanup interval on unmount or when log.deviceSocketData changes
+    return () => clearInterval(interval);
+  }, [log.deviceSocketData]);
+
   const getColor = (value: number, type: 'wifi' | 'battery') => {
     if (value <= 15 && type === 'wifi') return '#B61B00';
     if (value <= 20 && type === 'battery') return '#B61B00';
@@ -112,7 +79,7 @@ const LocationLog = (props: LocationLogProps) => {
     return <Plug size={24} weight="bold" color={color} />;
   };
 
-  // --- Icon/background URLs ---
+  // Public folder URLs
   const LogCardSvg = '/assets/uisvg/LogsSVG/logs.svg';
   const WifiHighIcon = '/assets/uisvg/LogsSVG/detailsHigh.svg';
   const WifiMedIcon = '/assets/uisvg/LogsSVG/detailsMed.svg';
@@ -122,7 +89,6 @@ const LocationLog = (props: LocationLogProps) => {
   const BatteryLowIcon = '/assets/uisvg/LogsSVG/detailsLow.svg';
   const PlugIcon = '/assets/uisvg/LogsSVG/detailsHigh.svg';
 
-  // --- Render device log ---
   if (log.deviceSocketData) {
     const { deviceId, fa_signal, data_isPower, data_percentBat } = log.deviceSocketData;
     if (!(deviceId && fa_signal && data_isPower && data_percentBat)) return null;
@@ -140,6 +106,7 @@ const LocationLog = (props: LocationLogProps) => {
           position: 'relative'
         }}
       >
+        {/* Header */}
         <div className="flex flex-col px-2 gap-1">
           <h4 className="text-lg font-semibold text-[#74D4FF] truncate">{locationName}</h4>
           <p className="text-xs font-medium text-[#74D4FF] truncate">Device ID</p>
@@ -148,7 +115,9 @@ const LocationLog = (props: LocationLogProps) => {
           <p className="text-sm text-white truncate">{timestamp}</p>
         </div>
 
+        {/* Device info */}
         <div className="flex flex-row justify-around -gap-x-2 flex-none -mt-2">
+          {/* WiFi */}
           <div
             className="flex items-center justify-center gap-2 p-3 flex-none"
             style={{
@@ -171,6 +140,7 @@ const LocationLog = (props: LocationLogProps) => {
             </p>
           </div>
 
+          {/* Power */}
           <div
             className="flex items-center justify-center gap-2 p-3 flex-none"
             style={{
@@ -182,14 +152,12 @@ const LocationLog = (props: LocationLogProps) => {
             }}
           >
             {powerIcon(data_isPower?.value)}
-            <p
-              className="text-sm truncate"
-              style={{ color: data_isPower?.value ? '#46ECD5' : '#B61B00' }}
-            >
+            <p className="text-sm truncate" style={{ color: data_isPower?.value ? '#46ECD5' : '#B61B00' }}>
               {data_isPower?.value ? 'On' : 'Off'}
             </p>
           </div>
 
+          {/* Battery */}
           <div
             className="flex items-center justify-center gap-2 p-3 flex-none"
             style={{
@@ -207,10 +175,7 @@ const LocationLog = (props: LocationLogProps) => {
             }}
           >
             {getBatteryIcon(data_percentBat?.value)}
-            <p
-              className="text-sm truncate"
-              style={{ color: getColor(data_percentBat?.value, 'battery') }}
-            >
+            <p className="text-sm truncate" style={{ color: getColor(data_percentBat?.value, 'battery') }}>
               {`${data_percentBat?.value}`}
             </p>
           </div>
@@ -219,9 +184,9 @@ const LocationLog = (props: LocationLogProps) => {
     );
   }
 
-  // --- Render alarm log ---
   if (log.alarmSocketData) {
     const timestamp = FormatTime(log.alarmSocketData.timestamp);
+
     return (
       <div className="flex flex-col p-2 border rounded-md bg-gray-50 bg-opacity-70 shadow-sm gap-2 my-2">
         <div className="flex flex-row justify-between items-center">
