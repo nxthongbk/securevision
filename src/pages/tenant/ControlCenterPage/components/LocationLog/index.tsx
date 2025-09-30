@@ -41,7 +41,15 @@ const LocationLog = (props: LocationLogProps) => {
         setLocationName(device?.data?.locationInfo?.name || 'Unknown Location');
       }
     };
+
+    // Initial fetch
     fetchLocationName();
+
+    // Refetch every 1 hour (3600000 ms)
+    const interval = setInterval(fetchLocationName, 3600000);
+
+    // Cleanup interval on unmount or when log.deviceSocketData changes
+    return () => clearInterval(interval);
   }, [log.deviceSocketData]);
 
   const getColor = (value: number, type: 'wifi' | 'battery') => {
