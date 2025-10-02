@@ -38,7 +38,7 @@ export default function DashboardPage() {
   }, [menuIndex, dashboards]);
 
   return (
-    <div className='w-full h-screen p-6 px-4 overflow-auto'>
+    <div className='w-full h-screen p-6 px-4 overflow-hidden bg-[var(--bg)] pt-[5%]'>
       <div className={`flex h-full ${!isVisible && ' flex-col'} `}>
         <div
           className={` border-r border-[var(--border-color)] overflow-auto transition-all duration-500 ${isVisible ? 'h-[1000px] opacity-100 w-[240px]' : ' w-[0px] max-h-0 opacity-0'
