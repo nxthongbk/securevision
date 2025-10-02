@@ -108,7 +108,8 @@ const EditDashboard: React.FC<EditDashboardProps> = ({ dataDefault, dashboardId,
           '& .MuiPaper-root': {
             borderRadius: '8px',
             width: '600px',
-            height: '500px'
+            height: '500px', 
+            backgroundColor: 'var(--bg)'
           }
         }}
       >

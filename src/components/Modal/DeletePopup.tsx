@@ -60,10 +60,11 @@ const PopupCoverDelete = ({
         onClose={handleClose}
         sx={{
           '& .MuiPaper-root': {
-            borderRadius: '8px',
+            borderRadius: '0px',
             minWidth: '340px',
             maxWidth: '400px',
-            maxHeight: '80vh'
+            maxHeight: '80vh',
+            backgroundColor: 'var(--bg)'
           }
         }}
       >
@@ -83,7 +84,6 @@ const PopupCoverDelete = ({
                 <>
                   <ButtonCustom
                     variant='contained'
-                    color='tertiary'
                     onClick={handleClose}
                     //   startIcon={<IconPhosphor iconName='X' size={18} />}
                   >
