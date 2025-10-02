@@ -102,7 +102,10 @@ export default function ControlCenterPage({
           mapRef.current?.flyTo({
             center: [locationData?.location?.longitude, locationData?.location?.latitude],
             duration: 1000,
-            zoom: 14
+            zoom: 16,
+            bearing: 30,
+            pitch: 55
+
           });
           setOpenMarkerPopup(locationData);
         }
