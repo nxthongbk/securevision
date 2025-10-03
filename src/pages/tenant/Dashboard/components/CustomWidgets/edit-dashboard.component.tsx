@@ -150,7 +150,7 @@ const EditDashboard: React.FC<EditDashboardProps> = ({ dataDefault, dashboardId,
                 label={t('Loại')}
                 control={control}
                 name='type'
-                placeholder={t('title')}
+                placeholder={t(dataDefault.type)}
                 disabled
                 isError={!!errors.title}
                 helperText={errors?.title?.message}

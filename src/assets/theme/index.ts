@@ -207,7 +207,7 @@ const components = {
           '& input': {
             color: 'var(--text-primary)',
             '&::placeholder': {
-              color: 'var(--text-secondary)',
+              color: 'var(--text-primary)',
               fontSize: 14,
               height: '24px'
             },
@@ -235,13 +235,13 @@ const components = {
             borderColor: 'var(--alert) '
           },
           '&.Mui-disabled fieldset': {
-            borderColor: 'var(--grey-neutral-200)',
-            color: 'var(--text-disable)'
+            borderColor: 'var(--border-color)',
+            color: 'var(--text-primary)'
           }
         },
         '& .MuiInputBase-root.Mui-disabled': {
-          backgroundColor: 'var(--grey-neutral-80)',
-          color: 'var(--text-disable)'
+          backgroundColor: 'var(--grey-neutral-800)',
+          color: 'var(--text-primary)'
         }
       })
     }

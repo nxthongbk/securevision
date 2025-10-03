@@ -240,9 +240,10 @@ const CreateDashboard: React.FC<CreateDashboardProps> = ({ tenantCode }) => {
             borderRadius: '8px',
             width: '600px',
             maxHeight: '90vh',
-            height: '800px'
+            height: '800px',
+            backgroundColor: 'var(--bg)'
           }
-        }}
+        }}  
       >
         <Box className='flex justify-between items-center p-4 h-[56px]'>
           <Typography color='var(--text-primary)' variant='h6'>
