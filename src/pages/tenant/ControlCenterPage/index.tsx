@@ -99,14 +99,18 @@ export default function ControlCenterPage({
         setSocketData(locationsData);
         if (locationData) {
           hasNewAlarmRef.current = false;
-          mapRef.current?.flyTo({
-            center: [locationData?.location?.longitude, locationData?.location?.latitude],
-            duration: 1000,
-            zoom: 16,
-            bearing: 30,
-            pitch: 55
-
-          });
+          const longitude = locationData?.location?.longitude
+          const latitude = locationData?.location?.latitude
+          mapRef.current?.easeTo({
+        center: [longitude, latitude],
+        zoom: 18,
+        pitch: 55,
+        bearing: 30,
+        duration: 1500,
+        curve: 1.5,
+        offset: [0, 250],
+        essential: true
+      });
           setOpenMarkerPopup(locationData);
         }
       }
