@@ -85,12 +85,12 @@ export default function ListBuilding({ data, mapRef, closeDialog }: { data: any[
       const latitude = item?.location?.latitude ;
       mapRef.current?.easeTo({
         center: [longitude, latitude],
-        zoom: 17,
+        zoom: 18,
         pitch: 55,
         bearing: 30,
         duration: 1500,
         curve: 1.5,
-        offset: [0, 150],
+        offset: [0, 250],
         essential: true
       });
       setOpenMarkerPopup(item);
