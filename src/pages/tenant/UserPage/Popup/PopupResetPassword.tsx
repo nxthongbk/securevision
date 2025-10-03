@@ -37,7 +37,8 @@ export default function PopupResetPassword({
           borderRadius: '8px',
           minWidth: '400px',
           maxWidth: '400px',
-          maxHeight: '80vh'
+          maxHeight: '80vh',
+          backgroundColor: 'var(--bg)'
         }
       }}
     >
@@ -53,7 +54,7 @@ export default function PopupResetPassword({
           </Box>
 
           <Box className='flex justify-end items-center p-6 pt-0 gap-3'>
-            <ButtonCustom variant='contained' color='tertiary' onClick={onClose}>
+            <ButtonCustom variant='contained' color='primary' onClick={onClose}>
               <Typography variant='button3' fontWeight={600}>
                 {translationCapitalFirst('cancel')}
               </Typography>

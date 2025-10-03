@@ -127,7 +127,7 @@ export default function PopupDetail({
     return (
       <div
         key={key}
-        className={`flex w-full px-[12px] py-[12px] ${order % 2 === 0 ? ' bg-[var(--grey-primary-60)] rounded-md' : ''}`}
+        className={`flex w-full border border-[var(--border-color)] px-[12px] py-[12px] ${order % 2 === 0 ? ' bg-[#03111b]' : 'bg-[#031423]'}`}
       >
         <Typography variant='label3' className='w-[28%]'>
           {label}
