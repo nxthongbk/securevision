@@ -75,7 +75,7 @@ export default function PopupAdd() {
     return (
       <div className='gap-3 flex flex-col min-h-[280px]'>
         <SelectDeviceProfile isError={false} helperText={''} control={control} />
-        <SelectLocation control={control} disabled={false} />
+        <SelectLocation control={control} disabled={false} isError={false} helperText={''} />
       </div>
     );
   };
