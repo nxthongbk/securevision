@@ -4,7 +4,7 @@ import SelectCustom from '~/components/SelectCustom';
 import { translationCapitalFirst } from '~/utils/translate';
 import { useGetLocations } from '../../LocationPage/handleApi';
 
-const SelectLocation = ({ control, disabled }) => {
+const SelectLocation = ({ control, disabled, isError, helperText}) => {
   const { data } = useGetLocations(0, 1000, '', '');
 
   const options = useMemo(() => {
@@ -38,6 +38,8 @@ const SelectLocation = ({ control, disabled }) => {
         }
       }}
       disabled={disabled}
+      isError={isError} 
+      helperText={helperText}
     />
   );
 };

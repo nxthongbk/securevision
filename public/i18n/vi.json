@@ -66,6 +66,7 @@
   "device": "thiết bị",
   "all-locations": "Tất cả địa điểm",
   "verify": "Xác minh",
+  "select-title": "Chọn tiêu đề",
   "deviceProfile": {
     "max-100-character": "Nhập tối đa 100 ký tự",
     "enter-time": "nhập thời gian",
