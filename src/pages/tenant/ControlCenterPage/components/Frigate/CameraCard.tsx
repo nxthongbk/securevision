@@ -51,7 +51,7 @@ export function CameraCard({
 
     const updateImage = () => setImgUrl(buildSnapshotUrl());
     updateImage();
-    const interval = setInterval(updateImage, 250); 
+    const interval = setInterval(updateImage, 250);
     return () => clearInterval(interval);
   }, [isActive, isDebugMode, showBBox, showTimestamp, showRegions, showZones, showMotion, showMask, wsUrl]);
 
@@ -59,18 +59,14 @@ export function CameraCard({
   useEffect(() => {
     const JSMpeg = (window as any).JSMpeg;
 
-    // Cleanup 
     if (playerRef.current) {
       try {
         playerRef.current.destroy?.();
-      } catch (e) {
-        console.warn("Cleanup error:", e);
-      }
+      } catch {}
       playerRef.current = null;
     }
 
     setError(false);
-
     if (!isActive || isDebugMode) return;
 
     if (canvasRef.current && JSMpeg) {
@@ -80,14 +76,10 @@ export function CameraCard({
           autoplay: true,
           audio: false,
           disableGl: false,
-          onError: (err: any) => {
-            console.error("JSMpeg Error:", err);
-            setError(true);
-          },
+          onError: () => setError(true),
         });
         playerRef.current = player;
-      } catch (err) {
-        console.error("Error creating JSMpeg player:", err);
+      } catch {
         setError(true);
       }
     }
@@ -95,10 +87,10 @@ export function CameraCard({
 
   return (
     <div className="bg-[#0a0f1d] rounded-xl border border-[#36BFFA]/20 shadow-lg flex flex-col overflow-hidden relative">
-      <div className="flex items-center justify-between p-3">
+      {/* HEADER */}
+      <div className="flex items-center justify-between p-3 border-b border-[#36BFFA]/20 bg-[#0a0f1d]">
         <div className="text-sm font-semibold text-gray-200">{title}</div>
 
-        {/* control toggles */}
         <div className="flex gap-1 flex-wrap">
           <button onClick={() => setShowBBox((v) => !v)} className={`text-xs px-2 py-1 rounded ${showBBox ? "bg-[#36BFFA]" : "bg-gray-700"}`}>BBox</button>
           <button onClick={() => setShowTimestamp((v) => !v)} className={`text-xs px-2 py-1 rounded ${showTimestamp ? "bg-[#36BFFA]" : "bg-gray-700"}`}>Timestamp</button>
@@ -108,16 +100,22 @@ export function CameraCard({
           <button onClick={() => setShowMask((v) => !v)} className={`text-xs px-2 py-1 rounded ${showMask ? "bg-[#36BFFA]" : "bg-gray-700"}`}>Mask</button>
         </div>
       </div>
-      
-      {isDebugMode || error ? (
-        <img
-          src={imgUrl || buildSnapshotUrl()}
-          alt="Camera snapshot"
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <canvas ref={canvasRef} className="w-full h-full object-cover" />
-      )}
+
+      {/* VIDEO / STREAM with fixed aspect ratio 16:9 */}
+      <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+        {isDebugMode || error ? (
+          <img
+            src={imgUrl || buildSnapshotUrl()}
+            alt="Camera snapshot"
+            className="absolute top-0 left-0 w-full h-full object-contain"
+          />
+        ) : (
+          <canvas
+            ref={canvasRef}
+            className="absolute top-0 left-0 w-full h-full object-contain"
+          />
+        )}
+      </div>
 
       {error && !isDebugMode && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-gray-300 text-sm">
