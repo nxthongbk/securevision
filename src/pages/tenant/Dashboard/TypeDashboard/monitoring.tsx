@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CircularProgress, Grid, Typography, IconButton } from '@mui/material';
+import { CircularProgress, Grid, Typography } from '@mui/material';
 
 import EditBar from '../components/Diagram/BarDiagram/bar-diagram';
 import Diagram from '../components/Diagram/diagram';
 import PreviewImage from '../components/Diagram/components/PreviewImage/preview-image';
 import { useGetAttributesMonitoring } from '../useDashboard';
 import { useGetLatestTelemetrys } from '../../DevicePage/handleApi';
-import { SidebarSimple } from '@phosphor-icons/react';
-import { useTranslation } from 'react-i18next';
+// import { SidebarSimple } from '@phosphor-icons/react';
+// import { useTranslation } from 'react-i18next';
 
 interface ControlMonitoringProps {
   allDeviceInfos?: any;
@@ -21,11 +21,11 @@ interface ControlMonitoringProps {
   typeProject?: string;
   listCam?: any[];
   dashboard: any;
-  isVisible: boolean;
-  setIsVisible: (visible: boolean) => void;
+  // isVisible: boolean;
+  // setIsVisible: (visible: boolean) => void;
 }
 
-const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dashboard, isVisible, setIsVisible }) => {
+const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dashboard }) => {
   const { data, isLoading } = dashboard && useGetAttributesMonitoring(dashboard?.id);
   const [arrArea, setArrArea] = useState<any[]>([]);
   const [isShowDiagram, setShowDiagram] = useState(true);
@@ -44,7 +44,8 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
   const [flattenedPoints, setFlattenedPoints] = useState<any>([]);
   const [selected, setSelected] = useState(false);
   const [telemetries, setTelemetries] = useState<any>();
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
+
   useEffect(() => {
     if (isDraw) return;
     setArrArea(data?.listArea);
@@ -53,6 +54,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
       setWidth(isCollapsed ? myDiagram.current.offsetWidth + 80 : myDiagram.current.offsetWidth - 80);
     }
   }, [myDiagram.current, dashboard, data]);
+
   useEffect(() => {
     const updateWindowDimensions = () => {
       setSize({ width: window.innerWidth, height: window.innerHeight });
@@ -91,6 +93,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
       document.body.style.overflow = 'visible';
     }
   }, [isMaximize, size]);
+
   const extendCard = () => {
     setMaximize(!isMaximize);
     const card = document.getElementById('cardDiagram');
@@ -106,34 +109,40 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
       }
     }
   };
+
   useEffect(() => {
     const handleResize = () => {
-
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);
     };
-    handleResize()
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   return (
-    <div>
-      <div className='flex '>
+    <div className='flex flex-col w-full h-auto'>
+      {/* removed this portion for cleaner UI - check w mr thong */}
+      {/* <div className='flex '>
         <IconButton aria-label='close' onClick={() => setIsVisible && setIsVisible(!isVisible)}>
           <SidebarSimple size={20} />
-        </IconButton>
+        </IconButton> 
         <Typography variant='h4'>
-          <span style={{ color: 'var(--primary-500)' }}>{projectName}</span>
+          <span style={{ color: 'white' }}>{projectName}</span>
         </Typography>
-      </div>
-      <div className='w-[calc(95vw-240px)] h-screen '>
-        <div className='m-4 border rounded-md'>
-          <div className='flex items-center justify-between px-4 border-b'>
+      </div> */}
+      <div className='w-[calc(95vw-240px)] flex-1'>
+        <div className='m-4 border border-[var(--border-color)] rounded-lg bg-[var(--bg)]'>
+          <div className='flex items-center justify-between px-4 border-b border-[var(--border-color)]'>
             <div>
-              <Typography variant='label1'>{t('diagram-area')}</Typography>
+              <Typography variant='label1' className='text-white'>
+                {/* {t('diagram-area')} */}
+                {projectName}
+                {/* then we could replace area map with {projectName} */}
+              </Typography>
             </div>
             <div className='flex justify-end p-2'>
               {data?.operationImage && isShowDiagram && (
@@ -163,16 +172,17 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
               )}
             </div>
           </div>
+
           <Grid container spacing={2}>
             <Grid item mobile={12}>
               {data?.operationImage && isShowDiagram ? (
                 <div
-                  className='card-diagram-alone'
+                  className='card-diagram-alone flex justify-center items-center overflow-hidden relative w-full max-h-[80vh]'
                   ref={myDiagram}
                   id='myDiagram'
                   style={{
-                    height: isMaximize ? '100%' : window.innerHeight,
-                    width: isMaximize && '100%',
+                    height: isMaximize ? '100%' : '80vh',
+                    width: isMaximize ? '100%' : '100%',
                   }}
                 >
                   <Diagram
@@ -200,7 +210,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
                   />
                 </div>
               ) : isLoading ? (
-                <div className='flex items-center justify-center w-screen h-screen'>
+                <div className='flex items-center justify-center w-full h-[70vh]'>
                   <CircularProgress />
                 </div>
               ) : (
