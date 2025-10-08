@@ -135,7 +135,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
         </Typography>
       </div> */}
       <div className='w-[calc(95vw-240px)] flex-1'>
-        <div className='m-4 border border-[var(--border-color)] rounded-lg bg-[var(--bg)]'>
+        <div className='m-4 border border-[var(--border-color)] bg-[var(--bg)]'>
           <div className='flex items-center justify-between px-4 border-b border-[var(--border-color)]'>
             <div>
               <Typography variant='label1' className='text-white'>
@@ -181,8 +181,8 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
                   ref={myDiagram}
                   id='myDiagram'
                   style={{
-                    height: isMaximize ? '100%' : '80vh',
-                    width: isMaximize ? '100%' : '100%',
+                    height: '75vh', // adjusted to 75vh
+                    width: '100%',
                   }}
                 >
                   <Diagram

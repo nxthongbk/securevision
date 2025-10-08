@@ -79,7 +79,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Dashboard Main Content */}
-          <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+          <div className="flex-1 min-h-0 flex flex-col">
             <div className="flex-1 min-h-0">
               {dashboard?.type === 'custom-widget' && (
                 <DashboardDisplay
