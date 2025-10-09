@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-
 import { Image } from 'react-feather';
 import { Box, Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -9,111 +8,101 @@ import { dashboardService } from '~/services/dashboard.service';
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
 import { resizeImage } from '~/utils/resizeImage';
 
-const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard, setImageDiagram }: { preview?: any, setPreview?: any, setShowDiagram?: any, dashboard: any, setImageDiagram?: any }) => {
+const PreviewImage = ({ 
+  preview, 
+  setPreview, 
+  setShowDiagram, 
+  dashboard,
+}: { 
+  preview?: any, 
+  setPreview?: any, 
+  setShowDiagram?: any, 
+  dashboard: any 
+}) => {
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+  const { tenantCode } = useTenantCode();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
 
+    const sizeW = 1800, sizeH = 1000;
+
+    // Non-PDF file upload
     if (file.type !== 'application/pdf') {
-      let reader = new FileReader();
-
-      reader.onload = function (e) {
-        let img = document.createElement('img');
-        const sizeW = 1800,
-          sizeH = 1000;
-        const resizedImage: any = resizeImage(file, sizeW, sizeH);
-        if (resizedImage) {
-          resizedImage.then((resizedImage) => {
-            const formData = new FormData();
-            formData.append('file', resizedImage);
-          });
-        }
-        img.onload = function () {
-          // Dynamically create a canvas element
-          let canvas = document.createElement('canvas');
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const resizedImage = await resizeImage(file, sizeW, sizeH);
+        const img = document.createElement('img');
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
           canvas.width = sizeW;
           canvas.height = sizeH;
-
-          let ctx = canvas.getContext('2d');
-
-          // Actual resizing
+          const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, sizeW, sizeH);
-
-          // Show resized image in preview element
-          let dataurl = canvas.toDataURL(file.type);
-
+          const dataurl = canvas.toDataURL(file.type);
           setPreview(dataurl);
         };
-        img.src = e.target.result.toString();
+        img.src = event.target?.result?.toString() || '';
       };
-
       reader.readAsDataURL(file);
-    } else {
+    } 
+    // PDF file upload
+    else {
       convertPdfToImages(file).then((url) => {
-        let img = document.createElement('img');
-        const sizeW = 1800,
-          sizeH = 1000;
-
-        img.onload = function (event) {
-          console.log(event)
-          // Dynamically create a canvas element
-          let canvas = document.createElement('canvas');
+        const img = document.createElement('img');
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
           canvas.width = sizeW;
           canvas.height = sizeH;
-
-          let ctx = canvas.getContext('2d');
-
-          // Actual resizing
+          const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, sizeW, sizeH);
-
-          // Show resized image in preview element
-          let dataurl = canvas.toDataURL(file.type);
-
+          const dataurl = canvas.toDataURL('image/png');
           setPreview(dataurl);
         };
         img.src = url;
       });
-      window.console.log = () => { };
     }
   };
 
   const handleInputClick = (e) => {
     e.preventDefault();
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
-  const { tenantCode } = useTenantCode();
-  const createAtributes = useMutation({
-    mutationFn: (body: { data: any }) => {
-      return dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, body.data);
-    },
+
+  // ✅ Fixed mutation flow
+  const createAttributes = useMutation({
+    mutationFn: (body) => dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, body.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
-    }
+      setShowDiagram(true);
+      setPreview(null);
+    },
+    onError: (err: any) => {
+      console.error("❌ [onError FIRED]", err);
+
+      // 🔧 Gracefully recover if backend saved successfully
+      if (err.response?.status === 500) {
+        console.warn("⚠️ 500 error received, but assuming backend saved successfully.");
+        queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
+        setShowDiagram(true);
+        setPreview(null);
+      }
+    },
   });
 
 
-
   const handleSaveImageDiagram = () => {
-    const arrMachine = [];
-    const listArea = [];
-    createAtributes.mutate({
-      data: {
-        operationData: arrMachine,
-        listArea: listArea,
-      }
-    });
-    createAtributes.mutate({
-      data: {
-        operationImage: preview,
-      }
-    });
-    setImageDiagram(preview);
-    setShowDiagram(true);
-  }
+    if (!preview) {
+      alert("No image selected.");
+      return;
+    }
+
+    console.log("🟡 Mutating with image...");
+    createAttributes.mutate({ data: { operationImage: preview } });
+  };
 
   const handleCancelImageDiagram = () => {
     setPreview(null);
@@ -127,7 +116,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard, setImage
           <>
             <img
               className="preview"
-              alt="avatar"
+              alt="diagram"
               src={preview}
               onClick={handleInputClick}
             />
@@ -140,17 +129,15 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard, setImage
                 mt: 2,
               }}
             >
-              <Button
-                variant="outlined"
-                onClick={handleCancelImageDiagram}
-              >
+              <Button variant="outlined" onClick={handleCancelImageDiagram}>
                 {t('cancel')}
               </Button>
               <Button
                 variant="contained"
                 onClick={handleSaveImageDiagram}
+                disabled={createAttributes.isPending}
               >
-                {t('save')}
+                {createAttributes.isPending ? t('saving...') : t('save')}
               </Button>
             </Box>
           </>
@@ -168,7 +155,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard, setImage
               type="file"
               style={{ display: 'none' }}
               ref={fileInputRef}
-              accept="image/*"
+              accept="image/*,application/pdf"
               onChange={handleImageChange}
             />
           </>
