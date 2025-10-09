@@ -53,6 +53,6 @@ export const dashboardService = {
   saveEntityAttributes(tenantCode, entityId, data) {
     const url = `/device/telemetry/DASHBOARD/${entityId}/attributes?tenantCode=${tenantCode}`;
     const payload = data;
-    return axiosClient.post(url, payload, {});
+    return axiosClient.post(url, payload);
   },
 };

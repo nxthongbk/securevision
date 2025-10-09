@@ -44,6 +44,8 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
   const [flattenedPoints, setFlattenedPoints] = useState<any>([]);
   const [selected, setSelected] = useState(false);
   const [telemetries, setTelemetries] = useState<any>();
+  // const [imageDiagram, setImageDiagram] = useState<string | null>(null);
+
   // const { t } = useTranslation();
 
   useEffect(() => {
@@ -186,7 +188,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
                   }}
                 >
                   <Diagram
-                    ImageDiagram={data?.operationImage}
+                    ImageDiagram={preview || data?.operationImage}
                     width={width}
                     height={height}
                     isDraw={isDraw}
@@ -219,6 +221,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
                   dashboard={dashboard}
                   preview={preview}
                   setPreview={setPreview}
+                  // setImageDiagram={setImageDiagram}
                 />
               )}
             </Grid>
