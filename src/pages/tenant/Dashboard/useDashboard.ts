@@ -30,6 +30,7 @@ export const useGetAttributesMonitoring = (dashboardId: string) => {
   const attributes = data?.data?.data;
 
   let operationImage,
+    operationModel,
     operationData,
     listArea,
     filterDiagram,
@@ -45,6 +46,7 @@ export const useGetAttributesMonitoring = (dashboardId: string) => {
       if (key === 'operationImage') operationImage = item.value;
       if (key === 'operationData') operationData = item.value;
       if (key === 'listArea') listArea = item.value;
+      if (key === 'operationModel') operationModel = item.value; // 🟢 add this
     });
   }
 
@@ -58,6 +60,8 @@ export const useGetAttributesMonitoring = (dashboardId: string) => {
       listArea: listArea,
       gridCamera: gridCamera,
       gridDevice: gridDevice,
+      operationModel: operationModel
+      
     }, error
   };
 };

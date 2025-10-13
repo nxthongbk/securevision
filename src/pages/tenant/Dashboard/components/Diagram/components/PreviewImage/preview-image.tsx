@@ -1,12 +1,13 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Image } from 'react-feather';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { convertPdfToImages } from '~/utils/PDFResolver';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { dashboardService } from '~/services/dashboard.service';
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
-// import { resizeImage } from '~/utils/resizeImage';
+import { ImageIcon, Cube } from '@phosphor-icons/react';
+import BabylonViewer from '../../../Babylon/babylon-scene';
 
 interface PreviewImageProps {
   preview?: string;
@@ -17,102 +18,93 @@ interface PreviewImageProps {
 
 const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: PreviewImageProps) => {
   const { t } = useTranslation();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const modelInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { tenantCode } = useTenantCode();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [is3DModel, setIs3DModel] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  // ✅ Mutations (direct file upload)
+  const uploadBabylonAttribute = useMutation({
+    mutationFn: (file: File) =>
+      dashboardService.uploadAndSaveModel(tenantCode, dashboard?.id, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
+      resetState();
+    },
+    onError: (err) => console.error('❌ [3D Upload Error]', err),
+  });
+
+  const uploadImageAttribute = useMutation({
+    mutationFn: (file: File) =>
+      dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
+      resetState();
+    },
+    onError: (err) => console.error('❌ [Image Upload Error]', err),
+  });
+
+  const resetState = () => {
+    setShowDiagram?.(true);
+    setPreview?.(null);
+    setSelectedFile(null);
+    setIs3DModel(false);
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const sizeW = 1800;
-    const sizeH = 1000;
+    setIs3DModel(false);
+    setSelectedFile(file);
 
-    // Non-PDF file upload
-    if (file.type !== 'application/pdf') {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        // const resizedImage = await resizeImage(file, sizeW, sizeH);
-        const img = document.createElement('img');
-
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = sizeW;
-          canvas.height = sizeH;
-
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return;
-
-          ctx.drawImage(img, 0, 0, sizeW, sizeH);
-          const dataUrl = canvas.toDataURL(file.type);
-          setPreview?.(dataUrl);
-        };
-
-        img.src = event.target?.result?.toString() || '';
-      };
-      reader.readAsDataURL(file);
+    if (file.type === 'application/pdf') {
+      const url = await convertPdfToImages(file);
+      setPreview?.(url);
     } else {
-      // PDF file upload
-      convertPdfToImages(file).then((url) => {
-        const img = document.createElement('img');
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = sizeW;
-          canvas.height = sizeH;
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return;
-
-          ctx.drawImage(img, 0, 0, sizeW, sizeH);
-          const dataUrl = canvas.toDataURL('image/png');
-          setPreview?.(dataUrl);
-        };
-        img.src = url;
-      });
+      const reader = new FileReader();
+      reader.onload = (event) => setPreview?.(event.target?.result?.toString() || '');
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleInputClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    fileInputRef.current?.click();
+  const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIs3DModel(true);
+    setSelectedFile(file);
+    const objectUrl = URL.createObjectURL(file);
+    setPreview?.(objectUrl);
   };
 
-  // ✅ Correctly typed and consistent mutation
-  const createAttributes = useMutation({
-    mutationFn: (body: { data: { operationImage: string } }) =>
-      dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, body.data),
+  const handleSave = () => {
+    if (!selectedFile) return alert('No file selected.');
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
-      setShowDiagram?.(true);
-      setPreview?.(null);
-    },
-
-    onError: (err: any) => {
-      console.error('❌ [onError FIRED]', err);
-
-      // Handle possible 500 where backend actually saved successfully
-      if (err?.response?.status === 500) {
-        console.warn('⚠️ Received 500, assuming backend saved successfully');
-        queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
-        setShowDiagram?.(true);
-        setPreview?.(null);
-      }
-    },
-  });
-
-  const handleSaveImageDiagram = () => {
-    if (!preview) {
-      alert('No image selected.');
-      return;
+    if (is3DModel) {
+      console.log('🟣 Uploading 3D model directly...');
+      uploadBabylonAttribute.mutate(selectedFile);
+    } else {
+      console.log('🟡 Uploading image directly...');
+      uploadImageAttribute.mutate(selectedFile);
     }
-
-    console.log('🟡 Mutating with image...');
-    createAttributes.mutate({ data: { operationImage: preview } });
   };
 
-  const handleCancelImageDiagram = () => {
-    setPreview?.(null);
-    setShowDiagram?.(true);
+  const handleCancel = resetState;
+  const handleMenuOpen = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleUploadImageClick = () => {
+    handleMenuClose();
+    imageInputRef.current?.click();
+  };
+  const handleUploadModelClick = () => {
+    handleMenuClose();
+    modelInputRef.current?.click();
   };
 
   return (
@@ -120,49 +112,72 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
       <Box className="previewWrapper">
         {preview ? (
           <>
-            <img
-              className="preview"
-              alt="diagram"
-              src={preview}
-              onClick={handleInputClick}
-            />
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-around',
-                mt: 2,
-              }}
-            >
-              <Button variant="outlined" onClick={handleCancelImageDiagram}>
+            {is3DModel ? (
+              <Box sx={{ width: '100%', height: 400 }}>
+                <BabylonViewer width={800} height={400} editMode={false} modelUrl={preview} />
+              </Box>
+            ) : (
+              <img className="preview" alt="diagram" src={preview} onClick={handleMenuOpen} />
+            )}
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
+              <Button variant="outlined" onClick={handleCancel}>
                 {t('cancel')}
               </Button>
               <Button
                 variant="contained"
-                onClick={handleSaveImageDiagram}
-                disabled={createAttributes.isPending}
+                onClick={handleSave}
+                disabled={uploadImageAttribute.isPending || uploadBabylonAttribute.isPending}
               >
-                {createAttributes.isPending ? t('saving...') : t('save')}
+                {uploadImageAttribute.isPending || uploadBabylonAttribute.isPending
+                  ? t('saving...')
+                  : t('save')}
               </Button>
             </Box>
           </>
         ) : (
           <>
-            <Image className="preview" width={150} onClick={handleInputClick} />
-            <Typography
-              className="content-preview"
-              sx={{ textAlign: 'center', cursor: 'pointer', mt: 2 }}
-              onClick={handleInputClick}
+            <Box
+              onClick={handleMenuOpen}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
             >
-              {t('upload-file')}
-            </Typography>
+              <Image className="preview" width={150} />
+              <Typography sx={{ textAlign: 'center', mt: 2 }}>{t('upload-file')}</Typography>
+            </Box>
+
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+              <MenuItem onClick={handleUploadImageClick}>
+                <ImageIcon size={20} className="mr-2" /> {t('upload image')}
+              </MenuItem>
+              <MenuItem onClick={handleUploadModelClick}>
+                <Cube size={20} className="mr-2" /> {t('upload 3D model')}
+              </MenuItem>
+            </Menu>
+
             <input
               type="file"
               style={{ display: 'none' }}
-              ref={fileInputRef}
+              ref={imageInputRef}
               accept="image/*,application/pdf"
               onChange={handleImageChange}
+            />
+            <input
+              type="file"
+              style={{ display: 'none' }}
+              ref={modelInputRef}
+              accept=".glb,.gltf,.obj,.stl"
+              onChange={handleModelChange}
             />
           </>
         )}
