@@ -54,8 +54,8 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
 
     // Optional: tweak controls
     camera.wheelPrecision = 5;       // lower = faster zoom
-    camera.lowerRadiusLimit = 50;     // min zoom distance
-    camera.upperRadiusLimit = 5000;   // max zoom distance
+    camera.lowerRadiusLimit = 0;     // min zoom distance
+    camera.upperRadiusLimit = 500000;   // max zoom distance
     camera.panningSensibility = 50;   // control panning speed
 
 
