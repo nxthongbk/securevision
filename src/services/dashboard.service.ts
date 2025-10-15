@@ -83,12 +83,13 @@ export const dashboardService = {
     try {
       // Step 1️⃣: Upload model file
       const uploadRes = await this.uploadBabylonScene(file);
+      console.log("AFTER UPLOADING:" ,uploadRes)
 
-      console.log('📤 [uploadAndSaveModel] Upload response:', uploadRes);
-      console.log('📦 [uploadAndSaveModel] Upload response data:', uploadRes?.data);
+      // console.log('📤 [uploadAndSaveModel] Upload response:', uploadRes);
+      // console.log('📦 [uploadAndSaveModel] Upload response data:', uploadRes?.data);
 
       const fileId = uploadRes?.data?.id; // ✅ correct key
-      console.log('🪪 [uploadAndSaveModel] Extracted file ID:', fileId);
+      // console.log('🪪 [uploadAndSaveModel] Extracted file ID:', fileId);
 
       if (!fileId) {
         throw new Error('File upload failed — missing file ID in response.');
@@ -99,11 +100,11 @@ export const dashboardService = {
         operationModel: fileId,
       };
 
-      console.log('💾 [uploadAndSaveModel] Saving payload:', payload);
+      // console.log('💾 [uploadAndSaveModel] Saving payload:', payload);
 
       const saveRes = await this.saveEntityAttributes(tenantCode, entityId, payload);
 
-      console.log('✅ [uploadAndSaveModel] Model uploaded and saved:', { fileId, saveRes });
+      // console.log('✅ [uploadAndSaveModel] Model uploaded and saved:', { fileId, saveRes });
       return { uploadRes, saveRes };
     } catch (err) {
       console.error('❌ uploadAndSaveModel failed:', err);
@@ -114,21 +115,32 @@ export const dashboardService = {
   /**
    * 🔹 Fetch model URL by file ID (used when rendering BabylonViewer)
    */
+  // async getBabylonModel(fileId: string): Promise<string> {
+  //   try {
+
+  //     const url = `https://scity-dev.innovation.com.vn/api/storage/files/download/${fileId}`;
+  //     const response = await axiosClient.get(url, { responseType: 'blob' });
+  //     const blob = response.data;
+  //     // ✅ Convert to object URL for Babylon
+  //     const blobUrl = URL.createObjectURL(blob);
+  //     return url;
+
+  //   } catch (err) {
+  //     console.error('❌ Failed to fetch Babylon model:', err);
+  //     throw err;
+  //   }
+  // },
+  // https://scity-dev.innovation.com.vn/api/storage/files/noauth/model/cdd0f433-6642-44e7-88f1-01eb827351f7_a1863d0b.glb
+  // "dc88a98a-c594-4b72-8ea4-30bc2a399ee3_a1863d0b.glb"
+
   async getBabylonModel(fileId: string): Promise<string> {
-  try {
-    const url = `https://scity-dev.innovation.com.vn/api/storage/files/${fileId}`;
-
-    const response = await axiosClient.get(url, { responseType: 'blob' });
-
-    // ✅ Convert to object URL for Babylon
-    const blobUrl = URL.createObjectURL(response.data);
-    return blobUrl;
-
-  } catch (err) {
-    console.error('❌ Failed to fetch Babylon model:', err);
-    throw err;
+    // console.log("this is being called")
+    // console.log(fileId)
+    const appended_url = `https://scity-dev.innovation.com.vn/api/storage/files/noauth/model/${fileId}`
+    // console.log(appended_url)
+    return appended_url;
   }
-}
+
   
 
 

@@ -28,7 +28,16 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  // ✅ Mutations (direct file upload)
+  // Convert file to base64 (for images/PDFs)
+  const fileToBase64 = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result?.toString() || '');
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+  // 3D model upload mutation
   const uploadBabylonAttribute = useMutation({
     mutationFn: (file: File) =>
       dashboardService.uploadAndSaveModel(tenantCode, dashboard?.id, file),
@@ -39,16 +48,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
     onError: (err) => console.error('❌ [3D Upload Error]', err),
   });
 
-  const uploadImageAttribute = useMutation({
-    mutationFn: (file: File) =>
-      dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, file),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
-      resetState();
-    },
-    onError: (err) => console.error('❌ [Image Upload Error]', err),
-  });
-
+  // Reset state helper
   const resetState = () => {
     setShowDiagram?.(true);
     setPreview?.(null);
@@ -56,6 +56,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
     setIs3DModel(false);
   };
 
+  // Handle image / PDF selection
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -73,25 +74,45 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
     }
   };
 
+  // Handle 3D model selection
   const handleModelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (!file) return;
+
+    // Ensure correct MIME type
+    if (file.name.endsWith('.glb')) {
+      file = new File([file], file.name, { type: 'model/gltf-binary' });
+    } else if (file.name.endsWith('.gltf')) {
+      file = new File([file], file.name, { type: 'model/gltf+json' });
+    }
 
     setIs3DModel(true);
     setSelectedFile(file);
+
     const objectUrl = URL.createObjectURL(file);
     setPreview?.(objectUrl);
   };
-
-  const handleSave = () => {
+  // Handle save
+  const handleSave = async () => {
     if (!selectedFile) return alert('No file selected.');
 
-    if (is3DModel) {
-      console.log('🟣 Uploading 3D model directly...');
-      uploadBabylonAttribute.mutate(selectedFile);
-    } else {
-      console.log('🟡 Uploading image directly...');
-      uploadImageAttribute.mutate(selectedFile);
+    try {
+      if (is3DModel) {
+        // console.log('🟣 Uploading 3D model directly...');
+        await uploadBabylonAttribute.mutateAsync(selectedFile, {
+          onError: (err) => console.warn('❌ 3D upload returned error, continuing anyway', err),
+        });
+      } else {
+        // console.log('🟡 Uploading image as base64...');
+        const base64 = await fileToBase64(selectedFile);
+
+        await dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, { operationImage: base64 });
+        queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
+      }
+    } catch (e) {
+      console.warn('❌ Upload failed, but continuing anyway', e);
+    } finally {
+      resetState();
     }
   };
 
@@ -124,14 +145,8 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
               <Button variant="outlined" onClick={handleCancel}>
                 {t('cancel')}
               </Button>
-              <Button
-                variant="contained"
-                onClick={handleSave}
-                disabled={uploadImageAttribute.isPending || uploadBabylonAttribute.isPending}
-              >
-                {uploadImageAttribute.isPending || uploadBabylonAttribute.isPending
-                  ? t('saving...')
-                  : t('save')}
+              <Button variant="contained" onClick={handleSave}>
+                {t('save')}
               </Button>
             </Box>
           </>

@@ -13,6 +13,8 @@ interface ControlMonitoringProps {
   dashboard: any;
 }
 
+// const TEST  = "/assets/3d_model.glb";
+// const TEST_2 = "https://scity-dev.innovation.com.vn/api/storage/files/noauth/model/6b999338-f817-4024-aeb5-7dbfdbf102d0_a1863d0b.glb"
 const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dashboard }) => {
   const { data, isLoading } = dashboard && useGetAttributesMonitoring(dashboard?.id);
   const [arrArea, setArrArea] = useState<any[]>([]);
@@ -112,19 +114,47 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
   //   : null;
 
   // Fetch Babylon model if operationModel exists
-  useEffect(() => {
-    if (data?.operationModel) {
-      const fetchModel = async () => {
-        try {
-          const url = await dashboardService.getBabylonModel(data.operationModel);
-          setModelUrl(url);
-        } catch (err) {
-          console.error('❌ Failed to fetch Babylon model:', err);
-        }
-      };
-      fetchModel();
-    }
-  }, [data?.operationModel]);
+  // useEffect(() => {
+  //   if (data?.operationModel) {
+  //     const fetchModel = async () => {
+  //       try {
+  //         const url = await dashboardService.getBabylonModel(data.operationModel);
+  //         setModelUrl(url);
+  //       } catch (err) {
+  //         console.error('❌ Failed to fetch Babylon model:', err);
+  //       }
+  //     };
+  //     fetchModel();
+  //   }
+  // }, [data?.operationModel]);
+useEffect(() => {
+
+  if (data.operationImage) {
+
+  // if (false) {
+    setPreview(data.operationImage); // image takes priority
+    setModelUrl(null);
+
+  } else if (data?.operationModel) {
+  //  } else if (true) {
+    const fetchModel = async () => {
+      try {
+        const url = await dashboardService.getBabylonModel(data.operationModel);
+        setModelUrl(url);
+        // setModelUrl(TEST_2)
+        setPreview(null);
+      } catch (err) {
+        console.error('❌ Failed to fetch Babylon model:', err);
+      }
+    };
+    fetchModel();
+  } else {
+    setPreview(null);
+    setModelUrl(null);
+  }
+}, [data?.operationImage, data?.operationModel]);
+
+
 
   return (
     <div className="flex flex-col w-full h-auto">
