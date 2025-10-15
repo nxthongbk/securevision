@@ -9,6 +9,8 @@ import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { PointerEventTypes } from '@babylonjs/core/Events/pointerEvents';
+import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
+
 
 interface BabylonViewerProps {
   width: number;
@@ -28,16 +30,35 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
     const scene = new Scene(engine);
 
     // ✅ Set up camera
-    const camera = new FreeCamera("camera", new Vector3(-500, 750, 0), scene);
-    camera.setTarget(new Vector3(0, 0, 0));
+    // const camera = new FreeCamera("camera", new Vector3(-500, 750, 0), scene);
+    // camera.setTarget(new Vector3(0, 0, 0));
+    // camera.attachControl(canvasRef.current, true);
+    // camera.inertia = 0.9;
+    // camera.speed = 10;
+    // camera.keysUp = [87];  // W
+    // camera.keysDown = [83]; // S
+    // camera.keysLeft = [65]; // A
+    // camera.keysRight = [68]; // D
+    // camera.inputs.removeMouseWheel();
+
+    // ✅ ArcRotateCamera (scroll to zoom, drag to rotate, right-click to pan)
+    const camera = new ArcRotateCamera(
+      "camera",
+      Math.PI / 2,    // horizontal angle
+      Math.PI / 3,    // vertical angle
+      1000,           // initial distance from target
+      new Vector3(0, 0, 0), // target
+      scene
+    );
     camera.attachControl(canvasRef.current, true);
-    camera.inertia = 0.9;
-    camera.speed = 10;
-    camera.keysUp = [87];  // W
-    camera.keysDown = [83]; // S
-    camera.keysLeft = [65]; // A
-    camera.keysRight = [68]; // D
-    camera.inputs.removeMouseWheel();
+
+    // Optional: tweak controls
+    camera.wheelPrecision = 5;       // lower = faster zoom
+    camera.lowerRadiusLimit = 50;     // min zoom distance
+    camera.upperRadiusLimit = 5000;   // max zoom distance
+    camera.panningSensibility = 50;   // control panning speed
+
+
 
     // ✅ Add light
     new HemisphericLight('light', new Vector3(0, 1, 0), scene);
