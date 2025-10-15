@@ -13,6 +13,8 @@
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss)\""
   },
   "dependencies": {
+    "@babylonjs/core": "^8.31.0",
+    "@babylonjs/loaders": "^8.31.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.4.2",
