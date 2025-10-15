@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Engine, Scene } from '@babylonjs/core';
-import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
+// import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
