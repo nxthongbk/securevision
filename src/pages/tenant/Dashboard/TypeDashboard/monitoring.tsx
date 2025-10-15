@@ -194,47 +194,58 @@ useEffect(() => {
           </div>
 
           <Grid container spacing={2}>
-            <Grid item mobile={12}>
-              {modelUrl ? (
-                <BabylonViewer width={width} height={height} editMode={isEdit || isDraw} modelUrl={modelUrl} />
-              ) : data?.operationImage && isShowDiagram ? (
-                <div
-                  className="card-diagram-alone flex justify-center items-center overflow-hidden relative w-full max-h-[80vh]"
-                  ref={myDiagram}
-                  id="myDiagram"
-                  style={{ height: '75vh', width: '100%' }}
-                >
-                  <Diagram
-                    ImageDiagram={preview || data?.operationImage}
-                    width={width}
-                    height={height}
-                    isDraw={isDraw}
-                    isEdit={isEdit}
-                    isDelete={isDelete}
-                    setEdit={setEdit}
-                    setDelete={setDelete}
-                    setArrMachine={setArrMachine}
-                    arrMachine={arrMachine}
-                    dataDiagram={data?.operationData}
-                    dataArea={data?.listArea}
-                    points={points}
-                    setPoints={setPoints}
-                    isPolyComplete={isPolyComplete}
-                    setPolyComplete={setPolyComplete}
-                    flattenedPoints={flattenedPoints}
-                    setFlattenedPoints={setFlattenedPoints}
-                    arrArea={arrArea}
-                    setArrArea={setArrArea}
-                  />
-                </div>
-              ) : isLoading ? (
-                <div className="flex items-center justify-center w-full h-[70vh]">
-                  <CircularProgress />
-                </div>
-              ) : (
-                <PreviewImage setShowDiagram={setShowDiagram} dashboard={dashboard} preview={preview} setPreview={setPreview} />
-              )}
-            </Grid>
+          <Grid item mobile={12}>
+  <div
+    className="card-diagram-alone flex justify-center items-center overflow-hidden relative w-full max-h-[80vh]"
+    ref={myDiagram}
+    id="myDiagram"
+    style={{ height: '75vh', width: '100%' }}
+  >
+    {modelUrl ? (
+      <BabylonViewer
+        width={width}
+        height={height}
+        editMode={isEdit || isDraw}
+        modelUrl={modelUrl}
+      />
+    ) : data?.operationImage && isShowDiagram ? (
+      <Diagram
+        ImageDiagram={preview || data?.operationImage}
+        width={width}
+        height={height}
+        isDraw={isDraw}
+        isEdit={isEdit}
+        isDelete={isDelete}
+        setEdit={setEdit}
+        setDelete={setDelete}
+        setArrMachine={setArrMachine}
+        arrMachine={arrMachine}
+        dataDiagram={data?.operationData}
+        dataArea={data?.listArea}
+        points={points}
+        setPoints={setPoints}
+        isPolyComplete={isPolyComplete}
+        setPolyComplete={setPolyComplete}
+        flattenedPoints={flattenedPoints}
+        setFlattenedPoints={setFlattenedPoints}
+        arrArea={arrArea}
+        setArrArea={setArrArea}
+      />
+    ) : isLoading ? (
+      <div className="flex items-center justify-center w-full h-[70vh]">
+        <CircularProgress />
+      </div>
+    ) : (
+      <PreviewImage
+        setShowDiagram={setShowDiagram}
+        dashboard={dashboard}
+        preview={preview}
+        setPreview={setPreview}
+      />
+    )}
+  </div>
+</Grid>
+
           </Grid>
         </div>
       </div>

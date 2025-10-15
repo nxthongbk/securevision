@@ -28,11 +28,11 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
     const scene = new Scene(engine);
 
     // ✅ Set up camera
-    const camera = new FreeCamera("camera", new Vector3(0, 750, 0), scene);
-    camera.setTarget(new Vector3(-750, 0, -750));
+    const camera = new FreeCamera("camera", new Vector3(-500, 750, 0), scene);
+    camera.setTarget(new Vector3(0, 0, 0));
     camera.attachControl(canvasRef.current, true);
     camera.inertia = 0.9;
-    camera.speed = 5;
+    camera.speed = 10;
     camera.keysUp = [87];  // W
     camera.keysDown = [83]; // S
     camera.keysLeft = [65]; // A
@@ -88,12 +88,17 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
   return (
     <canvas
       ref={canvasRef}
+      // style={{
+      //   width: `${width}px`,
+      //   height: `${height}px`,
+      //   display: 'block',
+      //   maxWidth: '100%',
+      //   maxHeight: '100%',
+      // }}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
+        width: '100%',
+        height: '100%',
         display: 'block',
-        maxWidth: '100%',
-        maxHeight: '100%',
       }}
     />
   );
