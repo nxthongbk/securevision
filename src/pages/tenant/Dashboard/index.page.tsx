@@ -92,7 +92,7 @@ export default function DashboardPage() {
 
               {dashboard?.type === 'monitoring' && (
                 <Monitoring
-                  typeProject={dashboard.type}
+                  // typeProject={dashboard.type}
                   projectName={dashboard.name}
                   dashboard={dashboard}
                   // isVisible={isVisible}
