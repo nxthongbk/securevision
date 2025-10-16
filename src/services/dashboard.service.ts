@@ -60,17 +60,22 @@ export const dashboardService = {
    * 🔹 Uploads a file (e.g. .glb, .gltf, .png, etc.) to the central storage service
    * Returns metadata including file ID, type, and signature
    */
-  uploadBabylonScene(file: File) {
+  uploadBabylonScene(file: File, onProgress?: (percent: number) => void) {
     const url = 'https://scity-dev.innovation.com.vn/api/storage/files/upload-file';
     const formData = new FormData();
     formData.append('file', file);
 
     return axiosClient.post(url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      onUploadProgress: (event) => {
+        if (event.total) {
+          const percent = Math.round((event.loaded * 100) / event.total);
+          onProgress?.(percent); // ✅ Report progress
+        }
       },
     });
   },
+
 
   /**
    * 🔹 Combined helper that:
@@ -79,10 +84,10 @@ export const dashboardService = {
    *
    * Returns both upload and save responses
    */
-  async uploadAndSaveModel(tenantCode: string, entityId: string, file: File) {
+  async uploadAndSaveModel(tenantCode: string, entityId: string, file: File, onProgress?: (percent: number) => void) {
     try {
       // Step 1️⃣: Upload model file
-      const uploadRes = await this.uploadBabylonScene(file);
+      const uploadRes = await this.uploadBabylonScene(file, onProgress);
       console.log("AFTER UPLOADING:" ,uploadRes)
 
       // console.log('📤 [uploadAndSaveModel] Upload response:', uploadRes);

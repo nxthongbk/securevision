@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { Image } from 'react-feather';
-import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Button, Menu, MenuItem, Typography, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { convertPdfToImages } from '~/utils/PDFResolver';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -26,6 +26,9 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
   const [is3DModel, setIs3DModel] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0); // 🟢 Added progress state
+  const [isSaving, setIsSaving] = useState(false); // 🟢 Added saving state
+
   const open = Boolean(anchorEl);
 
   // Convert file to base64 (for images/PDFs)
@@ -40,7 +43,12 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
   // 3D model upload mutation
   const uploadBabylonAttribute = useMutation({
     mutationFn: (file: File) =>
-      dashboardService.uploadAndSaveModel(tenantCode, dashboard?.id, file),
+      dashboardService.uploadAndSaveModel(
+        tenantCode,
+        dashboard?.id,
+        file,
+        (percent: number) => setUploadProgress(percent) // 🟢 update progress
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
       resetState();
@@ -54,6 +62,8 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
     setPreview?.(null);
     setSelectedFile(null);
     setIs3DModel(false);
+    setUploadProgress(0);
+    setIsSaving(false);
   };
 
   // Handle image / PDF selection
@@ -92,27 +102,37 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
     const objectUrl = URL.createObjectURL(file);
     setPreview?.(objectUrl);
   };
+
   // Handle save
   const handleSave = async () => {
     if (!selectedFile) return alert('No file selected.');
 
+    setIsSaving(true);
+    setUploadProgress(0);
+
     try {
       if (is3DModel) {
-        // console.log('🟣 Uploading 3D model directly...');
         await uploadBabylonAttribute.mutateAsync(selectedFile, {
-          onError: (err) => console.warn('❌ 3D upload returned error, continuing anyway', err),
+          onError: (err) => console.warn('❌ 3D upload returned error', err),
         });
       } else {
-        // console.log('🟡 Uploading image as base64...');
         const base64 = await fileToBase64(selectedFile);
 
-        await dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, { operationImage: base64 });
+        // Simulate progress for image uploads (since base64 is instant)
+        for (let i = 0; i <= 100; i += 20) {
+          await new Promise((res) => setTimeout(res, 50));
+          setUploadProgress(i);
+        }
+
+        await dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, {
+          operationImage: base64,
+        });
         queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
       }
     } catch (e) {
-      console.warn('❌ Upload failed, but continuing anyway', e);
+      console.warn('❌ Upload failed', e);
     } finally {
-      resetState();
+      setTimeout(() => resetState(), 800);
     }
   };
 
@@ -142,11 +162,32 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
             )}
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
-              <Button variant="outlined" onClick={handleCancel}>
+              <Button variant="outlined" onClick={handleCancel} disabled={isSaving}>
                 {t('cancel')}
               </Button>
-              <Button variant="contained" onClick={handleSave}>
-                {t('save')}
+
+              <Button
+                variant="contained"
+                onClick={handleSave}
+                disabled={isSaving || uploadBabylonAttribute.isPending}
+                sx={{ minWidth: 120 }}
+              >
+                {isSaving || uploadBabylonAttribute.isPending ? (
+                  <>
+                    <CircularProgress
+                      size={20}
+                      variant="determinate"
+                      value={uploadProgress}
+                      color="inherit"
+                      sx={{ mr: 1 }}
+                    />
+                    {uploadProgress < 100
+                      ? `${Math.round(uploadProgress)}%`
+                      : t('saving') || 'Saving...'}
+                  </>
+                ) : (
+                  t('save')
+                )}
               </Button>
             </Box>
           </>
