@@ -75,10 +75,16 @@ const TableCustom: React.FC<TableCustomProps> = ({
     <Box position='relative'>
       <TableContainer className='table-wrapper'>
         <Table className='table-container' stickyHeader>
-          <TableHead>
-            <TableRow>
+          <TableHead
+            sx={{
+              '& .MuiTableCell-root': {
+                backgroundColor: 'var(--bg)',
+              },
+            }}
+          >            
+            <TableRow >
               {columns.map((column) => (
-                <TableCell key={column.key}>
+                <TableCell  key={column.key}>
                   {column.render ? (
                     column.render(undefined, undefined, 0)
                   ) : (
