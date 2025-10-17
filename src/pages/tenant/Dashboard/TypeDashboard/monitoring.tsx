@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CircularProgress, Grid, Typography } from '@mui/material';
 
 import EditBar from '../components/Diagram/BarDiagram/bar-diagram';
+import BabylonEditBar from '../components/Babylon/babylon-editbar'
 import Diagram from '../components/Diagram/diagram';
 import PreviewImage from '../components/Diagram/components/PreviewImage/preview-image';
 import BabylonViewer from '../components/Babylon/babylon-scene';
@@ -188,6 +189,30 @@ useEffect(() => {
                   setSelected={setSelected}
                   dashboard={dashboard}
                   extendCard={extendCard}
+                />
+              )}
+              {data?.operationModel && isShowDiagram && (
+                <BabylonEditBar
+                  setDraw={setDraw}
+                  setEdit={setEdit}
+                  setPreview={setPreview}
+                  setShowDiagram={setShowDiagram}
+                  isEdit={isEdit}
+                  isDraw={isDraw}
+                  arrMachine={arrMachine}
+                  setArrMachine={setArrMachine}
+                  dataDiagram={data?.operationData}
+                  arrArea={arrArea}
+                  setArrArea={setArrArea}
+                  width={width}
+                  height={height}
+                  isRole={true}
+                  setPoints={setPoints}
+                  setFlattenedPoints={setFlattenedPoints}
+                  setPolyComplete={setPolyComplete}
+                  selected={selected}
+                  setSelected={setSelected}
+                  dashboard={dashboard}
                 />
               )}
             </div>
