@@ -1,126 +1,172 @@
 import React, { useEffect, useRef } from 'react';
-import { Engine, Scene } from '@babylonjs/core';
-// import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
-import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
-import '@babylonjs/loaders/glTF'; // ✅ Ensure GLB/GLTF loader is included
-import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
-import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
-import { Color3 } from '@babylonjs/core/Maths/math.color';
-import { PointerEventTypes } from '@babylonjs/core/Events/pointerEvents';
-import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
-
+import * as BABYLON from '@babylonjs/core';
+import '@babylonjs/loaders';
 
 interface BabylonViewerProps {
-  width: number;
-  height: number;
+  modelUrl: string;
   editMode: boolean;
-  modelUrl?: string; // blob or remote .glb file
+  isDraw: boolean;
+  showAddArea?: boolean; // 👈 new
+  areas?: { id?: string; label?: string; x: number; y: number; z: number }[];
+  onMarkerPlaced?: (coords: { x: number; y: number; z: number }) => void;
+  onSceneReady?: (payload: {
+    scene: BABYLON.Scene;
+    camera: BABYLON.ArcRotateCamera;
+    engine: BABYLON.Engine;
+    canvas: HTMLCanvasElement;
+  }) => void;
 }
 
-const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, modelUrl }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const BabylonViewer: React.FC<BabylonViewerProps> = ({
+  modelUrl,
+  editMode,
+  isDraw,
+  showAddArea,
+  areas = [],
+  onMarkerPlaced,
+  onSceneReady,
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const engineRef = useRef<BABYLON.Engine | null>(null);
+  const sceneRef = useRef<BABYLON.Scene | null>(null);
+  const markerMeshes = useRef<BABYLON.Mesh[]>([]);
+  useEffect(() => {
+    const scene = sceneRef.current;
+    const canvas = canvasRef.current;
+    if (!scene || !canvas) return;
+
+    const camera = scene.activeCamera as BABYLON.ArcRotateCamera;
+    if (!camera) return;
+
+    if (showAddArea) {
+      // 👇 Full detach to stop intercepting input
+      camera.inputs.clear();
+      camera.detachControl();
+      canvas.blur();
+      canvas.tabIndex = -1;
+      console.log('🎯 Full camera detachment (modal open)');
+    } else {
+      // 👇 Reattach all inputs
+      camera.inputs.addKeyboard();
+      camera.inputs.addMouseWheel();
+      camera.inputs.addPointers();
+      camera.attachControl(canvas, true);
+      canvas.tabIndex = 1;
+      console.log('🎯 Camera fully reattached (modal closed)');
+    }
+  }, [showAddArea]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    // ✅ Initialize Babylon engine and scene
-    const engine = new Engine(canvasRef.current, true);
-    const scene = new Scene(engine);
+    const engine = new BABYLON.Engine(canvasRef.current, true);
+    const scene = new BABYLON.Scene(engine);
+    engineRef.current = engine;
+    sceneRef.current = scene;
 
-    // ✅ Set up camera
-    // const camera = new FreeCamera("camera", new Vector3(-500, 750, 0), scene);
-    // camera.setTarget(new Vector3(0, 0, 0));
-    // camera.attachControl(canvasRef.current, true);
-    // camera.inertia = 0.9;
-    // camera.speed = 10;
-    // camera.keysUp = [87];  // W
-    // camera.keysDown = [83]; // S
-    // camera.keysLeft = [65]; // A
-    // camera.keysRight = [68]; // D
-    // camera.inputs.removeMouseWheel();
-
-    // ✅ ArcRotateCamera (scroll to zoom, drag to rotate, right-click to pan)
-    const camera = new ArcRotateCamera(
-      "camera",
-      Math.PI / 2,    // horizontal angle
-      Math.PI / 3,    // vertical angle
-      1000,           // initial distance from target
-      new Vector3(0, 0, 0), // target
+    const camera = new BABYLON.ArcRotateCamera(
+      'camera',
+      Math.PI / 2,
+      Math.PI / 3,
+      10,
+      new BABYLON.Vector3(0, 100, 0),
       scene
     );
     camera.attachControl(canvasRef.current, true);
 
-    // Optional: tweak controls
-    camera.wheelPrecision = 5;       // lower = faster zoom
-    camera.lowerRadiusLimit = 0;     // min zoom distance
-    camera.upperRadiusLimit = 500000;   // max zoom distance
-    camera.panningSensibility = 50;   // control panning speed
+    new BABYLON.HemisphericLight('light', new BABYLON.Vector3(1, 1, 0), scene);
 
+    BABYLON.SceneLoader.Append(
+      '',
+      modelUrl,
+      scene,
+      () => console.log('✅ Model loaded:', modelUrl),
+      undefined,
+      (_, message, exception) => console.error('❌ Load error:', message, exception),
+      '.glb'
+    );
 
+    onSceneReady?.({ scene, camera, engine, canvas: canvasRef.current });
 
-    // ✅ Add light
-    new HemisphericLight('light', new Vector3(0, 1, 0), scene);
+    engine.runRenderLoop(() => scene.render());
+    window.addEventListener('resize', () => engine.resize());
 
-    // ✅ Load the .glb model (works with blob URLs)
-    if (modelUrl) {
-      SceneLoader.Append("", modelUrl, scene, 
-        () => console.log("✅ Model loaded successfully"),
-        null,
-        (scene, message, exception) => {
-          console.error("❌ Error loading model:", message, exception, scene);
-        },
-        ".glb" // 👈 Always treat the file as .glb
-      );
-    }
+    return () => {
+      engine.stopRenderLoop();
+      scene.dispose();
+      engine.dispose();
+    };
+  }, [modelUrl]);
 
-    // ✅ Click-to-place marker (edit mode)
-    const pointerObserver = scene.onPointerObservable.add((pointerInfo) => {
-      if (!editMode) return;
-      if (pointerInfo.type === PointerEventTypes.POINTERPICK) {
-        const pickResult = pointerInfo.pickInfo;
-        if (pickResult?.hit && pickResult.pickedPoint) {
-          const marker = MeshBuilder.CreateBox("marker", { size: 10 }, scene);
-          const mat = new StandardMaterial("markerMat", scene);
-          mat.diffuseColor = new Color3(1, 0, 0);
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+
+    const pointerHandler = (pointerInfo: BABYLON.PointerInfo) => {
+      if (!isDraw || !editMode) return;
+
+      if (pointerInfo.type === BABYLON.PointerEventTypes.POINTERPICK) {
+        const pickInfo = pointerInfo.pickInfo;
+        if (pickInfo?.hit && pickInfo.pickedPoint) {
+          const { x, y, z } = pickInfo.pickedPoint;
+
+          const marker = BABYLON.MeshBuilder.CreateSphere('marker', { diameter: 0.2 }, scene);
+          marker.position = pickInfo.pickedPoint;
+
+          const mat = new BABYLON.StandardMaterial('markerMat', scene);
+          mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
           marker.material = mat;
-          marker.position.copyFrom(pickResult.pickedPoint);
+          markerMeshes.current.push(marker);
+
+          onMarkerPlaced?.({ x, y, z });
         }
       }
-    });
-
-    // ✅ Start render loop
-    engine.runRenderLoop(() => scene.render());
-
-    // ✅ Resize handler
-    const handleResize = () => engine.resize();
-    window.addEventListener('resize', handleResize);
-
-    // ✅ Cleanup
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (pointerObserver) scene.onPointerObservable.remove(pointerObserver);
-      if (!scene.isDisposed) scene.dispose();
-      if (!engine.isDisposed) engine.dispose();
     };
-  }, [width, height, editMode, modelUrl]);
 
+    scene.onPointerObservable.add(pointerHandler);
+    return () => {
+      scene.onPointerObservable.removeCallback(pointerHandler);
+    };
+  }, [isDraw, editMode, onMarkerPlaced]);
+
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+
+    markerMeshes.current.forEach((m) => m.dispose());
+    markerMeshes.current = [];
+
+    areas.forEach((area) => {
+      const marker = BABYLON.MeshBuilder.CreateSphere(
+        `area-${area.id}`,
+        { diameter: 0.2 },
+        scene
+      );
+      marker.position = new BABYLON.Vector3(area.x, area.y, area.z);
+
+      const mat = new BABYLON.StandardMaterial('areaMat', scene);
+      mat.diffuseColor = new BABYLON.Color3(0, 0.8, 1);
+      marker.material = mat;
+      markerMeshes.current.push(marker);
+    });
+  }, [areas]);
+  useEffect(() => {
+  const scene = sceneRef.current;
+  if (!scene) return;
+
+  const camera = scene.activeCamera as BABYLON.ArcRotateCamera;
+  if (!camera) return;
+
+  const canvas = canvasRef.current;
+
+  console.log('🧭 Camera input test');
+  console.log('  Attached controls:', camera.inputs.attached);
+  console.log('  Canvas tabindex:', canvas?.tabIndex);
+}, [showAddArea]);
   return (
     <canvas
       ref={canvasRef}
-      // style={{
-      //   width: `${width}px`,
-      //   height: `${height}px`,
-      //   display: 'block',
-      //   maxWidth: '100%',
-      //   maxHeight: '100%',
-      // }}
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'block',
-      }}
+      style={{ width: '100%', height: '100%', display: 'block', outline: 'none' }}
     />
   );
 };

@@ -1,4 +1,3 @@
-
 import {
   Box,
   IconButton,
@@ -6,9 +5,7 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
-
-
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Eraser, FloppyDiskBack, PencilSimple, Polygon, X } from '@phosphor-icons/react';
 import { useTenantCode } from '~/utils/hooks/useTenantCode';
@@ -16,301 +13,152 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { dashboardService } from '~/services/dashboard.service';
 import ButtonCustom from '~/components/ButtonCustom';
 
-let newArrMoveFilter;
-let existsInBothArrays;
 interface BabylonEditBarProps {
-  setShowDiagram?: (value: boolean) => void;
-  setPreview?: any
-  isDraw?: boolean;
-  setDraw?: (value: boolean) => void;
   isEdit?: boolean;
   setEdit?: (value: boolean) => void;
-  arrMachine?: any[]; // Replace `any` with the specific type if known
-  setArrMachine?: (value: any[]) => void; // Replace `any` with the specific type if known
-  dataDiagram?: any; // Replace `any` with the specific type if known
+  isDraw?: boolean;
+  setDraw?: (value: boolean) => void;
+  arrArea?: any[];
+  setArrArea?: (value: any[]) => void;
   isRole?: boolean;
-  width?: number;
-  height?: number;
-  setPoints?: (points: any[]) => void; // Replace `any` with the specific type if known
-  setPolyComplete?: any;
-  setFlattenedPoints?: any; // Replace `any` with the specific type if known
-  selected?: any; // Replace `any` with the specific type if known
-  setSelected?: (value: any) => void; // Replace `any` with the specific type if known
-  arrArea?: any[]; // Replace `any` with the specific type if known
-  setArrArea?: (value: any[]) => void; // Replace `any` with the specific type if known
-  dataArea?: any; // Replace `any` with the specific type if known
-  isMaximize?: boolean;
-  extendCard?: any;
-  setIsloading?: (value: boolean) => void;
-  setCurTypeDevice?: (value: any) => void; // Replace `any` with the specific type if known
-  curTypeDevice?: any; // Replace `any` with the specific type if known
-  dashboard?: any; // Replace `any` with the specific type if known
+  dashboard?: any;
 }
+
 const BabylonEditBar: React.FC<BabylonEditBarProps> = ({
-  isDraw,
-  setDraw,
   isEdit,
   setEdit,
-  arrMachine,
-  setArrMachine,
-  dataDiagram,
-  isRole,
-  width,
-  height,
-  setPoints,
-  selected,
-  setSelected,
+  isDraw,
+  setDraw,
   arrArea,
   setArrArea,
-  setCurTypeDevice,
-  curTypeDevice,
+  isRole,
   dashboard
 }) => {
   const { t } = useTranslation();
-
-  const numberKey = 0;
-  const confirmX = 0;
-  const confirmY = 0;
-  const editArea = arrMachine?.filter((item) => item.type !== 'Area');
-  const editPoint = Array.isArray(dataDiagram)
-    ? dataDiagram.filter((item) => item?.topLeftPoint?.x === numberKey)
-    : [];
-
-  let index = Array.isArray(dataDiagram)
-    ? dataDiagram.findIndex(
-      (elm) => elm.topLeftPoint?.x === editPoint[0]?.topLeftPoint?.x
-    )
-    : -1;
-
-  const [newArrMove, setNewArrMove] = useState([]);
-  const [showTool, setShowTool] = useState(false);
-  const [currentSelected, setCurrentSelected] = useState();
   const { tenantCode } = useTenantCode();
   const queryClient = useQueryClient();
-  const createAtributes = useMutation({
-    mutationFn: (body: { data: any }) => {
-      return dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, body.data);
-    },
+
+  const [showTool, setShowTool] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const createAttributes = useMutation({
+    mutationFn: (body: { data: any }) =>
+      dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, body.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
-    }
+    },
   });
-
-  useEffect(() => {
-    if (index > -1) {
-      let newArr2;
-      if (numberKey && confirmX && confirmY) {
-        newArr2 = {
-          ...editPoint[0],
-          topRightPoint: {
-            x: (confirmX + 5) / width,
-            y: (confirmY + 13) / height,
-          },
-        };
-        const uniqueSet = [...newArrMove];
-        let checkDuplicate = arrMachine.findIndex(
-          (element1) => element1.label === newArr2.label
-        );
-        if (checkDuplicate > -1) {
-          uniqueSet[checkDuplicate] = newArr2;
-          setNewArrMove(uniqueSet);
-        } else {
-          setNewArrMove([...newArrMove, newArr2]);
-        }
-      }
-    }
-  }, [index, confirmX, confirmY, numberKey, isEdit]);
-
-  useEffect(() => {
-    // save normal
-    existsInBothArrays = editArea.filter(
-      (element1) =>
-        !newArrMove.map((element2) => element2?.label).includes(element1?.label)
-    );
-
-    // check những thay đổi
-    newArrMoveFilter = newArrMove.filter((element1) =>
-      dataDiagram.map((element2) => element2?.label).includes(element1?.label)
-    );
-  }, [editArea, newArrMove]);
-
-  useEffect(() => {
-    curTypeDevice && setCurTypeDevice(curTypeDevice);
-  }, [curTypeDevice]);
-
-
-
+  // keep isEdit for UI control consistency with 2D editor
+  void isEdit;
+  // 🧭 Handlers
   const handleShowTool = () => {
     setShowTool(true);
-    setEdit(true);
-    setDraw(false);
+    setEdit?.(true);
   };
 
-  const handleDraw = (value) => {
-    setArrMachine(arrMachine);
-    setCurrentSelected(value);
-    if (currentSelected === value && !isEdit) {
-      setSelected(null);
-      setEdit(true);
-      setDraw(false);
-      setPoints([]);
-    } else {
-      setEdit(false);
-      setDraw(true);
-      if (value === 1) {
-        setSelected(true);
-      } else if (value === 2) {
-        setSelected(false);
-      }
-    }
+  const handleDraw = () => {
+    setDraw?.(true);
   };
 
-  const handleCancelActionDiagram = () => {
+  const handleCancel = () => {
     setShowTool(false);
-  };
-
-  const handleError = () => {
-    console.log('error');
+    setEdit?.(false);
+    setDraw?.(false);
   };
 
   const handleSave = async () => {
-
-    let arrMachine = [...newArrMoveFilter, ...existsInBothArrays];
-
-    let listArea = [...(arrArea?.length > 0 ? arrArea : [])];
-    createAtributes.mutate({
+    createAttributes.mutate({
       data: {
-        operationData: arrMachine,
-        listArea: listArea,
-      }
+        operationData: [],
+        listArea: arrArea || [],
+      },
     });
-    setDraw(false);
-    setEdit(false);
     setShowTool(false);
-    setArrMachine(arrMachine);
+    setEdit?.(false);
+    setDraw?.(false);
   };
 
-  //delete all
   const handleConfirmDeleteAll = async () => {
-    const arrMachine = [];
-    const listArea = [];
-    createAtributes.mutate({
+    createAttributes.mutate({
       data: {
-        operationData: arrMachine,
-        listArea: listArea,
-      }
+        operationData: [],
+        listArea: [],
+      },
     });
-    setArrMachine([]);
-    setArrArea([]);
-    setDraw(false);
-    setEdit(false);
+    setArrArea?.([]);
     setShowTool(false);
+    setEdit?.(false);
+    setDraw?.(false);
   };
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
+  // Popover
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+  const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
   return (
     <div className="flex">
       {!showTool ? (
-        <>
-
-          <Tooltip title="Edit" placement="top">
-            <IconButton
-              onClick={isRole ? handleShowTool : handleError}
-              className="btn-ctrl-diagram"
-            >
-              <PencilSimple size={24} />
-            </IconButton>
-          </Tooltip>
-        </>
+        <Tooltip title="Edit" placement="top">
+          <IconButton onClick={isRole ? handleShowTool : undefined}>
+            <PencilSimple size={24} />
+          </IconButton>
+        </Tooltip>
       ) : (
         <>
+          {/* Place Marker */}
           <Tooltip title="Place Marker" placement="top">
-            <IconButton
-              onClick={isRole ? () => handleDraw(2) : handleError}
-              className={`btn-ctrl-diagram `}
-            >
-              <div className={
-                isDraw && selected === false
-                  ? `bg-blue-500 text-white rounded-lg`
-                  : ''
-              }>
-                <Polygon
-                  size={24}
-
-                />
+            <IconButton onClick={isRole ? handleDraw : undefined}>
+              <div className={isDraw ? 'bg-blue-500 text-white rounded-lg' : ''}>
+                <Polygon size={24} />
               </div>
             </IconButton>
           </Tooltip>
 
-          <div>
-            <Tooltip title={t('delete')} placement="top">
-              <IconButton aria-describedby={id} onClick={handleClick}>
-                <Eraser
-                  size={24}
-                  className={'btn-selected'}
-                />
-              </IconButton>
-            </Tooltip>
-            <Popover
-              id={id}
-              open={open}
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-            >
-              <Box p={2}>
-                <div className='pb-2'>
-                  <Typography>Delete All?</Typography>
-                </div>
-                <div className='flex justify-end gap-4'>
-                  <ButtonCustom variant='contained' color='secondary' onClick={handleClose}>
-                    Cancel
-                    </ButtonCustom>
-                  <ButtonCustom variant='contained' onClick={handleConfirmDeleteAll} color="error">
-                    Confirm
-                  </ButtonCustom>
+          {/* Delete All */}
+          <Tooltip title={t('delete')} placement="top">
+            <IconButton aria-describedby={id} onClick={handleClick}>
+              <Eraser size={24} />
+            </IconButton>
+          </Tooltip>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          >
+            <Box p={2}>
+              <Typography>Delete All?</Typography>
+              <div className="flex justify-end gap-4 mt-2">
+                <ButtonCustom variant="contained" color="secondary" onClick={handleClose}>
+                  Cancel
+                </ButtonCustom>
+                <ButtonCustom variant="contained" color="error" onClick={handleConfirmDeleteAll}>
+                  Confirm
+                </ButtonCustom>
+              </div>
+            </Box>
+          </Popover>
 
-                </div>
-              </Box>
-            </Popover>
-          </div>
-
-
-
-
+          {/* Cancel */}
           <Tooltip title={t('cancel')} placement="top">
-            <IconButton
-              onClick={handleCancelActionDiagram}
-              className="btn-ctrl-diagram"
-            >
+            <IconButton onClick={handleCancel}>
               <X size={24} />
             </IconButton>
           </Tooltip>
 
+          {/* Save */}
           <Tooltip title={t('save')} placement="top">
-            <IconButton
-              onClick={isRole ? handleSave : handleError}
-              className="btn-ctrl-diagram"
-            >
+            <IconButton onClick={isRole ? handleSave : undefined}>
               <FloppyDiskBack size={24} />
             </IconButton>
           </Tooltip>
         </>
       )}
-      
     </div>
   );
 };

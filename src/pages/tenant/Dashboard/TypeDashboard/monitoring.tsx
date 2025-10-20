@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CircularProgress, Grid, Typography } from '@mui/material';
 
 import EditBar from '../components/Diagram/BarDiagram/bar-diagram';
-import BabylonEditBar from '../components/Babylon/babylon-editbar'
+import BabylonEditBar from '../components/Babylon/babylon-editbar';
 import Diagram from '../components/Diagram/diagram';
+import BabylonWrapper from '../components/Babylon/babylon-wrapper';
 import PreviewImage from '../components/Diagram/components/PreviewImage/preview-image';
-import BabylonViewer from '../components/Babylon/babylon-scene';
 import { useGetAttributesMonitoring } from '../useDashboard';
 import { useGetLatestTelemetrys } from '../../DevicePage/handleApi';
 import { dashboardService } from '~/services/dashboard.service';
@@ -14,8 +14,6 @@ interface ControlMonitoringProps {
   dashboard: any;
 }
 
-// const TEST  = "/assets/3d_model.glb";
-// const TEST_2 = "https://scity-dev.innovation.com.vn/api/storage/files/noauth/model/6b999338-f817-4024-aeb5-7dbfdbf102d0_a1863d0b.glb"
 const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dashboard }) => {
   const { data, isLoading } = dashboard && useGetAttributesMonitoring(dashboard?.id);
   const [arrArea, setArrArea] = useState<any[]>([]);
@@ -195,23 +193,11 @@ useEffect(() => {
                 <BabylonEditBar
                   setDraw={setDraw}
                   setEdit={setEdit}
-                  setPreview={setPreview}
-                  setShowDiagram={setShowDiagram}
                   isEdit={isEdit}
                   isDraw={isDraw}
-                  arrMachine={arrMachine}
-                  setArrMachine={setArrMachine}
-                  dataDiagram={data?.operationData}
                   arrArea={arrArea}
                   setArrArea={setArrArea}
-                  width={width}
-                  height={height}
                   isRole={true}
-                  setPoints={setPoints}
-                  setFlattenedPoints={setFlattenedPoints}
-                  setPolyComplete={setPolyComplete}
-                  selected={selected}
-                  setSelected={setSelected}
                   dashboard={dashboard}
                 />
               )}
@@ -227,11 +213,12 @@ useEffect(() => {
     style={{ height: '75vh', width: '100%' }}
   >
     {modelUrl ? (
-      <BabylonViewer
-        width={width}
-        height={height}
-        editMode={isEdit || isDraw}
+      <BabylonWrapper
         modelUrl={modelUrl}
+        isEdit={isEdit}
+        isDraw={isDraw}
+        arrArea={arrArea}
+        setArrArea={setArrArea}
       />
     ) : data?.operationImage && isShowDiagram ? (
       <Diagram

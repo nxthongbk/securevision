@@ -98,7 +98,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
 
     setIs3DModel(true);
     setSelectedFile(file);
-
+    
     const objectUrl = URL.createObjectURL(file);
     setPreview?.(objectUrl);
   };
@@ -155,7 +155,12 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
           <>
             {is3DModel ? (
               <Box sx={{ width: '100%', height: 400 }}>
-                <BabylonViewer width={800} height={400} editMode={false} modelUrl={preview} />
+                <BabylonViewer 
+                  modelUrl={preview} 
+                  editMode={false} 
+                  isDraw={false} 
+                  areas={[]} 
+                />
               </Box>
             ) : (
               <img className="preview" alt="diagram" src={preview} onClick={handleMenuOpen} />
