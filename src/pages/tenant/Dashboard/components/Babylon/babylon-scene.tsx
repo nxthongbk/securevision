@@ -46,7 +46,7 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
       "camera",
       Math.PI / 2,    // horizontal angle
       Math.PI / 3,    // vertical angle
-      1000,           // initial distance from target
+      10,           // initial distance from target
       new Vector3(0, 0, 0), // target
       scene
     );
