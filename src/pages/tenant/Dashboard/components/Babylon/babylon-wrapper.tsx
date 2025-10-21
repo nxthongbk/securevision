@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import BabylonViewer from './babylon-scene';
-import AddArea3D from './babylon-addarea'; // ✅ Import new 3D modal
+import ModalMarker from './babylon-modalmarker';
 import * as BABYLON from '@babylonjs/core';
 
 interface BabylonWrapperProps {
@@ -29,7 +29,6 @@ const BabylonWrapper: React.FC<BabylonWrapperProps> = ({
     canvas: HTMLCanvasElement;
   } | null>(null);
 
-  // ✅ When the scene is ready, store the Babylon engine + camera + scene ref
   const handleSceneReady = (payload: {
     scene: BABYLON.Scene;
     camera: BABYLON.ArcRotateCamera;
@@ -39,7 +38,6 @@ const BabylonWrapper: React.FC<BabylonWrapperProps> = ({
     scenePayload.current = payload;
   };
 
-  // ✅ Open modal with 3D coordinates
   const openModal = (coords: { x: number; y: number; z: number }) => {
     setTempMarker(coords);
     setShowAddArea(true);
@@ -50,7 +48,6 @@ const BabylonWrapper: React.FC<BabylonWrapperProps> = ({
     }
   };
 
-  // ✅ Close modal and reattach camera controls
   const closeModal = () => {
     setShowAddArea(false);
     setTempMarker(null);
@@ -61,8 +58,7 @@ const BabylonWrapper: React.FC<BabylonWrapperProps> = ({
     }
   };
 
-  // ✅ When modal saves a new area
-  const handleSaveArea = (formData: any) => {
+  const handleSaveMarker = (formData: any) => {
     if (!tempMarker) return;
 
     const newArea = {
@@ -73,8 +69,13 @@ const BabylonWrapper: React.FC<BabylonWrapperProps> = ({
       id: Date.now().toString(),
     };
 
-    // Add to list of areas
-    setArrArea((prev) => [...prev, newArea]);
+    setArrArea((prev) => {
+      const updated = [...prev, newArea];
+      console.log('✅ New marker added:', newArea);
+      console.log('📦 Updated markers array:', updated);
+      return updated;
+    });
+
     closeModal();
   };
 
@@ -92,14 +93,13 @@ const BabylonWrapper: React.FC<BabylonWrapperProps> = ({
         onSceneReady={handleSceneReady}
       />
 
-      {/* ✅ New AddArea3D modal */}
       {showAddArea && tempMarker && (
-        <AddArea3D
+        <ModalMarker
           show={showAddArea}
-          setShow={setShowAddArea}  
-          handleClose={closeModal}
-          handleSaveArea={handleSaveArea}
-          coords3D={tempMarker}
+          setShow={setShowAddArea}
+          coords={tempMarker}
+          arrayMarker={arrArea || []} // ✅ Pass current markers to modal
+          handleSaveMarker={handleSaveMarker}
         />
       )}
     </div>
