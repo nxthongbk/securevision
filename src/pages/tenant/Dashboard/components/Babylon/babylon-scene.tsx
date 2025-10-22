@@ -11,15 +11,15 @@ import { Color3 } from '@babylonjs/core/Maths/math.color';
 import { PointerEventTypes } from '@babylonjs/core/Events/pointerEvents';
 import { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
 
-
 interface BabylonViewerProps {
   width: number;
   height: number;
   editMode: boolean;
   modelUrl?: string; // blob or remote .glb file
+  sensitivity?: number; // NEW: control camera sensitivity
 }
 
-const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, modelUrl }) => {
+const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, modelUrl, sensitivity = 50 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -52,13 +52,11 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
     );
     camera.attachControl(canvasRef.current, true);
 
-    // Optional: tweak controls
-    camera.wheelPrecision = 5;       // lower = faster zoom
+    // Optional: tweak controls based on sensitivity
+    camera.wheelPrecision = 10 - (sensitivity / 10);  // zoom: higher sensitivity → faster
+    camera.panningSensibility = 100 - sensitivity;    // pan: higher sensitivity → faster
     camera.lowerRadiusLimit = 0;     // min zoom distance
     camera.upperRadiusLimit = 500000;   // max zoom distance
-    camera.panningSensibility = 50;   // control panning speed
-
-
 
     // ✅ Add light
     new HemisphericLight('light', new Vector3(0, 1, 0), scene);
@@ -104,7 +102,7 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
       if (!scene.isDisposed) scene.dispose();
       if (!engine.isDisposed) engine.dispose();
     };
-  }, [width, height, editMode, modelUrl]);
+  }, [width, height, editMode, modelUrl, sensitivity]); // 🔹 sensitivity added here
 
   return (
     <canvas
