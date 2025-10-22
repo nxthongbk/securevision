@@ -36,6 +36,8 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
   const [selected, setSelected] = useState(false);
   const [telemetries, setTelemetries] = useState<any>();
   const [modelUrl, setModelUrl] = useState<string | null>(null);
+  const [sensitivity, setSensitivity] = useState(50); // default 50
+
 
   // Update area when data changes
   useEffect(() => {
@@ -213,6 +215,8 @@ useEffect(() => {
                   selected={selected}
                   setSelected={setSelected}
                   dashboard={dashboard}
+                  sensitivity={sensitivity} // 👈 Pass here
+                  setSensitivity={setSensitivity}
                 />
               )}
             </div>
@@ -232,6 +236,7 @@ useEffect(() => {
         height={height}
         editMode={isEdit || isDraw}
         modelUrl={modelUrl}
+        sensitivity={sensitivity} // 👈 Pass here
       />
     ) : data?.operationImage && isShowDiagram ? (
       <Diagram
