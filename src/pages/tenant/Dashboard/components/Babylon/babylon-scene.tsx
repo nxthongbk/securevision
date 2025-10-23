@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Engine, Scene } from '@babylonjs/core';
-// import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
-import '@babylonjs/loaders/glTF'; // ✅ Ensure GLB/GLTF loader is included
+import '@babylonjs/loaders/glTF';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
 import { StandardMaterial } from '@babylonjs/core/Materials/standardMaterial';
 import { Color3 } from '@babylonjs/core/Maths/math.color';
@@ -15,11 +14,17 @@ interface BabylonViewerProps {
   width: number;
   height: number;
   editMode: boolean;
-  modelUrl?: string; // blob or remote .glb file
-  sensitivity?: number; // NEW: control camera sensitivity
+  modelUrl?: string;
+  sensitivity?: number; // user slider (0–100)
 }
 
-const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, modelUrl, sensitivity = 50 }) => {
+const BabylonViewer: React.FC<BabylonViewerProps> = ({
+  width,
+  height,
+  editMode,
+  modelUrl,
+  sensitivity = 50
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -29,47 +34,48 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
     const engine = new Engine(canvasRef.current, true);
     const scene = new Scene(engine);
 
-    // ✅ Set up camera
-    // const camera = new FreeCamera("camera", new Vector3(-500, 750, 0), scene);
-    // camera.setTarget(new Vector3(0, 0, 0));
-    // camera.attachControl(canvasRef.current, true);
-    // camera.inertia = 0.9;
-    // camera.speed = 10;
-    // camera.keysUp = [87];  // W
-    // camera.keysDown = [83]; // S
-    // camera.keysLeft = [65]; // A
-    // camera.keysRight = [68]; // D
-    // camera.inputs.removeMouseWheel();
-
-    // ✅ ArcRotateCamera (scroll to zoom, drag to rotate, right-click to pan)
+    // ✅ ArcRotateCamera
     const camera = new ArcRotateCamera(
       "camera",
-      Math.PI / 2,    // horizontal angle
-      Math.PI / 3,    // vertical angle
-      10,           // initial distance from target
-      new Vector3(0, 0, 0), // target
+      Math.PI / 2,
+      Math.PI / 3,
+      10,
+      new Vector3(0, 0, 0),
       scene
     );
+
+    camera.minZ = 0.1;
+    camera.maxZ = 10000000;
+    camera.upperRadiusLimit = 10000;
     camera.attachControl(canvasRef.current, true);
 
-    // Optional: tweak controls based on sensitivity
-    camera.wheelPrecision = 10 - (sensitivity / 10);  // zoom: higher sensitivity → faster
-    camera.panningSensibility = 100 - sensitivity;    // pan: higher sensitivity → faster
-    camera.lowerRadiusLimit = 0;     // min zoom distance
-    camera.upperRadiusLimit = 500000;   // max zoom distance
+    // 🧮 Global sensitivity setup
+    const BASE_SENSITIVITY_FACTOR = 1.0; // change this to scale all speeds globally
+    const normalized = Math.max(0.1, sensitivity / 50); // maps 0–100 → 0.1–2.0
+    const sensitivityFactor = normalized * BASE_SENSITIVITY_FACTOR;
+
+    // 🎮 Apply linear scaling to all camera movements
+    // Higher sensitivityFactor → faster controls
+    camera.angularSensibilityX = 2000 / sensitivityFactor; // rotate X
+    camera.angularSensibilityY = 2000 / sensitivityFactor; // rotate Y
+    camera.panningSensibility = 50 / sensitivityFactor;  // pan (right-click)
+    camera.wheelPrecision = 10 / sensitivityFactor;        // zoom (scroll)
 
     // ✅ Add light
-    new HemisphericLight('light', new Vector3(0, 1, 0), scene);
+    new HemisphericLight("light", new Vector3(0, 1, 0), scene);
 
-    // ✅ Load the .glb model (works with blob URLs)
+    // ✅ Load model if provided
     if (modelUrl) {
-      SceneLoader.Append("", modelUrl, scene, 
+      SceneLoader.Append(
+        "",
+        modelUrl,
+        scene,
         () => console.log("✅ Model loaded successfully"),
         null,
         (scene, message, exception) => {
           console.error("❌ Error loading model:", message, exception, scene);
         },
-        ".glb" // 👈 Always treat the file as .glb
+        ".glb"
       );
     }
 
@@ -88,36 +94,29 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, 
       }
     });
 
-    // ✅ Start render loop
+    // ✅ Render loop
     engine.runRenderLoop(() => scene.render());
 
-    // ✅ Resize handler
+    // ✅ Handle resize
     const handleResize = () => engine.resize();
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // ✅ Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       if (pointerObserver) scene.onPointerObservable.remove(pointerObserver);
       if (!scene.isDisposed) scene.dispose();
       if (!engine.isDisposed) engine.dispose();
     };
-  }, [width, height, editMode, modelUrl, sensitivity]); // 🔹 sensitivity added here
+  }, [width, height, editMode, modelUrl, sensitivity]);
 
   return (
     <canvas
       ref={canvasRef}
-      // style={{
-      //   width: `${width}px`,
-      //   height: `${height}px`,
-      //   display: 'block',
-      //   maxWidth: '100%',
-      //   maxHeight: '100%',
-      // }}
       style={{
-        width: '100%',
-        height: '100%',
-        display: 'block',
+        width: "100%",
+        height: "100%",
+        display: "block",
       }}
     />
   );
