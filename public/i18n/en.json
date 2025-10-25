@@ -579,8 +579,8 @@
       "subtitle": "Comprehensive solutions with the most advanced technology to protect assets and people.",
       "learnMore": "Learn More",
       "cameraAI": {
-        "title": "Smart Camera AI",
-        "description": "A camera system with AI for facial recognition, abnormal behavior detection, and real-time motion tracking."
+        "title": "Camera Integration",
+        "description": "A camera integration system with for facial recognition, people detection, and real-time motion tracking."
       },
       "sensorNetwork": {
         "title": "Advanced Sensor Network",

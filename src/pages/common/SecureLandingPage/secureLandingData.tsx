@@ -183,7 +183,7 @@ export const getSecureLandingData = (t) => {
     {
       icon: <Phone size={28} className='text-blue-600' />,
       label: t('secureLandingPage.contact.hotline'),
-      values: ['1900 1212 (24/7)', '028 1234 5678']
+      values: ['1900 1212 (24/7)', '0383 927 0958']
     },
     {
       icon: <EnvelopeSimple size={28} className='text-blue-600' />,

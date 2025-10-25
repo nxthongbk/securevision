@@ -1,4 +1,4 @@
-FROM node:18.16-alpine3.17 as builder
+FROM node:18-alpine AS builder
 
 # Create app directory
 RUN mkdir /app
