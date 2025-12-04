@@ -90,11 +90,7 @@ export default function Header({
                 >
                   <img
                     src={
-                      lang === 'en'
-                        ? '/flag_en_icon.svg'
-                        : lang === 'vi'
-                        ? '/flag_vn_icon.svg'
-                        : '/flag_jp_icon.svg'
+                      lang === 'en' ? '/flag_en_icon.svg' : lang === 'vi' ? '/flag_vn_icon.svg' : '/flag_jp_icon.svg'
                     }
                     alt={lang}
                     className='mr-2 h-5 w-6 object-cover align-middle'
@@ -214,7 +210,10 @@ export default function Header({
                   </a>
                 ))}
                 <hr className='my-2' />
-                <button className='text-gray-700  border border-[#00BCFF] hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
+                <button
+                  className='text-gray-700  border border-[#00BCFF] hover:text-blue-600 text-base text-left py-2'
+                  onClick={handleSignIn}
+                >
                   {t('secureLandingPage.header.signIn')}
                 </button>
                 <button
