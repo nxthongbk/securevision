@@ -1,25 +1,38 @@
-import { Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import Img from '~/assets/images/svg/repainr.svg';
-import ButtonCustom from '~/components/ButtonCustom';
+import AlarmSummary from "./components/alarmSummary";
+import LocationsSummary from "./components/locationSummary";
+import UserSummary from "./components/userSummary";
+import DeviceSummary from "./components/deviceSummary";
 
 export default function ReportPage() {
-  const navigate = useNavigate();
-  return <div className='flex items-center justify-center w-screen h-screen'>
-    <div className='flex flex-col items-center'>
-      <img alt='error' src={Img} className='max-w-[400px] max-h-[400px]' />
-      <div className='flex flex-col items-center justify-center mt-14'>
-        <Typography variant='h4'>Trang đang được bảo trì</Typography>
-        <ButtonCustom
-          variant='contained'
-          onClick={() => {
-            navigate(-1);
-          }}
-          className='!w-[120px] !h-[48px] !mt-6'
-        >
-          <Typography variant='button1'>Quay về</Typography>
-        </ButtonCustom>
+  return (
+    <div className="grid grid-cols-2 grid-rows-2 w-screen h-screen overflow-y-auto pt-[7vh] bg-[var(--bg)]">
+      {/* Quarter 1 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <AlarmSummary />
+        </div>
+      </div>
+
+      {/* Quarter 2 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <LocationsSummary />
+        </div>
+      </div>
+
+      {/* Quarter 3 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <UserSummary/>
+        </div>
+      </div>
+
+      {/* Quarter 4 */}
+      <div className="flex items-center justify-center border border-gray-700">
+        <div className="w-full h-full">
+          <DeviceSummary/>
+        </div>
       </div>
     </div>
-  </div>;
+  );
 }

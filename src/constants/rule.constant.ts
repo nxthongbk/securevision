@@ -18,5 +18,6 @@ export enum INDEX_SETTING {
 
 export enum LANG_OPTIONS {
   LANG_ENG = 'en',
-  LANG_VI = 'vi'
+  LANG_VI = 'vi',
+  LANG_JA = 'ja'
 }

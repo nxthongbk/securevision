@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["develop"]
   pull_request:
-    branches: ["main"]
+    branches: ["develop"]
     types: [closed]
 
 jobs:
@@ -23,11 +23,11 @@ jobs:
 
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: nxthongbk/securevision:latest
+          tags: nxthongbk/securevision:develop
 
 

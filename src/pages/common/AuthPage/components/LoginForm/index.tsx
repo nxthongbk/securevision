@@ -84,7 +84,7 @@ export default function LoginForm({ setResetMode }: IProps) {
       <div className='mb-10'>
         <img alt='logo' src={Logo} className='w-[56px] h-[56px]' />
       </div>
-      <Typography variant='h4' className='!mb-10'>
+      <Typography variant='h4' className='!mb-10 text-[var(--text-primary)]'>
         {translation('Đăng nhập')}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit, onInvalid)} className='w-full'>

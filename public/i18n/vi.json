@@ -66,6 +66,7 @@
   "device": "thiết bị",
   "all-locations": "Tất cả địa điểm",
   "verify": "Xác minh",
+  "select-title": "Chọn tiêu đề",
   "deviceProfile": {
     "max-100-character": "Nhập tối đa 100 ký tự",
     "enter-time": "nhập thời gian",
@@ -224,7 +225,9 @@
     "alarm-details": "Chi tiết cảnh báo",
     "update-infos": "Cập nhật thông tin",
     "update-notification": "Cập nhật cấu hình thông báo",
-    "add-new-notification": "Thêm cấu hình thông báo mới"
+    "add-new-notification": "Thêm cấu hình thông báo mới",
+    "name": "Tên"
+
   },
   "locationPage": {
     "location-management": "Quản lý địa điểm",
@@ -326,7 +329,7 @@
     "only-start-with-0": "Số điện thoại gồm 10 số và bắt đầu bằng “0”",
     "reset-password-success": "Đặt lại mật khẩu mặc định thành công"
   },
-  "fire-alerts-page": {
+  "alarm-page": {
     "management": "Quản lý cảnh báo",
     "location": "Địa điểm",
     "address": "Địa chỉ",
@@ -371,7 +374,13 @@
     "select-alarm-type": "Chọn loại cảnh báo",
     "no-alarm": "Hiện không có cảnh báo nào."
   },
-  "hr-page": {
+  "alarm-status" :{
+    "ignore": "Bỏ qua",
+    "confirm": "Xác minh",
+    "pending": "Chờ xác minh",
+    "alarm": "Cảnh báo"
+  },
+  "user-page": {
     "management": "Quản lý nhân sự",
     "location": "Địa điểm",
     "select-location": "Chọn địa điểm",
@@ -474,11 +483,19 @@
     "device-management": "Quản lý thiết bị",
     "monitor": "Giám sát",
     "fire-alerts-page": "Quản lý báo cháy",
+    "alarm-page": "Quản lý cảnh báo",
     "location-management": "Quản lý địa điểm",
     "hr-management": "Quản lý nhân sự",
+    "user-management": "Quản lý người dùng",
     "report": "Báo cáo",
     "tool": "Công cụ",
     "setting": "Cấu hình/ Cài đặt"
+  },
+  "report": {
+  "alarm-summary": "Tóm tắt cảnh báo",
+  "user-summary": "Tóm tắt người dùng",
+  "device-summary": "Tóm tắt thiết bị",
+  "location-summary": "Tóm tắt địa điểm"
   },
   "setting": {
     "setting": "Cài đặt",
@@ -504,6 +521,23 @@
     "vi": "Tiếng Việt",
     "en": "Tiếng Anh"
   },
+  "config": {
+      "call-alerts": "Thông báo cuộc gọi",
+      "call-description": "Nhận cuộc gọi cho các cảnh báo quan trọng",
+      "email-alerts": "Thông báo Email",
+      "email-description": "Nhận cảnh báo và thông báo bảo mật qua email",
+      "SMS-alerts": "Thông báo SMS",
+      "SMS-description": "Nhận tin nhắn SMS ngay lập tức cho các cảnh báo quan trọng",
+      "push-notification": "Thông báo Push",
+      "push-description": "Thông báo push trên trình duyệt cho các cập nhật thời gian thực",
+      "sound-alerts": "Thông báo âm thanh",
+      "sound-description": "Thông báo âm thanh để chú ý ngay lập tức",
+      "zalo-alerts": "Thông báo Zalo",
+      "zalo-description": "Gửi tin nhắn qua Zalo",
+      "header-description": "Mô tả",
+      "header-medium": "Phương tiện",
+      "header-toggle": "Bật/Tắt"
+    },
   "next": "Tiếp tục",
   "previous": "Trở lại",
   "monitoring": "Giám sát",
@@ -552,11 +586,13 @@
   "chosse-template": "Chọn template",
   "addition-information": "Thêm thông tin",
   "fire-locations": "Các địa điểm cháy",
+  "alarm-locations": "Vị trí báo động", 
   "view-detail": "Xem chi tiết",
   "connectors": "Số thiết bị kết nối",
   "apply": "Áp dụng",
   "Đặt lại": "Đặt lại",
   "list-location": "Danh sách địa điểm",
+  "device-statistics": "Thống kê thiết bị",
   "set-alarm-successfully": "Cài cảnh báo thành công",
   "secureLandingPage": {
     "languages": {
@@ -580,8 +616,8 @@
       "subtitle": "Giải pháp toàn diện với công nghệ tiên tiến nhất để bảo vệ tài sản và con người",
       "learnMore": "Tìm hiểu thêm",
       "cameraAI": {
-        "title": "Camera AI Thông Minh",
-        "description": "Hệ thống camera với AI nhận diện khuôn mặt, phát hiện hành vi bất thường và theo dõi chuyển động trong thời gian thực."
+        "title": "Camera Ghi Sự Kiện",
+        "description": "Tích hợp hệ thống camera với AI nhận diện người, khuôn mặt, và theo dõi chuyển động trong thời gian thực."
       },
       "sensorNetwork": {
         "title": "Mạng Cảm Biến Tiên Tiến",

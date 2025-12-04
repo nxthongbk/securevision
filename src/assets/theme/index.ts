@@ -106,10 +106,11 @@ const components = {
   MuiOutlinedInput: {
     styleOverrides: {
       input: {
-        padding: '10px 16px'
+        padding: '10px 16px',
+        borderRadius: "0px"
       },
       root: {
-        borderRadius: '6px',
+        borderRadius: '0px',
         borderWidth: '1px!important',
         borderColor: 'var(--neutral)',
         '&.Mui-focused': {
@@ -123,14 +124,14 @@ const components = {
       }
     }
   },
-  // Override maxHeight for select MUI globally
-  MuiMenu: {
-    styleOverrides: {
-      paper: {
-        maxHeight: 500 // Override maxHeight globally
-      }
-    }
-  },
+  // // Override maxHeight for select MUI globally
+  // MuiMenu: {
+  //   styleOverrides: {
+  //     paper: {
+  //       maxHeight: 500 // Override maxHeight globally
+  //     }
+  //   }
+  // },
   MuiSelect: {
     defaultProps: {
       fullWidth: true,
@@ -150,7 +151,7 @@ const components = {
 
         '&.MuiInputBase-root': {
           height: '40px',
-          borderRadius: '6px',
+          borderRadius: '0px',
           borderWidth: '0px !important'
         },
 
@@ -202,11 +203,11 @@ const components = {
           }
         },
         '& .MuiOutlinedInput-root': {
-          borderRadius: '6px',
+          borderRadius: '0px',
           '& input': {
             color: 'var(--text-primary)',
             '&::placeholder': {
-              color: 'var(--text-secondary)',
+              color: 'var(--text-primary)',
               fontSize: 14,
               height: '24px'
             },
@@ -234,13 +235,13 @@ const components = {
             borderColor: 'var(--alert) '
           },
           '&.Mui-disabled fieldset': {
-            borderColor: 'var(--grey-neutral-200)',
-            color: 'var(--text-disable)'
+            borderColor: 'var(--border-color)',
+            color: 'var(--text-primary)'
           }
         },
         '& .MuiInputBase-root.Mui-disabled': {
-          backgroundColor: 'var(--grey-neutral-80)',
-          color: 'var(--text-disable)'
+          backgroundColor: 'var(--grey-neutral-800)',
+          color: 'var(--text-primary)'
         }
       })
     }
@@ -275,13 +276,14 @@ const components = {
       },
 
       root: ({ ownerState }) => ({
-        borderRadius: 6,
+        borderRadius: 0,
         textTransform: 'none',
         fontWeight: 500,
         boxShadow: 'none',
 
         '&.Mui-disabled': {
-          background: 'var(--disable-btn)',
+          // background: 'var(--disable-btn)',
+          background: '#64748B',
           color: 'var(--text-disable)'
         },
         ...(ownerState.variant === 'contained' &&
@@ -442,10 +444,10 @@ const components = {
       root: {
         // Example of style overrides
         padding: '8px',
-        borderRadius: '8px',
+        borderRadius: '0px',
         '& .MuiMenuItem-root': {
           // Styling ListItem within the List
-          borderRadius: '6px'
+          borderRadius: '0px'
         },
         '& .Mui-selected': {
           backgroundColor: 'var(--grey-primary-80) !important'
@@ -460,11 +462,42 @@ const components = {
         padding: '8px !important',
         '& .MuiAutocomplete-option': {
           // Styling options within the listbox
-          borderRadius: '6px'
+          borderRadius: '0px'
         }
       }
     }
+  },
+  MuiIconButton: {
+    styleOverrides: {
+      root: {
+        color: '#00BCFF', // main color
+        '&:hover': {
+          backgroundColor: 'transparent', // or rgba(0,188,255,0.08) if you want subtle bg
+        },
+        '&:active': {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
+  },
+  MuiMenu: {
+    styleOverrides: {
+      paper: {
+        maxHeight: 500,
+        backgroundColor: "#101828",
+        color: "#fff"
+      }
+    }
+  },
+  MuiPopover: {
+    styleOverrides: {
+      paper: {
+        backgroundColor: "#101828",
+        color: "#fff"
+      }
+    }
   }
+
 };
 
 const theme = createTheme({
@@ -476,7 +509,7 @@ const theme = createTheme({
       main: '#fff'
     },
     text: {
-      primary: '#3A3D41',
+      primary: '#FFFFFF',
       secondary: '#737982'
     }
   },

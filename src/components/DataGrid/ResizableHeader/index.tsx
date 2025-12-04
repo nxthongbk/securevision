@@ -7,280 +7,265 @@ import {
   Stack,
   TextField,
   Typography,
-  buttonClasses,
-  menuItemClasses
+  menuItemClasses,
+  Popover
 } from '@mui/material';
-import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr';
+// import { ArrowCounterClockwise } from '@phosphor-icons/react/dist/ssr';
 import { useTranslation } from 'react-i18next';
 import SearchBox from '../../SearchBox';
 import DateRangePicker from '../../DatePicker';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { ResizableHeaderProps } from './type';
-import HeaderPage from '~/components/HeaderPage';
-import ButtonCustom from '~/components/ButtonCustom';
-import { Funnel } from '@phosphor-icons/react';
+// import HeaderPage from '~/components/HeaderPage';
+// import ButtonCustom from '~/components/ButtonCustom';
+// import { Funnel } from '@phosphor-icons/react';
+import dayjs from 'dayjs';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+// const ITEM_HEIGHT = 48;
+// const ITEM_PADDING_TOP = 8;
 
 const ResizableHeader = ({
   filter,
   isSearch,
   keyword,
-  disableResetFilter,
-  handleResetFilter,
+  // disableResetFilter,
+  // handleResetFilter,
   setKeyword,
-  filterFullwidth = false,
-  title,
-  btnPopup
+  // filterFullwidth = false,
+  // title,
+  // btnPopup
 }: ResizableHeaderProps) => {
   const { t } = useTranslation();
-  const [menuWidth, setMenuWidth] = useState<'auto' | number>('auto');
-  const selectRef = useRef<HTMLDivElement>(null);
-  const [isShowFilter, setIsShowFilter] = useState(false);
+  // const [menuWidth, setMenuWidth] = useState<'auto' | number>('auto');
+  // const selectRef = useRef<HTMLDivElement>(null);
+  // const [isShowFilter, setIsShowFilter] = useState(true); 
+  
+  // useEffect(() => {
+  //   function updateSize() {
+  //     selectRef.current && setMenuWidth(selectRef.current.offsetWidth);
+  //   }
+  //   window.addEventListener('resize', updateSize);
+  //   updateSize();
+  //   return () => window.removeEventListener('resize', updateSize);
+  // }, []);
 
-  useEffect(() => {
-    function updateSize() {
-      selectRef.current && setMenuWidth(selectRef.current.offsetWidth);
-    }
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  const miniLaptopGridSize = filterFullwidth && filter?.length ? 12 / (filter.length + 1) : 2.4;
+  // const miniLaptopGridSize =
+  //   filterFullwidth && filter?.length ? 12 / (filter.length + 1) : 2.4;
 
   return (
-    <div className='w-full'>
-      <div className='flex items-center justify-between'>
-        <HeaderPage title={title} btnPopup={btnPopup} />
-        <div className='flex items-center gap-2'>
-          {isSearch && (
-            <Grid item mobile={6} miniLaptop={3.2} laptop={2.8}>
-              <Stack direction='column' width={'100%'} gap={1}>
-                <Box width={'100%'} component={'div'} display={'flex'} justifyContent={'space-between'}>
-                  <Box width='100%'>
-                    <SearchBox keyword={keyword} setKeyword={setKeyword} />
-                  </Box>
-                </Box>
-              </Stack>
-            </Grid>
-          )}
-          {filter && (
-            <>
-              <ButtonCustom
-                className='h-[40px]'
-                variant='outlined'
-                onClick={() => setIsShowFilter(!isShowFilter)}
-                startIcon={<Funnel />}
-              >
-                {t('filter')}
-              </ButtonCustom>
-            </>
-          )}
-        </div>
-      </div>
-      {isShowFilter && (
+    <div className="w-full">
+      {/* 🔹 If you want to hide the title row, just comment HeaderPage */}
+      {/* <HeaderPage title={title} btnPopup={btnPopup} /> */}
+
+      {/* 🔹 Filters Row */}
+      {/* {isShowFilter && ( */}
         <Grid
           container
-          className='w-full justify-start items-center  bg-[var(--grey-neutral-60)] p-2 rounded-lg gap-3 mt-6'
+          className="w-full justify-between items-center  p-2 gap-3"
         >
-          <Typography variant='label3' color={'var(--text-primary)'}>
-            {t('filter')}
-          </Typography>
-          {/* Addtional filter */}
-          {filter?.map((item) => {
-            if (item.isRangeFilter) {
-              return (
-                <Grid
-                  item
-                  mobile={12}
-                  miniLaptop={miniLaptopGridSize}
-                  sx={{
-                    maxWidth: { miniLaptop: '259px !important', mobile: '100%' }
-                  }}
-                  key={item.id}
-                >
-                  <Stack direction='column' gap={1} key={item?.id}>
-                    <Box display='flex' gap='6px' alignItems='center'>
-                      <TextField
-                        type='number'
-                        placeholder={t('from')}
-                        value={item.value?.from}
-                        name='from'
-                        onChange={item.onChange}
-                        inputProps={{
-                          style: {
-                            fontSize: '14px'
-                          }
-                        }}
-                        className='bg-white hide-arrows-input-number'
-                        sx={{
-                          flexBasis: { miniLaptop: '45%', mobile: '48.5%' }
-                        }}
-                      />
-                      {' - '}
-                      <TextField
-                        type='number'
-                        value={item.value?.to}
-                        placeholder={t('to')}
-                        name='to'
-                        onChange={item.onChange}
-                        inputProps={{
-                          style: {
-                            fontSize: '14px'
-                          }
-                        }}
-                        className='bg-white hide-arrows-input-number'
-                        sx={{
-                          flexBasis: { miniLaptop: '55%', mobile: '48.5%' }
-                        }}
-                      />
-                    </Box>
-                  </Stack>
-                </Grid>
-              );
-            }
-            if (item.isDateRangeFilter) {
-              return (
-                <Grid key={item.id} item mobile={6} miniLaptop={3.5} laptop={2.8} desktop={miniLaptopGridSize}>
-                  <Stack direction='column' gap={1} key={item?.id}>
-                    <Box>
-                      <DateRangePicker
-                        valueStart={item?.value?.startTime}
-                        valueEnd={item?.value?.endTime}
-                        onChange={item?.onChange}
-                        hasTimeSelection={false}
-                      />
-                    </Box>
-                  </Stack>
-                </Grid>
-              );
-            }
-            return (
-              <div className='grid grid-cols-7  items-center   bg-white border rounded-lg w-[320px] px-4 pr-0'>
-                <div className='col-span-2' >
-                  <Typography variant='body3' className='text-[var(--tertiary)]'>
-                    {t(item?.label)}:
-                  </Typography>
-                </div>
-                <div className='col-span-5'>
-                  <Select
-                    value={item?.value}
-                    onChange={item?.onChange}
-                    sx={{
-                      boxShadow: 'none',
-                      '.MuiOutlinedInput-notchedOutline': { border: 0 },
-                      '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                        border: 0
-                      },
-                      '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        border: 0
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        boxShadow: 'none',
-                        border: 0,
-                        borderWidth: '0 !important'
-                      },
-                      '& .MuiOutlinedInput-input': {
-                        fontWeight: 600,
-                        paddingLeft: '0px',
-                        paddingRight: '0px',
-                      },
+          {/* Search box (left side) */}
+          {isSearch && (
+            <Grid item mobile={6} miniLaptop={3.2} laptop={2.8}>
+              <SearchBox keyword={keyword} setKeyword={setKeyword} />
+            </Grid>
+          )}
 
-                    }}
-                    className='border-none !pl-0'
-                    MenuProps={
-                      item.isLazyLoad
-                        ? {
-                          PaperProps: {
-                            style: {
-                              maxHeight: ITEM_HEIGHT * 10 + ITEM_PADDING_TOP
-                            },
-                            onScroll: item.onScroll
-                          }
+          {/* Filters (right side) */}
+          <Grid item className="flex gap-3 items-center ml-auto">
+            {filter?.map((item) => {
+              if (item.isRangeFilter) {
+                return (
+                  <Box key={item.id} className="flex gap-2 items-center">
+                    <TextField
+                      type="number"
+                      placeholder={t('from')}
+                      value={item.value?.from}
+                      name="from"
+                      onChange={item.onChange}
+                      size="small"
+                      sx={{
+                        background: '#0B1118',
+                        input: { color: 'white', fontSize: 13 },
+                        width: 80
+                      }}
+                    />
+                    <Typography color="white">-</Typography>
+                    <TextField
+                      type="number"
+                      placeholder={t('to')}
+                      value={item.value?.to}
+                      name="to"
+                      onChange={item.onChange}
+                      size="small"
+                      sx={{
+                        background: '#0B1118',
+                        input: { color: 'white', fontSize: 13 },
+                        width: 80
+                      }}
+                    />
+                  </Box>
+                );
+              }
+
+              if (item.isDateRangeFilter) {
+                // ✅ Time filter redesign
+                const [anchorEl, setAnchorEl] =
+                  useState<null | HTMLElement>(null);
+                const [tempValue, setTempValue] = useState(item.value);
+
+                const open = Boolean(anchorEl);
+                const handleClick = (event: any) => {
+                  setTempValue(item.value); // preload existing
+                  setAnchorEl(event.currentTarget);
+                };
+                const handleClose = () => setAnchorEl(null);
+
+                // const handleApply = () => {
+                //   item.onChange(tempValue);
+                //   handleClose();
+                // };
+
+                // const handleReset = () => {
+                //   setTempValue({ startTime: null, endTime: null });
+                //   item.onChange({ startTime: null, endTime: null });
+                //   handleClose();
+                // };
+
+                const label =
+                  item.value?.startTime && item.value?.endTime
+                    ? `${dayjs(item.value.startTime).format(
+                        'DD/MM/YYYY'
+                      )} - ${dayjs(item.value.endTime).format('DD/MM/YYYY')}`
+                    : `${t(item.label)}: All`;
+
+                return (
+                  <Box key={item.id}>
+                    <Button
+                      onClick={handleClick}
+                      sx={{
+                        color: 'white',
+                        borderRadius: 0,
+                        border: '1px solid #00BCFFCC', // same as dropdown border
+                        textTransform: 'none',
+                        fontSize: 13,
+                        height: 32,
+                        minWidth: 150,
+                        px: 2,
+                        py: 2.45,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      {label}
+                    </Button>
+                    <Popover
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left'
+                      }}
+                      PaperProps={{
+                        sx: {
+                          background: '#0B1118',
+                          color: 'white',
+                          p: 2,
+                          borderRadius: 0
                         }
-                        : {
-                          slotProps: {
-                            paper: {
-                              sx: {
-                                [`& .${menuItemClasses.root}`]: { whiteSpace: 'normal' },
-                                width: menuWidth
-                              }
+                      }}
+                    >
+                      <DateRangePicker
+                        valueStart={tempValue?.startTime}
+                        valueEnd={tempValue?.endTime}
+                        onChange={setTempValue}
+                        // hasTimeSelection={false}
+                      />
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-end"
+                        gap={1}
+                        mt={2}
+                      >
+                        
+                      </Stack>
+                    </Popover>
+                  </Box>
+                );
+              }
+
+              // ✅ Normal dropdown filters
+              return (
+                <Select
+                  key={item.id}
+                  size="small"
+                  value={item?.value ?? ''}
+                  onChange={item?.onChange}
+                  displayEmpty
+                  
+                  sx={{
+                  fontSize: 13,
+                  color: 'white',
+                  height: 32,
+                  minWidth: 150,
+                  '.MuiOutlinedInput-notchedOutline': { 
+                    borderColor: '#00BCFFCC', // your desired color
+                    borderWidth: 1,          // thickness of the border
+                    borderRadius: 0          // remove rounding
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#00BCFFCC', // keep same color on hover
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#00BCFFCC', // keep same color on focus
+                  },
+                  '&.MuiSelect-select': {
+                    py: 0.5,
+                    px: 1,
+                  }
+                }}
+                  MenuProps={{
+                    slotProps: {
+                      paper: {
+                        sx: {
+                          background: '#0B1118', // dropdown background
+                          borderRadius: 0,       // remove dropdown corners
+                          [`& .${menuItemClasses.root}`]: {
+                            fontSize: 13,
+                            color: 'white',
+                            borderRadius: 0,     // remove item corners
+                            '&.Mui-selected': {
+                              backgroundColor: "#031423 !important", 
+                              color: 'white'
+                            },
+                            '&.Mui-selected:hover': {
+                              backgroundColor: '#031423 !important' // keep on hover
                             }
                           }
                         }
+                      }
                     }
-                  >
-                    {item?.value && (
-                      <MenuItem
-                        key={'default'}
-                        value=''
-                        sx={{
-                          mb: '5px',
-                          borderRadius: '0px !important',
-                          borderBottom: '1px solid var(--divider-color)',
-                          backgroundColor: 'var(--white) !important',
-                          '&:hover': {
-                            backgroundColor: 'var(--white) !important'
-                          }
-                        }}
-                      >
-                        <Typography variant='button3' color={'var(--primary)'}>
-                          {t('unselect')}
-                        </Typography>
-                      </MenuItem>
-                    )}
-                    {item?.option?.map((item: any) => (
-                      <MenuItem key={item.id} value={item.value} sx={{ fontSize: '14px' }}>
-                        {item.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              </div>
-            );
-          })}
-
-          {filter && (
-            <Grid
-              item
-              mobile={6}
-              laptop={6}
-              desktop={1.5}
-              display='flex'
-              justifyContent={{
-                mobile: 'start'
-              }}
-            >
-              <Button
-                variant='text'
-                disabled={disableResetFilter}
-                color='primary'
-                onClick={() => {
-                  if (handleResetFilter) {
-                    handleResetFilter();
-                  }
-                }}
-                sx={{
-                  [`&.${buttonClasses.disabled}`]: {
-                    backgroundColor: 'transparent',
-                    color: 'var(--grey-neutral-400)'
-                  },
-                  '&:hover': {
-                    textDecoration: 'none'
-                  }
-                }}
-              >
-                <Stack direction='row' alignItems='center' gap={0.75}>
-                  <ArrowCounterClockwise size={19.4} />
-                  <Typography variant='button2'>{t('Đặt lại bộ lọc')}</Typography>
-                </Stack>
-              </Button>
-            </Grid>
-          )}
+                  }}
+                >
+                  <MenuItem value="" sx={{ fontSize: 13, color: 'white' }}>
+                    {t(item.label)}: All
+                  </MenuItem>
+                  {item?.option?.map((opt: any) => (
+                    <MenuItem
+                      key={opt.id}
+                      value={opt.value}
+                      sx={{ fontSize: 13, color: 'white' }}
+                    >
+                      {t(opt.name)}
+                    </MenuItem>
+                  ))}
+                </Select>
+              );
+            })}
+          </Grid>
         </Grid>
-      )}
+      {/* )} */}
     </div>
   );
 };

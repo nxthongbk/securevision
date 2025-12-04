@@ -23,7 +23,7 @@ export default function TabLastTelemetrySysAdminView(props: IProps) {
     entityId: deviceId
   });
 
-  const { rows, length } = useSocketLatestTelemetry({
+  const { rows } = useSocketLatestTelemetry({
     dependency: [deviceId],
     topic: `/topic/${deviceId}`,
     initData: initLatestTelemetry?.data?.data,

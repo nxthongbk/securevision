@@ -59,13 +59,26 @@ export default function Header({
           <div className='hidden smallLaptop:flex items-center space-x-4'>
             <button
               onClick={handleSignIn}
-              className='px-4 py-2 rounded-lg font-medium text-inherit hover:bg-gray-100 transition-colors duration-300'
+              className='px-4 py-2 rounded-lg border border-[#00BCFF] font-medium text-inherit hover:bg-gray-100 transition-colors duration-300'
             >
               {t('secureLandingPage.header.signIn')}
             </button>
-            <button className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'>
+            <button
+              onClick={() => {
+                const scrollContainer = document.querySelector('.secure-landing-page');
+                const targetSection = document.querySelector('#contact');
+                if (scrollContainer && targetSection) {
+                  scrollContainer.scrollTo({
+                    top: targetSection.getBoundingClientRect().top + scrollContainer.scrollTop,
+                    behavior: 'smooth'
+                  });
+                }
+              }}
+              className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'
+            >
               {t('secureLandingPage.header.freeConsultation')}
             </button>
+
             {lang && handleChangeLang && (
               <div className='relative'>
                 <button
@@ -77,7 +90,11 @@ export default function Header({
                 >
                   <img
                     src={
-                      lang === 'en' ? '/flag_en_icon.svg' : lang === 'vi' ? '/flag_vn_icon.svg' : '/flag_jp_icon.svg'
+                      lang === 'en'
+                        ? '/flag_en_icon.svg'
+                        : lang === 'vi'
+                        ? '/flag_vn_icon.svg'
+                        : '/flag_jp_icon.svg'
                     }
                     alt={lang}
                     className='mr-2 h-5 w-6 object-cover align-middle'
@@ -104,7 +121,7 @@ export default function Header({
                       role='option'
                       aria-selected={lang === 'en'}
                     >
-                      <img src={'/public/flag_en_icon.svg'} className='mr-2 h-5 w-5' alt='English' />{' '}
+                      <img src={'/flag_en_icon.svg'} className='mr-2 h-5 w-5' alt='English' />{' '}
                       {t('secureLandingPage.languages.en')}
                     </li>
                     <li
@@ -116,7 +133,7 @@ export default function Header({
                       role='option'
                       aria-selected={lang === 'vi'}
                     >
-                      <img src={'/public/flag_vn_icon.svg'} className='mr-2 h-5 w-5' alt='Tiếng Việt' />{' '}
+                      <img src={'/flag_vn_icon.svg'} className='mr-2 h-5 w-5' alt='Tiếng Việt' />{' '}
                       {t('secureLandingPage.languages.vi')}
                     </li>
                     <li
@@ -128,7 +145,7 @@ export default function Header({
                       role='option'
                       aria-selected={lang === 'ja'}
                     >
-                      <img src={'/public/flag_jp_icon.svg'} className='mr-2 h-5 w-5' alt='日本語' />{' '}
+                      <img src={'/flag_jp_icon.svg'} className='mr-2 h-5 w-5' alt='日本語' />{' '}
                       {t('secureLandingPage.languages.ja')}
                     </li>
                   </ul>
@@ -197,17 +214,19 @@ export default function Header({
                   </a>
                 ))}
                 <hr className='my-2' />
-                <button className='text-gray-700 hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
+                <button className='text-gray-700  border border-[#00BCFF] hover:text-blue-600 text-base text-left py-2' onClick={handleSignIn}>
                   {t('secureLandingPage.header.signIn')}
                 </button>
-                <a
-                  className='mt-2 w-full bg-blue-600 text-white py-2 rounded-lg text-center font-semibold hover:bg-blue-700 transition'
+                <button
                   onClick={() => {
                     setMenuOpen(false);
+                    const section = document.querySelector('#contact');
+                    section?.scrollIntoView({ behavior: 'smooth' });
                   }}
+                  className='bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-2 rounded-lg font-medium text-white hover:from-blue-700 hover:to-blue-800 transition-transform transform hover:scale-105'
                 >
                   {t('secureLandingPage.header.freeConsultation')}
-                </a>
+                </button>
               </nav>
             </div>
           </div>

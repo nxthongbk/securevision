@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '~/contexts/app.context';
-import { useGetPermissionList } from '~/pages/tenant/HumanResourcesPage/handleApi';
+import { useGetPermissionList } from '~/pages/tenant/UserPage/handleApi';
 
 export const usePermissions = (viewCode: string, editCode: string, tenantCode: string) => {
   const { userInfo } = useContext(AppContext);

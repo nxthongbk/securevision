@@ -22,7 +22,6 @@ function CustomTabPanel(props: TabPanelProps) {
     <div
       className={`flex-1 ${value === index ? ' flex' : 'hidden'}`}
       role='tabpanel'
-      // hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
@@ -69,27 +68,30 @@ export default function DrawerDeviceDetails(props: DrawerDeviceDetailsProps) {
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
           <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
             <Tab label={translate('info')} {...a11yProps(0)} />
-            <Tab label={'Attributes'} {...a11yProps(1)} />
-            <Tab label={'Latest telemetry'} {...a11yProps(2)} />
-            <Tab label={translate('warning')} {...a11yProps(3)} />
-            <Tab label={translate('notification')} {...a11yProps(4)} />
+            <Tab label={'Credentials'} {...a11yProps(1)} /> 
+            <Tab label={'Attributes'} {...a11yProps(2)} />
+            <Tab label={'Latest telemetry'} {...a11yProps(3)} />
+            <Tab label={translate('warning')} {...a11yProps(4)} />
+            <Tab label={translate('notification')} {...a11yProps(5)} />
+            
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
           <TabsInforDevice props={props} hasEdit={hasEdit} />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
+        <CustomTabPanel value={value} index={2}>
           <TabAttributesDevice deviceId={props.id} />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={2}>
+        <CustomTabPanel value={value} index={3}>
           <TabLastTelemetry deviceId={props.id} deviceName={props?.name} />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={3}>
+        <CustomTabPanel value={value} index={4}>
           <TabAlarmDevice token={props?.token} />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={4}>
+        <CustomTabPanel value={value} index={5}>
           <TabNotification deviceId={props.id} token={props?.token} />
         </CustomTabPanel>
+
       </Box>
     </Drawer>
   );

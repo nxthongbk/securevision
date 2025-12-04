@@ -37,9 +37,9 @@ export default function InputCustom(props: TProps) {
 
   const [showPassword, setShowPassword] = useState(false);
   return (
-    <div className={classNameCont}>
+    <div className={classNameCont} >
       {label && (
-        <Typography variant='label3' className='!mb-1'>
+        <Typography variant='label3' className='!mb-1' color="var(--text-primary)">
           {label} {isRequired && <span className='text-[var(--semantic-alert)]'>*</span>}
         </Typography>
       )}
@@ -67,7 +67,7 @@ export default function InputCustom(props: TProps) {
                   <Typography component='div' className='w-full h-[18px]'></Typography>
                 ) : null
               }
-              sx={{ [`& .${inputBaseClasses.root}`]: { border: 'none' } }}
+              sx={{ [`& .${inputBaseClasses.root}`]: { border: 'none',borderRadius: 0 } }}
               InputProps={
                 type === 'password'
                   ? {

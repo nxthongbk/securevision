@@ -56,7 +56,7 @@ export default function PopupMarker() {
       <div className='flex w-full gap-[12px] p-0 tablet:p-4'>
         {renderBuildingImage()}
         <div className='max-w-full tablet:max-w-[172px] mt-[-4px]'>
-          <Typography variant='label2' display='block'>
+          <Typography variant='label2' display='block' className="text-[#36BFFA] !important">
             {openMarkerPopup?.name}
           </Typography>
           <Typography variant='body3'>{openMarkerPopup?.address}</Typography>
@@ -65,14 +65,14 @@ export default function PopupMarker() {
       {!isTablet && <Divider />}
       <div className='p-0 tablet:px-4 pt-4 tablet:pb-3'>
         <div className='flex flex-col gap-1.5'>
-          <div className='flex'>
+          {/* <div className='flex'>
             <Typography variant='label3' display='block' className='flex-1'>
               ID:
             </Typography>
             <Typography variant='body3' display='block' className='flex-1'>
               {openMarkerPopup?.code ? String(openMarkerPopup.code).padStart(4, '0') : ''}
             </Typography>
-          </div>
+          </div> */}
           <div className='flex'>
             <Typography variant='label3' display='block' className='flex-1'>
               {t('locationPage.manager')}:
@@ -83,7 +83,7 @@ export default function PopupMarker() {
           </div>
           <div className='flex'>
             <Typography variant='label3' display='block' className='flex-1'>
-              {t('hr-page.phone')}:
+              {t('user-page.phone')}:
             </Typography>
             <Typography variant='body3' display='block' className='flex-1'>
               {openMarkerPopup?.operatorInfo?.phone}
@@ -152,7 +152,7 @@ export default function PopupMarker() {
               <ButtonCustom
                 onClick={handleClickOpenPopupDetail}
                 variant='contained'
-                className='w-full !min-h-[40px] !mt-3 !bg-[var(--blue-500)]'
+                className='w-full !min-h-[40px] !mt-3 !bg-[#36BFFA3D] !rounded-none'
               >
                 <Typography variant='button3' color='white'>
                   {t('view-detail')}

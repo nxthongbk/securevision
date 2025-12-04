@@ -1,6 +1,7 @@
 import HeaderAccessTenant from './components/HeaderAccessTenant';
 import SideBar from './components/SideBar';
 import { Outlet, useLocation } from 'react-router-dom';
+import Header from './components/Header';
 
 export default function MainLayout() {
   const location = useLocation();
@@ -9,11 +10,16 @@ export default function MainLayout() {
   return (
     <>
       {tenantCode && <HeaderAccessTenant />}
-      <div className={`miniLaptop:flex  ${tenantCode ? ' pt-14' : ''}`}>
-        <SideBar />
-        <div className='flex-1 overflow-hidden '>
+      <div className={`flex flex-col min-h-screen ${tenantCode ? ' pt-14' : ''}`}>
+        
+        <Header></Header>
+        {/* Main content */}
+        <div className='flex-1 overflow-y-auto'>
           <Outlet />
         </div>
+
+        {/* Sidebar at the bottom */}
+        <SideBar/>
       </div>
     </>
   );

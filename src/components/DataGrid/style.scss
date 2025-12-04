@@ -16,7 +16,8 @@
 }
 
 .rows-selected {
-  background-color: var(--turquoise-60) !important;
+  background-color: var(--turquoise-60) !important
+  ;
 }
 
 .pagination {
@@ -25,8 +26,9 @@
   position: relative;
   bottom: 0;
   padding: 16px;
-  border-top: 1px solid var(--border-color);
 }
+
+// rgba(255, 255, 255, 0.2)
 .MuiDataGrid-columnHeaders {
   position: -webkit-sticky;
   position: sticky !important;
@@ -85,7 +87,7 @@
     font-weight: 600;
     font-family: Inter;
     background-color: var(--grey-primary-60);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid pink;
   }
 }
 
@@ -107,15 +109,17 @@
 }
 
 .table-grid__header {
-  border-top: 1px solid var(--grey-primary-100);
-  border-right: 1px solid var(--grey-primary-100);
+  // border-top: 1px solid var(--grey-primary-100);
+  // border-right: 1px solid var(--grey-primary-100);
   background-color: var(--grey-primary-80);
   padding: 0px 16px !important;
   border-radius: 0 !important;
+  background: #031f2f;
 }
 
 .table__wrapper {
   min-height: 179px;
+
   .MuiDataGrid-overlayWrapper {
     min-height: unset;
   }
@@ -133,20 +137,42 @@
   .MuiDataGrid-overlayWrapperInner {
     .empty-record-message {
       border-bottom: none;
+      color: #ffffff; // empty message text white
     }
   }
+
   .MuiDataGrid-filler {
     display: none;
   }
 
+  // Alternating row colors
   .row-white {
-    background-color: var(--white);
+    background-color: #03111b;
+    color: #ffffff; // text color white
   }
   .row-grey {
-    background-color: var(--grey-primary-60);
+    background-color: #031423;
+    color: #ffffff; // text color white
+  }
+
+  // Cells
+  .MuiDataGrid-cell {
+    color: #ffffff; // text color white
+  }
+
+  // Column headers
+  .MuiDataGrid-columnHeaders {
+    color: #ffffff; // header text white
+    background-color: #031f2f; // dark header background
+  }
+
+  // Optional hover effect
+  .MuiDataGrid-row:hover {
+    background-color: #0a1a2b; // slightly lighter for hover
   }
 
   .MuiDataGrid-scrollbar--vertical {
     display: none !important;
   }
 }
+

@@ -9,6 +9,8 @@ import { useTenantCode } from '~/utils/hooks/useTenantCode';
 import { useGetAllDashboard } from './useDashboard';
 import DashboardDisplay from './TypeDashboard/custom-widget';
 import Monitoring from './TypeDashboard/monitoring';
+import HandleScrollPage from '~/components/HandleScrollPage';
+import { HeaderPageProps } from '~/components/HeaderPage';
 
 export default function DashboardPage() {
   const { tenantCode } = useTenantCode();
@@ -37,20 +39,30 @@ export default function DashboardPage() {
     }
   }, [menuIndex, dashboards]);
 
+  const headerProps: HeaderPageProps = {
+    title: 'Dashboard',
+    // subtitle: '',
+  };
+
   return (
-    <div className='w-full h-screen p-6 px-4 overflow-auto'>
-      <div className={`flex h-full ${!isVisible && ' flex-col'} `}>
-        <div
-          className={` border-r border-[var(--border-color)] overflow-auto transition-all duration-500 ${isVisible ? 'h-[1000px] opacity-100 w-[240px]' : ' w-[0px] max-h-0 opacity-0'
-            }`}
-        >
-          <div className='px-2 '>
-            <div className='flex gap-2 py-2 border-b'>
-              <CreateDashboard tenantCode={tenantCode} />
-            </div>
-            <div className='flex-col gap-2 py-2'>
-              {dashboards.map((item) => {
-                return (
+    <HandleScrollPage props={headerProps}>
+      <div className="flex flex-1 min-h-0 w-full px-4">
+        {/* Sidebar + content container */}
+        <div className={`flex flex-1 min-h-0 ${!isVisible && 'flex-col'}`}>
+          
+          {/* Sidebar */}
+          <div
+            className={`border-r border-[var(--border-color)] transition-all duration-500 
+              ${isVisible ? 'opacity-100 w-[240px]' : 'w-0 opacity-0'}
+            `}
+          >
+            
+            <div className="h-full overflow-auto px-2">
+              <div className="flex gap-2 py-2 border-b border-[var(--border-color)]">
+                <CreateDashboard tenantCode={tenantCode} />
+              </div>
+              <div className="flex flex-col gap-2 py-2">
+                {dashboards.map((item) => (
                   <MenuItem
                     key={item.id}
                     title={item.name}
@@ -61,27 +73,36 @@ export default function DashboardPage() {
                     data={item}
                     icon={menuIndex === item.id && <DotsThreeOutlineVertical />}
                   />
-                );
-              })}
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Dashboard Main Content */}
+          <div className="flex-1 min-h-0 flex flex-col">
+            <div className="flex-1 min-h-0">
+              {dashboard?.type === 'custom-widget' && (
+                <DashboardDisplay
+                  dashboards={dashboards}
+                  dashboard={dashboard}
+                  isVisible={isVisible}
+                  setIsVisible={setIsVisible}
+                />
+              )}
+
+              {dashboard?.type === 'monitoring' && (
+                <Monitoring
+                  // typeProject={dashboard.type}
+                  projectName={dashboard.name}
+                  dashboard={dashboard}
+                  // isVisible={isVisible}
+                  // setIsVisible={setIsVisible}
+                />
+              )}
             </div>
           </div>
         </div>
-        {dashboard && dashboard?.type === 'custom-widget' &&
-          <DashboardDisplay
-            dashboards={dashboards}
-            dashboard={dashboard}
-            isVisible={isVisible}
-            setIsVisible={setIsVisible}
-          />}
-        {dashboard && dashboard?.type === 'monitoring' &&
-          <Monitoring
-            typeProject={dashboard.type}
-            projectName={dashboard.name}
-            dashboard={dashboard}
-            isVisible={isVisible}
-            setIsVisible={setIsVisible}
-          />}
       </div>
-    </div>
+    </HandleScrollPage>
   );
 }

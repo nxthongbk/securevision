@@ -1,0 +1,40 @@
+.normal-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: green;
+  border: 2px solid white;
+}
+
+.alarm-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: red;
+  border: 2px solid white;
+  position: relative;
+}
+
+.alarm-marker::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.35);
+  transform: translate(-50%, -50%) scale(1);
+  animation: ripple 3s infinite;
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(15);
+    opacity: 0;
+  }
+}

@@ -10,36 +10,38 @@ interface IProps {
   initData: any;
 }
 
-export default function useSocketLatestTelemetry(props: IProps) {
-  const { dependency, topic, connectHeaders, initData } = props;
-  const [latestTelemetry, setLatestTelemetry] = useState(null);
-  const [length, setLength] = useState<number>(0);
+export default function useSocketLatestTelemetry({ dependency, topic, connectHeaders, initData }: IProps) {
+  const [latestTelemetry, setLatestTelemetry] = useState(initData || {});
 
-  const data = useSocket({
-    dependency,
-    topic,
-    connectHeaders
-  }) as Record<string, unknown>;
+  const data = useSocket({ dependency, topic, connectHeaders }) as Record<string, any>;
 
+  // Only update the keys coming from WebSocket
   useEffect(() => {
-    if (data?.token) delete data.token;
-    setLatestTelemetry({ ...initData, ...data });
-  }, [initData, data]);
+    if (!data) return;
+
+    setLatestTelemetry((prev) => {
+      const updated = { ...prev };
+      for (const key in data) {
+        if (key !== 'token') updated[key] = data[key];
+      }
+      return updated;
+    });
+  }, [data]);
 
   const rows = useMemo(() => {
-    const newArr = [];
-    for (const key in latestTelemetry) {
-      newArr.push({
-        id: key,
-        time: dayjs(latestTelemetry[key]?.ts).format('DD/MM/YYYY HH:mm:ss'),
-        key: key,
-        value: JSON.stringify(latestTelemetry[key])
-      });
-      setLength((pre) => ++pre);
-    }
-    const sortedRows = sortBy(newArr, (row) => row.key.toLowerCase());
-    return sortedRows;
+    if (!latestTelemetry) return [];
+
+    const newArr = Object.keys(latestTelemetry).map((key) => ({
+      id: key,
+      key,
+      value: JSON.stringify(latestTelemetry[key]),
+      time: latestTelemetry[key]?.ts
+        ? dayjs(latestTelemetry[key].ts).format('DD/MM/YYYY HH:mm:ss')
+        : ''
+    }));
+
+    return sortBy(newArr, (row) => row.key.toLowerCase());
   }, [latestTelemetry]);
 
-  return { rows, length };
+  return { rows };
 }

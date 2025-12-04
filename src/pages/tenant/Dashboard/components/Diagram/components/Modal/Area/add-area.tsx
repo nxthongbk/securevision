@@ -38,31 +38,27 @@ function AddArea(props) {
     handleSelectValue,
     show,
   } = props;
-  // multi language
+
   const { t } = useTranslation();
-
   const [deviceTranslate] = useTranslation('', { keyPrefix: 'devicePage' });
-  const optionDeviceProfile = useMemo(() => {
-    const option = dataDevice?.data?.content?.map((item: any) => {
-      return (
-        <MenuItem value={item?.id} key={item?.id}>
-          {item?.name}
-        </MenuItem>
-      );
-    });
-    return option;
-  }, [dataDevice?.data]);
-  const optionTelemetry = useMemo(() => {
-    const option = typeData?.map((item: any) => {
-      return (
-        <MenuItem value={item} key={item}>
-          {item}
-        </MenuItem>
-      );
-    });
-    return option;
-  }, [typeData]);
 
+  // Device options
+  const optionDeviceProfile = useMemo(() => {
+    return dataDevice?.data?.content?.map((item: any) => (
+      <MenuItem value={item?.id} key={item?.id}>
+        {item?.name}
+      </MenuItem>
+    ));
+  }, [dataDevice?.data]);
+
+  // Telemetry options
+  const optionTelemetry = useMemo(() => {
+    return typeData?.map((item: any) => (
+      <MenuItem value={item} key={item}>
+        {item}
+      </MenuItem>
+    ));
+  }, [typeData]);
 
   return (
     <Dialog
@@ -70,23 +66,22 @@ function AddArea(props) {
       onClose={handleClose}
       sx={{
         '& .MuiPaper-root': {
-          borderRadius: '8px',
           width: '600px',
           maxHeight: '90vh',
-          height: '800px'
-        }
+          height: '800px',
+          backgroundColor: 'var(--bg)',
+        },
       }}
     >
       <DialogTitle id="form-dialog-title">
-        {(isDraw ? 'Thêm zone mới' : t('edit'))}
+        {isDraw ? 'Thêm zone mới' : t('edit')}
       </DialogTitle>
+
       <DialogContent>
-        <RadioGroup
-          value={type}
-          onChange={handleSelectedType}
-          style={{ width: '100%' }}
-        >
+        <RadioGroup value={type} onChange={handleSelectedType} style={{ width: '100%' }}>
+          {/* ====== Form Layout ====== */}
           <Grid container spacing={2}>
+            {/* --- Zone Name --- */}
             <Grid item mobile={12}>
               <InputCustom
                 fullWidth
@@ -94,14 +89,16 @@ function AddArea(props) {
                 disabled={type === 'delete'}
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
-                label={'Tên zone'}
+                label="Tên zone"
                 inputProps={{ maxLength: 14 }}
                 isRequired
               />
             </Grid>
+
+            {/* --- Device Selector --- */}
             <Grid item mobile={12}>
               <SelectCustom
-                name='deviceId'
+                name="deviceId"
                 isRequired
                 label={deviceTranslate('devices')}
                 placeholderText={deviceTranslate('select-device')}
@@ -115,77 +112,92 @@ function AddArea(props) {
                       padding: '16px',
                       '& .MuiMenuItem-root': {
                         padding: 1,
-                        borderRadius: '6px'
-                      }
-                    }
-                  }
+                      },
+                    },
+                  },
                 }}
               />
             </Grid>
 
-          </Grid>
-          {loadingTypeData ? (
-            <Box display="flex" justifyContent="center" mt={2}>
-              <CircularProgress />
-            </Box>
-          ) : (
-            typeData && typeData?.length > 0 && (
-              <>
-                <SelectCustom
-                  name='telemetryId'
-                  isRequired
-                  label={'Telemetry'}
-                  placeholderText={'Chọn Telemetry'}
-                  children={optionTelemetry}
-                  value={valueDevice}
-                  onChange={(e) => handleSelectValue(e.target.value)}
-                  multiple={true}
-                  isSelectAll
-                  renderValue={(selected: any[]) => {
-                    return (
+            {/* --- Telemetry & Table Section --- */}
+            {loadingTypeData ? (
+              <Grid item mobile={12}>
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <CircularProgress />
+                </Box>
+              </Grid>
+            ) : (
+              typeData &&
+              typeData.length > 0 && (
+                <Grid item mobile={12}>
+                  {/* Telemetry Selector */}
+                  <SelectCustom
+                    name="telemetryId"
+                    isRequired
+                    label="Telemetry"
+                    placeholderText="Chọn Telemetry"
+                    children={optionTelemetry}
+                    value={valueDevice}
+                    onChange={(e) => handleSelectValue(e.target.value)}
+                    multiple
+                    isSelectAll
+                    renderValue={(selected: any[]) => (
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected?.map((value) => <Chip key={value.name} label={value.name} />)}
+                        {selected?.map((value) => (
+                          <Chip key={value.name} label={value.name} />
+                        ))}
                       </Box>
-                    );
-                  }}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        maxHeight: '50vh',
-                        padding: '16px',
-                        '& .MuiMenuItem-root': {
-                          padding: 1,
-                          borderRadius: '6px'
-                        }
-                      }
-                    }
-                  }}
-                />
-                {valueDevice?.length > 0 && (
-                  <TableCustom
-                    dataSource={dataSourceModalDiagram}
-                    columns={columnsModalDiagram}
-                    unfooter={false}
+                    )}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          maxHeight: '50vh',
+                          padding: '16px',
+                          '& .MuiMenuItem-root': {
+                            padding: 1,
+                            backgroundColor: 'var(--bg)',
+                          },
+                        },
+                      },
+                    }}
                   />
-                )}
-              </>
-            )
-          )}
+
+                  {/* Table under telemetry */}
+                  {valueDevice?.length > 0 && (
+                    <Box mt={2}>
+                      <TableCustom
+                        dataSource={dataSourceModalDiagram}
+                        columns={columnsModalDiagram}
+                        unfooter={false}
+                      />
+                    </Box>
+                  )}
+                </Grid>
+              )
+            )}
+          </Grid>
         </RadioGroup>
       </DialogContent>
+
+      {/* Divider */}
       <Divider
         sx={{
           borderBottom: '1px solid var(--border-color)',
-          width: '100%'
+          width: '100%',
         }}
       />
+
+      {/* Dialog Actions */}
       <DialogActions>
-        <ButtonCustom variant='outlined' onClick={handleClose} color="primary">
+        <ButtonCustom variant="outlined" onClick={handleClose} color="primary">
           {t('cancel')}
         </ButtonCustom>
-        <ButtonCustom onClick={handleSaveArea} variant='contained'
-          color='primary'
-          type='submit'>
+        <ButtonCustom
+          onClick={handleSaveArea}
+          variant="contained"
+          color="primary"
+          type="submit"
+        >
           {type === 'delete' ? t('delete') : t('save')}
         </ButtonCustom>
       </DialogActions>

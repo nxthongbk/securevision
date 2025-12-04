@@ -53,7 +53,7 @@ function EditNotification({ deviceId, telemetryId }: { deviceId: string; telemet
   return (
     <>
       <div
-        className='h-8 flex w-full  justify-center rounded items-center bg-[var(--grey-primary-80)] hover:bg-[var(--grey-primary-100)] cursor-pointer'
+        className='h-8 flex w-full  justify-center rounded items-center hover:bg-[var(--grey-primary-100)] cursor-pointer'
         onClick={handleClickOpen}
       >
         <Typography variant='button3' fontWeight={600}>
@@ -68,7 +68,8 @@ function EditNotification({ deviceId, telemetryId }: { deviceId: string; telemet
             borderRadius: '8px',
             width: '600px',
             maxHeight: '90vh',
-            height: '1000px'
+            height: '1000px',
+            backgroundColor: "#101828"
           }
         }}
       >

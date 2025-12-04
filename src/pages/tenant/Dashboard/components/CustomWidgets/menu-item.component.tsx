@@ -29,17 +29,17 @@ export function MenuItem(props: {
   };
 
   const classDiv = classNames(
-    'flex p-[10px] justify-between gap-2 items-center max-w-[228px] miniLaptop:rounded-md cursor-pointer',
+    'flex p-[10px] justify-between gap-2 items-center max-w-[228px] cursor-pointer',
     {
-      'miniLaptop:text-[#FFFFFF] miniLaptop:bg-[#007EF5] border-b-2 text-primary border-primary': active,
-      'text-[#3A3D41] hover:bg-[#D9E1E8]': !active
+      'miniLaptop:text-[#FFFFFF] miniLaptop:bg-[#007EF5] border border-[var(--border-color)] ': active,
+      'text-white hover:bg-slate-400': !active
     }
   );
 
   return (
     <div onClick={onClick} className={classDiv}>
       <div className='flex items-center justify-start gap-2'>
-        <AvatarTableRow sx={{ width: '32px', height: '32px', borderRadius: '4px !important' }} avatarUrl={img} />
+        <AvatarTableRow sx={{ width: '32px', height: '32px', borderRadius: '0px !important' }} avatarUrl={img} />
 
         <Typography className='hidden miniLaptop:block' variant='body3'>
           {title}

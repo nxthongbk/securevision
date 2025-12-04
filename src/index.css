@@ -30,7 +30,7 @@ body {
 
 /* Tùy chỉnh thanh cuộn cho WebKit (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 6px; /* Độ rộng của thanh cuộn dọc */
+  width: 0px; /* Độ rộng của thanh cuộn dọc */
   height: 6px; /* Độ cao của thanh cuộn ngang */
 }
 
@@ -132,4 +132,21 @@ select:-webkit-autofill:focus {
   top: 0;
   left: 0;
   z-index: -10;
+}
+
+@keyframes pulsate {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.7;
+    box-shadow: 0 0 10px 3px #7CD4FD;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.2);
+    opacity: 1;
+    box-shadow: 0 0 20px 8px #7CD4FD;
+  }
+}
+
+.pulsate::before {
+  animation: pulsate 1.5s infinite ease-in-out;
 }

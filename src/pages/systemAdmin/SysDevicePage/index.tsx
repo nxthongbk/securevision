@@ -200,7 +200,7 @@ export default function SysDevicePage() {
         filter={filter}
         handleResetFilter={handleResetFilter}
         disableResetFilter={checkDisableFilter}
-        title={translationCapitalFirst('devices-management', 'devicePage')}
+        // title={translationCapitalFirst('devices-management', 'devicePage')}
         btnPopup={<PopoverButton />}
       />
       {isTablet ? (

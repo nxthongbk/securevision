@@ -1,31 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CircularProgress, Grid, Typography, IconButton } from '@mui/material';
+import { CircularProgress, Grid, Typography } from '@mui/material';
 
 import EditBar from '../components/Diagram/BarDiagram/bar-diagram';
+import BabylonEditBar from '../components/Babylon/babylon-editbar'
 import Diagram from '../components/Diagram/diagram';
 import PreviewImage from '../components/Diagram/components/PreviewImage/preview-image';
+import BabylonViewer from '../components/Babylon/babylon-scene';
 import { useGetAttributesMonitoring } from '../useDashboard';
 import { useGetLatestTelemetrys } from '../../DevicePage/handleApi';
-import { SidebarSimple } from '@phosphor-icons/react';
-import { useTranslation } from 'react-i18next';
-
+import { dashboardService } from '~/services/dashboard.service';
 interface ControlMonitoringProps {
-  allDeviceInfos?: any;
-  loadingP?: boolean;
-  attributeProject?: any;
   projectName?: string;
-  assetId?: string;
-  showLiveStream?: boolean;
-  handleShowLiveStream?: () => void;
-  curCam?: any;
-  typeProject?: string;
-  listCam?: any[];
   dashboard: any;
-  isVisible: boolean;
-  setIsVisible: (visible: boolean) => void;
 }
 
-const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dashboard, isVisible, setIsVisible }) => {
+// const TEST  = "/assets/3d_model.glb";
+// const TEST_2 = "https://scity-dev.innovation.com.vn/api/storage/files/noauth/model/6b999338-f817-4024-aeb5-7dbfdbf102d0_a1863d0b.glb"
+const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dashboard }) => {
   const { data, isLoading } = dashboard && useGetAttributesMonitoring(dashboard?.id);
   const [arrArea, setArrArea] = useState<any[]>([]);
   const [isShowDiagram, setShowDiagram] = useState(true);
@@ -44,7 +35,11 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
   const [flattenedPoints, setFlattenedPoints] = useState<any>([]);
   const [selected, setSelected] = useState(false);
   const [telemetries, setTelemetries] = useState<any>();
-  const { t } = useTranslation();
+  const [modelUrl, setModelUrl] = useState<string | null>(null);
+  const [sensitivity, setSensitivity] = useState(50); // default 50
+
+
+  // Update area when data changes
   useEffect(() => {
     if (isDraw) return;
     setArrArea(data?.listArea);
@@ -53,6 +48,8 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
       setWidth(isCollapsed ? myDiagram.current.offsetWidth + 80 : myDiagram.current.offsetWidth - 80);
     }
   }, [myDiagram.current, dashboard, data]);
+
+  // Window resize listener
   useEffect(() => {
     const updateWindowDimensions = () => {
       setSize({ width: window.innerWidth, height: window.innerHeight });
@@ -61,28 +58,23 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
     return () => window.removeEventListener('resize', updateWindowDimensions);
   }, []);
 
+  // Fetch telemetry data
   const devices = data?.listArea?.map((item) => item.key);
-  const queries = useGetLatestTelemetrys({
-    entityType: 'DEVICE',
-    entityIds: devices
-  });
+  const queries = useGetLatestTelemetrys({ entityType: 'DEVICE', entityIds: devices });
   useEffect(() => {
     queries?.forEach((query) => {
-      if (query.isLoading) {
-        console.log('Loading...');
-      } else if (query.isError) {
-        console.error(query.error);
-      } else if (query.data) {
-        const data = query.data.data.data;
-        const newData = { ...telemetries, ...data };
-        // Only update state if newData is different from current telemetries
+      if (query.isLoading) return;
+      if (query.isError) console.error(query.error);
+      if (query.data) {
+        const newData = { ...telemetries, ...query.data.data.data };
         if (JSON.stringify(newData) !== JSON.stringify(telemetries)) {
           setTelemetries(newData);
         }
       }
     });
-  }, []);
+  }, [queries, telemetries]);
 
+  // Adjust diagram size
   useEffect(() => {
     if (myDiagram.current) {
       setWidth(myDiagram.current.offsetWidth);
@@ -91,6 +83,7 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
       document.body.style.overflow = 'visible';
     }
   }, [isMaximize, size]);
+
   const extendCard = () => {
     setMaximize(!isMaximize);
     const card = document.getElementById('cardDiagram');
@@ -106,36 +99,75 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
       }
     }
   };
+
+  // Window resize for engine
   useEffect(() => {
     const handleResize = () => {
-
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);
     };
-    handleResize()
+    handleResize();
     window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Construct model URL if available
+  // const modelUrl = data?.operationModel
+  //   ? `https://scity-dev.innovation.com.vn/api/storage/files/${data.operationModel}`
+  //   : null;
+
+  // Fetch Babylon model if operationModel exists
+  // useEffect(() => {
+  //   if (data?.operationModel) {
+  //     const fetchModel = async () => {
+  //       try {
+  //         const url = await dashboardService.getBabylonModel(data.operationModel);
+  //         setModelUrl(url);
+  //       } catch (err) {
+  //         console.error('❌ Failed to fetch Babylon model:', err);
+  //       }
+  //     };
+  //     fetchModel();
+  //   }
+  // }, [data?.operationModel]);
+useEffect(() => {
+
+  if (data.operationImage) {
+
+  // if (false) {
+    setPreview(data.operationImage); // image takes priority
+    setModelUrl(null);
+
+  } else if (data?.operationModel) {
+  //  } else if (true) {
+    const fetchModel = async () => {
+      try {
+        const url = await dashboardService.getBabylonModel(data.operationModel);
+        setModelUrl(url);
+        // setModelUrl(TEST_2)
+        setPreview(null);
+      } catch (err) {
+        console.error('❌ Failed to fetch Babylon model:', err);
+      }
+    };
+    fetchModel();
+  } else {
+    setPreview(null);
+    setModelUrl(null);
+  }
+}, [data?.operationImage, data?.operationModel]);
+
+
+
   return (
-    <div>
-      <div className='flex '>
-        <IconButton aria-label='close' onClick={() => setIsVisible && setIsVisible(!isVisible)}>
-          <SidebarSimple size={20} />
-        </IconButton>
-        <Typography variant='h4'>
-          <span style={{ color: 'var(--primary-500)' }}>{projectName}</span>
-        </Typography>
-      </div>
-      <div className='w-[calc(95vw-240px)] h-screen '>
-        <div className='m-4 border rounded-md'>
-          <div className='flex items-center justify-between px-4 border-b'>
-            <div>
-              <Typography variant='label1'>{t('diagram-area')}</Typography>
-            </div>
-            <div className='flex justify-end p-2'>
+    <div className="flex flex-col w-full h-auto">
+      <div className="w-[calc(95vw-240px)] flex-1">
+        <div className="m-4 border border-[var(--border-color)] bg-[var(--bg)]">
+          <div className="flex items-center justify-between px-4 border-b border-[var(--border-color)]">
+            <Typography variant="label1" className="text-white">
+              {projectName}
+            </Typography>
+            <div className="flex justify-end p-2">
               {data?.operationImage && isShowDiagram && (
                 <EditBar
                   setDraw={setDraw}
@@ -161,57 +193,89 @@ const ControlMonitoring: React.FC<ControlMonitoringProps> = ({ projectName, dash
                   extendCard={extendCard}
                 />
               )}
-            </div>
-          </div>
-          <Grid container spacing={2}>
-            <Grid item mobile={12}>
-              {data?.operationImage && isShowDiagram ? (
-                <div
-                  className='card-diagram-alone'
-                  ref={myDiagram}
-                  id='myDiagram'
-                  style={{
-                    height: isMaximize ? '100%' : window.innerHeight,
-                    width: isMaximize && '100%',
-                  }}
-                >
-                  <Diagram
-                    ImageDiagram={data?.operationImage}
-                    width={width}
-                    height={height}
-                    isDraw={isDraw}
-                    isEdit={isEdit}
-                    isDelete={isDelete}
-                    setEdit={setEdit}
-                    setDelete={setDelete}
-                    setArrMachine={setArrMachine}
-                    arrMachine={arrMachine}
-                    dataDiagram={data?.operationData}
-                    //poly
-                    dataArea={data?.listArea}
-                    points={points}
-                    setPoints={setPoints}
-                    isPolyComplete={isPolyComplete}
-                    setPolyComplete={setPolyComplete}
-                    flattenedPoints={flattenedPoints}
-                    setFlattenedPoints={setFlattenedPoints}
-                    arrArea={arrArea}
-                    setArrArea={setArrArea}
-                  />
-                </div>
-              ) : isLoading ? (
-                <div className='flex items-center justify-center w-screen h-screen'>
-                  <CircularProgress />
-                </div>
-              ) : (
-                <PreviewImage
-                  setShowDiagram={setShowDiagram}
-                  dashboard={dashboard}
-                  preview={preview}
+              {data?.operationModel && isShowDiagram && (
+                <BabylonEditBar
+                  setDraw={setDraw}
+                  setEdit={setEdit}
                   setPreview={setPreview}
+                  setShowDiagram={setShowDiagram}
+                  isEdit={isEdit}
+                  isDraw={isDraw}
+                  arrMachine={arrMachine}
+                  setArrMachine={setArrMachine}
+                  dataDiagram={data?.operationData}
+                  arrArea={arrArea}
+                  setArrArea={setArrArea}
+                  width={width}
+                  height={height}
+                  isRole={true}
+                  setPoints={setPoints}
+                  setFlattenedPoints={setFlattenedPoints}
+                  setPolyComplete={setPolyComplete}
+                  selected={selected}
+                  setSelected={setSelected}
+                  dashboard={dashboard}
+                  sensitivity={sensitivity} // 👈 Pass here
+                  setSensitivity={setSensitivity}
                 />
               )}
-            </Grid>
+            </div>
+          </div>
+
+          <Grid container spacing={2}>
+          <Grid item mobile={12}>
+  <div
+    className="card-diagram-alone flex justify-center items-center overflow-hidden relative w-full max-h-[80vh]"
+    ref={myDiagram}
+    id="myDiagram"
+    style={{ height: '75vh', width: '100%' }}
+  >
+    {modelUrl ? (
+      <BabylonViewer
+        width={width}
+        height={height}
+        editMode={isEdit || isDraw}
+        modelUrl={modelUrl}
+        sensitivity={sensitivity} // 👈 Pass here
+      />
+    ) : data?.operationImage && isShowDiagram ? (
+      <Diagram
+        ImageDiagram={preview || data?.operationImage}
+        width={width}
+        height={height}
+        isDraw={isDraw}
+        isEdit={isEdit}
+        isDelete={isDelete}
+        setEdit={setEdit}
+        setDelete={setDelete}
+        setArrMachine={setArrMachine}
+        arrMachine={arrMachine}
+        dataDiagram={data?.operationData}
+        dataArea={data?.listArea}
+        points={points}
+        setPoints={setPoints}
+        isPolyComplete={isPolyComplete}
+        setPolyComplete={setPolyComplete}
+        flattenedPoints={flattenedPoints}
+        setFlattenedPoints={setFlattenedPoints}
+        arrArea={arrArea}
+        setArrArea={setArrArea}
+      />
+    ) : isLoading ? (
+      <div className="flex items-center justify-center w-full h-[70vh]">
+        <CircularProgress />
+      </div>
+    ) : (
+      <PreviewImage
+        setShowDiagram={setShowDiagram}
+        dashboard={dashboard}
+        preview={preview}
+        setPreview={setPreview}
+      />
+    )}
+  </div>
+</Grid>
+
           </Grid>
         </div>
       </div>

@@ -45,22 +45,22 @@ const Diagram: React.FC<DiagramProps> = ({
   width,
   height,
   ImageDiagram,
-  dataDiagram,
-  isDraw,
-  isEdit,
-  arrMachine,
-  points,
-  setPoints,
-  setPolyComplete,
-  dataArea,
-  flattenedPoints,
-  selected,
-  arrArea,
-  setArrArea,
+  dataDiagram = [],
+  isDraw = false,
+  isEdit = false,
+  arrMachine = [],
+  points = [],
+  setPoints = () => {},
+  setPolyComplete = () => {},
+  dataArea = [],
+  flattenedPoints = [],
+  selected = false,
+  arrArea = [],
+  setArrArea = () => {},
   curTypeDevice,
-  isPolyComplete,
-  setFlattenedPoints,
-  setSelected
+  isPolyComplete = false,
+  setFlattenedPoints = () => {},
+  setSelected = () => {}
 }) => {
   const [selectedContextMenu, setSelectedContextMenu] = useState<any>(null);
   const [isShowMenu, setShowMenu] = useState<boolean>(false);
@@ -69,7 +69,7 @@ const Diagram: React.FC<DiagramProps> = ({
   // const [isShowMarker, setShowMarker] = useState<boolean>(false);
   const [isMouseOverPoint, setMouseOverPoint] = useState(false);
   const [positionKey, setPositionKey] = useState<any>();
-  const refImage = useRef<HTMLImageElement>(null);
+  // const refImage = useRef<HTMLImageElement>(null);
   // draw polygon
   const [arrPolygon, setArrPolygon] = useState();
   // const [arrPoint, setArrPoint] = useState();
@@ -339,14 +339,14 @@ const Diagram: React.FC<DiagramProps> = ({
           setArrArea={setArrArea}
         />
       )}
-      <img
+      {/* <img
         ref={refImage}
         width={'100%'}
         height={'100%'}
         src={ImageDiagram}
         alt='diagram-virtual'
         className='absolute top-0 left-0'
-      />
+      /> */}
     </>
   );
 };

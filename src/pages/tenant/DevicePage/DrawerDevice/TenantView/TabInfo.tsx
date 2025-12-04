@@ -1,5 +1,4 @@
 import { IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
-
 import AvatarTableRow from '~/components/AvatarTableRow';
 import DrawerUpdateDevice from '../../Drawer/DrawerUpdateDevice';
 import DrawerWrapper from '~/components/Drawer/DrawerWrapper';
@@ -13,14 +12,14 @@ import { useGetDataDeviceType } from '~/pages/systemAdmin/SysDeviceProfilePage/h
 type Data = {
   key: string;
   lable: string;
-  value: string;
+  value: string | JSX.Element;
 };
 
 export default function TabsInforDevice({ props, hasEdit }: { props: Record<string, any>; hasEdit: boolean }) {
   const translate = (text: string) => translationCapitalFirst(text, 'devicePage');
   const { dataDeviceTypeR } = useGetDataDeviceType({ keyword: '', page: 0, size: 1000 });
 
-  const { code, id, deviceProfile, status, locationInfo, alarmStatus } = props;
+  const { code, id, deviceProfile, status, alarmStatus, locationInfo } = props;
 
   const data: Data[] = [
     { key: 'status', lable: translate('status'), value: <StatusChip status={alarmStatus} /> },
@@ -32,14 +31,11 @@ export default function TabsInforDevice({ props, hasEdit }: { props: Record<stri
     {
       key: 'type',
       lable: translate('device-type'),
-      value: (dataDeviceTypeR?.data?.content || []).find((type) => type.id === deviceProfile?.typeId)?.label || ''
+      value:
+        (dataDeviceTypeR?.data?.content || []).find((type) => type.id === deviceProfile?.typeId)?.label || ''
     },
     { key: 'waitingTime', lable: translate('time-waiting'), value: deviceProfile?.signalWaitingTime / 60000 + ' phút' },
-    {
-      key: 'description',
-      lable: translate('description'),
-      value: deviceProfile?.description
-    }
+    { key: 'description', lable: translate('description'), value: deviceProfile?.description }
   ];
 
   const theme = useTheme();
@@ -47,6 +43,7 @@ export default function TabsInforDevice({ props, hasEdit }: { props: Record<stri
 
   return (
     <div className='w-full flex flex-col justify-start'>
+      {/* Top Avatar + Edit Button */}
       <div className='h-[132px] flex justify-between items-start'>
         <AvatarTableRow avatarUrl={deviceProfile?.imageUrl} sx={{ width: '120px', height: '120px' }} />
         {isTablet ? (
@@ -64,17 +61,26 @@ export default function TabsInforDevice({ props, hasEdit }: { props: Record<stri
           <div className='flex justify-end items-center gap-4'>{hasEdit && <PopupEdit props={props} />}</div>
         )}
       </div>
+
+      {/* Table rows */}
       {data?.map((item: Data, idx: number) => {
+        const bgColor = idx % 2 === 0 ? '#031f2f' : '#031523'; // alternate row colors
+
         return (
           <div
             key={idx}
-            className={`w-full flex justify-start items-start py-3 px-4 rounded-md ${idx % 2 === 0 ? ' bg-[var(--grey-primary-60)]' : ''}`}
+            className='w-full flex justify-start items-start py-3 px-4 border'
+            style={{ backgroundColor: bgColor, borderColor: 'var(--border)'}}
           >
             <div className='w-[30%]'>
-              <Typography variant='label2'>{item.lable}</Typography>
+              <Typography variant='label2' color='var(--text-primary)'>
+                {item.lable}
+              </Typography>
             </div>
             <div className='w-[70%] flex justify-start items-center'>
-              <Typography variant='body2'>{item.value}</Typography>
+              <Typography variant='body2' color='var(--text-primary)'>
+                {item.value}
+              </Typography>
             </div>
           </div>
         );

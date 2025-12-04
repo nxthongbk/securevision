@@ -1,0 +1,22 @@
+@keyframes torchLight {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+.subheader-torch {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    rgba(200, 255, 255, 0.1) 0%,    
+    rgba(200, 255, 255, 0.3) 25%,   
+    rgba(255, 255, 255, 1) 50%,     
+    rgba(200, 255, 255, 0.3) 75%,   
+    rgba(200, 255, 255, 0.1) 100%   
+  );
+  background-size: 200% 100%;       
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  animation: torchLight 3s linear infinite alternate; 
+}

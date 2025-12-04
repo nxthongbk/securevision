@@ -32,7 +32,7 @@ export default function DropDownActionTable(props: PropsDropdown) {
 
   return (
     <>
-      <div className='h-8  w-fit justify-center rounded items-center bg-[var(--grey-primary-80)] hover:bg-[var(--grey-primary-100)] hidden miniLaptop:flex'>
+      <div className='h-8 w-fit justify-center rounded items-center hover:bg-[var(--grey-primary-100)] hidden miniLaptop:flex text-[#00BCFF]'>
 
         <div className='px-3 cursor-pointer'>{mainBtn}</div>
         {showMenuOptions && <Divider orientation='vertical' variant='middle' flexItem />}

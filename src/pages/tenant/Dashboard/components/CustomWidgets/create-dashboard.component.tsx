@@ -81,8 +81,8 @@ const CreateDashboard: React.FC<CreateDashboardProps> = ({ tenantCode }) => {
     }
   });
   const createDashboardSchema = yup.object({
-    title: yup.string().required(t('title')),
-    locationId: yup.string().required()
+    title: yup.string().required(t('select-title')),
+    locationId: yup.string().required(t('devicePage.select-location'))
   });
   const {
     control,
@@ -211,7 +211,11 @@ const CreateDashboard: React.FC<CreateDashboardProps> = ({ tenantCode }) => {
                 isError={!!errors.title}
                 helperText={errors?.title?.message}
               />
-              <SelectLocation control={control} disabled={false} />
+              <SelectLocation 
+              control={control} 
+              disabled={false} 
+              isError={!!errors.locationId} 
+              helperText={errors?.locationId?.message} />
             </div>
           </div>
         );
@@ -219,7 +223,7 @@ const CreateDashboard: React.FC<CreateDashboardProps> = ({ tenantCode }) => {
       default:
         return <div>Unknown step</div>;
     }
-  }, [activeStep, selectedTemplate]);
+  }, [activeStep, selectedTemplate, errors]);
   return (
     <>
       <Button
@@ -240,9 +244,10 @@ const CreateDashboard: React.FC<CreateDashboardProps> = ({ tenantCode }) => {
             borderRadius: '8px',
             width: '600px',
             maxHeight: '90vh',
-            height: '800px'
+            height: '800px',
+            backgroundColor: 'var(--bg)'
           }
-        }}
+        }}  
       >
         <Box className='flex justify-between items-center p-4 h-[56px]'>
           <Typography color='var(--text-primary)' variant='h6'>

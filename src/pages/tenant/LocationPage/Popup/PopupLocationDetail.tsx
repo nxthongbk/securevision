@@ -79,7 +79,7 @@ export default function PopupLocationDetail({
 
     return (
       <div
-        className={`flex w-full px-[12px] py-[12px] ${order % 2 === 0 ? ' bg-[var(--grey-primary-60)] rounded-md' : ''}`}
+        className={`flex w-full px-[12px] py-[12px] ${order % 2 === 0 ? ' bg-[#031f2f]' : 'bg-[#031523]'}`}
       >
         <Typography variant='label3' className='w-[28%]'>
           {label}
