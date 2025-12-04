@@ -1,5 +1,6 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
-import { useContext, useEffect, useRef, useState, useMemo } from 'react';
+import { useContext, useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import JSMpegPlayer from '../../Frigate/JSMpegPlayer';
 
 import { AppContext } from '~/contexts/app.context';
 import { ArrowsOut } from '@phosphor-icons/react';
@@ -8,14 +9,15 @@ import CarouselCustom from '~/components/Carousel';
 import CommonInfoLocation from '../../CommonInfoLocation';
 import DialogCustom from '~/components/DialogCustom';
 import DrawerViewDetails from '~/components/Drawer/DrawerViewDetails';
-import Hls from 'hls.js';
+
 import PopupSkipAlarm from '~/pages/tenant/AlarmPage/Popup/PopupSkipAlarm';
 import PopupVerifyAlarm from '~/pages/tenant/AlarmPage/Popup/PopupVerifyAlarm';
 import SockJS from 'sockjs-client';
 import StatusChip from '~/components/StatusChip';
 import Stomp from 'stompjs';
 import dayjs from 'dayjs';
-import locationService from '~/services/location.service';
+import deviceService from '~/services/device.service';
+
 import { useGetAlarmLocationInfo } from '../../../handleApi';
 import { useGetLocationDetail } from '~/pages/tenant/LocationPage/handleApi';
 import { useQueryClient } from '@tanstack/react-query';
@@ -24,7 +26,6 @@ import { useTranslation } from 'react-i18next';
 import { useGetDashboards } from '../../../handleApi';
 import { MenuItem } from '../../../../Dashboard/components/CustomWidgets/menu-item.component';
 import { useNavigate } from 'react-router-dom';
-
 
 // import { ArrowsOut } from '@phosphor-icons/react';
 
@@ -46,21 +47,24 @@ export default function AlertPopup() {
   const [cameraList, setCameraList] = useState([]);
   const { tenantCode } = useTenantCode();
   const timeoutId = useRef<NodeJS.Timeout>();
-  const socket = new SockJS(SOCKET_URL);
+  const socket = useRef(new SockJS(SOCKET_URL));
   const navigate = useNavigate();
-  
 
   const { status, data } = useGetAlarmLocationInfo(openAlertPopup?.id, tenantCode);
   const { data: detail } = useGetLocationDetail(openAlertPopup?.id, tenantCode);
   // Fetch dashboards (React Query)
   const { data: dashboardsData } = useGetDashboards(detail?.data?.id, tenantCode);
-  const dashboards = useMemo(() => dashboardsData?.data || [], [dashboardsData]);  
+  const dashboards = useMemo(() => dashboardsData?.data || [], [dashboardsData]);
+
+  const invalidateQueries = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['getAlarmLocationInfo'] });
+  }, [queryClient]);
 
   useEffect(() => {
     if (openAlertPopup) {
       const topic = '/topic/' + openAlertPopup?.id;
       const connectHeaders = {};
-      let stompClient = Stomp.over(socket);
+      let stompClient = Stomp.over(socket.current);
 
       if (!stompClient.connected) {
         stompClient.connect(connectHeaders, () => {
@@ -68,7 +72,7 @@ export default function AlertPopup() {
             const body = JSON.parse(message.body);
             if (body.hasNewAlarm) {
               timeoutId.current = setTimeout(() => {
-                queryClient.invalidateQueries({ queryKey: ['getAlarmLocationInfo'] });
+                invalidateQueries();
               }, 1200);
             }
           });
@@ -84,7 +88,7 @@ export default function AlertPopup() {
         }
       };
     }
-  }, [openAlertPopup]);
+  }, [openAlertPopup, invalidateQueries]);
   useEffect(() => {
     if (detail) {
       setCameraList(detail?.data?.cameraList);
@@ -157,214 +161,203 @@ export default function AlertPopup() {
             </ButtonCustom>
           </Box>
         </Box>
-
       </>
     );
   };
 
   const renderDeviceAlarmPanel = (alarm) => {
     return (
-    <Grid>
-      <div className='flex flex-col w-80 text-white'>
-        <div className='flex w-full px-4 py-3'>
-          <Typography variant='label2' className='w-[40%]'>
-            {t('alarm-page.status')}
-          </Typography>
-          <Typography variant='body2' className='flex-1'>
-            <StatusChip status={alarm?.status} />
-          </Typography>
-        </div>
+      <Grid>
+        <div className='flex flex-col w-80 text-white'>
+          <div className='flex w-full px-4 py-3'>
+            <Typography variant='label2' className='w-[40%]'>
+              {t('alarm-page.status')}
+            </Typography>
+            <Typography variant='body2' className='flex-1'>
+              <StatusChip status={alarm?.status} />
+            </Typography>
+          </div>
 
-      
-        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
-          <Typography variant='label2' className='w-[40%]'>
-            {t('devicePage.name')}
-          </Typography>
-          <Typography variant='body2' className='flex-1'>
-            {alarm.deviceInfo?.name || '-'}
-          </Typography>
-        </div>
+          <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
+            <Typography variant='label2' className='w-[40%]'>
+              {t('devicePage.name')}
+            </Typography>
+            <Typography variant='body2' className='flex-1'>
+              {alarm.deviceInfo?.name || '-'}
+            </Typography>
+          </div>
 
-        <div className='flex w-full px-4 py-3 '>
-          <Typography variant='label2' className='w-[40%]'>
-            {t('devicePage.detail')}
-          </Typography>
-          <Typography variant='body2' className='flex-1 break-words'>
-            {alarm?.detail || '-'}
-          </Typography>
-        </div>
+          <div className='flex w-full px-4 py-3 '>
+            <Typography variant='label2' className='w-[40%]'>
+              {t('devicePage.detail')}
+            </Typography>
+            <Typography variant='body2' className='flex-1 break-words'>
+              {alarm?.detail || '-'}
+            </Typography>
+          </div>
 
-        <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
-          <Typography variant='label2' className='w-[40%]'>
-            {t('devicePage.start-time')}
-          </Typography>
-          <Typography variant='body2' className='flex-1'>
-            {alarm?.createdAlarmBy ? dayjs(alarm?.createdAlarmBy.date).format('HH:mm DD/MM') : '-'}
-          </Typography>
-        </div>
+          <div className='flex w-full px-4 py-3 bg-[#00BCFF12]'>
+            <Typography variant='label2' className='w-[40%]'>
+              {t('devicePage.start-time')}
+            </Typography>
+            <Typography variant='body2' className='flex-1'>
+              {alarm?.createdAlarmBy ? dayjs(alarm?.createdAlarmBy.date).format('HH:mm DD/MM') : '-'}
+            </Typography>
+          </div>
 
-        <div className='flex w-full px-4 py-3'>
-          <Typography variant='label2' className='w-[40%]'>
-            {t('devicePage.update-time')}
-          </Typography>
-          <Typography variant='body2' className='flex-1'>
-            {alarm?.updatedAlarmBy ? dayjs(alarm?.updatedAlarmBy.date).format('HH:mm DD/MM') : '-'}
-          </Typography>
+          <div className='flex w-full px-4 py-3'>
+            <Typography variant='label2' className='w-[40%]'>
+              {t('devicePage.update-time')}
+            </Typography>
+            <Typography variant='body2' className='flex-1'>
+              {alarm?.updatedAlarmBy ? dayjs(alarm?.updatedAlarmBy.date).format('HH:mm DD/MM') : '-'}
+            </Typography>
+          </div>
         </div>
-      </div>
-    </Grid>
-
+      </Grid>
     );
   };
 
-  
   const renderVideoSection = () => {
+    const BASE_URL = 'wss://cloud.innovation.com.vn/live/jsmpeg/';
+
     if (alarms.length === 0) {
       return (
-        <Typography variant="body2" className="text-[var(--text-secondary)]">
+        <Typography variant='body2' className='text-[var(--text-secondary)]'>
           No alarms found
         </Typography>
       );
     }
 
-    const alarm = alarms[0]; // Take the first alarm for simplicity
-    const alarmDateTime = alarm?.createdAlarmBy?.date;
+    const alarm = alarms[0];
+    const deviceInfo = alarm?.alarms?.[0]?.deviceInfo;
 
-    // Get device ID from the first device in the alarm
-    const deviceId = alarm?.alarms?.[0]?.deviceInfo?.id;
-
-    if (!alarmDateTime || !deviceId) {
+    if (!deviceInfo) {
       return (
-        <Typography variant="body2" className="text-[var(--text-secondary)]">
-          Missing alarm date or device ID
+        <Typography variant='body2' className='text-[var(--text-secondary)]'>
+          No device information available
         </Typography>
       );
     }
 
-    const formattedDate = dayjs(alarmDateTime).format('YYYY-MM-DD_HH:mm:ss');
-    const videoUrl = `https://scity-dev.innovation.com.vn/api/media/get_video?alarm_time=${formattedDate}&camera=camera-${deviceId}`;
-
-    console.log('Generated video URL:', videoUrl);
+    // Use device name for WebSocket stream
+    const deviceName = deviceInfo.deviceName || deviceInfo.name;
+    const wsUrl = deviceName ? `${BASE_URL}${deviceName}` : null;
 
     return (
-      <div className="h-[253px] relative border border-gray-700 overflow-hidden">
-        <div className="w-full h-full bg-black flex items-center justify-center">
-          <video className="w-full h-full" controls autoPlay loop>
-            <source src={videoUrl} type="video/mp4"/>
-            Your browser does not support the video tag.
-          </video>
-        </div>
+      <div className='h-[253px] relative border border-gray-700 overflow-hidden'>
+        {wsUrl ? (
+          <JSMpegPlayer url={wsUrl} />
+        ) : (
+          <div className='w-full h-full bg-black flex items-center justify-center'>
+            <Typography variant='body2' className='text-white'>
+              No video stream available
+            </Typography>
+          </div>
+        )}
       </div>
     );
   };
-
 
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down('tablet'));
   const title = alarmTranslate('location-information');
 
   const renderBody = () => (
-  <div className="flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6">
-
-    {/* Top row */}
-    <div className="tablet:grid grid-cols-2 gap-6 tablet:gap-12">
-      <div className="bg-[#161B29] p-3">
-        <CommonInfoLocation
-          info={
-            status === 'error'
-              ? { ...openAlertPopup, status: 'CONFIRM' }
-              : openAlertPopup
-          }
-        />
-      </div>
-
-      <div className="bg-[#0D1117]">
-        {/* Full-width red header */}
-        <div className="bg-[#FF6467] w-full py-3">
-          <Typography variant="label1" className="text-white px-3 py-2">
-            {t('alarm-page.warning')}
-          </Typography>
+    <div className='flex flex-col gap-6 p-0 tablet:px-4 tablet:py-6'>
+      {/* Top row */}
+      <div className='tablet:grid grid-cols-2 gap-6 tablet:gap-12'>
+        <div className='bg-[#161B29] p-3'>
+          <CommonInfoLocation info={status === 'error' ? { ...openAlertPopup, status: 'CONFIRM' } : openAlertPopup} />
         </div>
 
-        {/* Content section with padding */}
-        <div className="p-3 flex flex-col gap-4">
-          {alarms.map((alarm) => (
-            <Box className="border border-white" key={alarm.id}>
-              {renderAlarmPanel(alarm)}
-            </Box>
-          ))}
+        <div className='bg-[#0D1117]'>
+          {/* Full-width red header */}
+          <div className='bg-[#FF6467] w-full py-3'>
+            <Typography variant='label1' className='text-white px-3 py-2'>
+              {t('alarm-page.warning')}
+            </Typography>
+          </div>
+
+          {/* Content section with padding */}
+          <div className='p-3 flex flex-col gap-4'>
+            {alarms.map((alarm) => (
+              <Box className='border border-white' key={alarm.id}>
+                {renderAlarmPanel(alarm)}
+              </Box>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  
-    {/* Video panel row (full width) */}
-    <div className="bg-[#0D1117] p-3">
-      <Typography variant="label1" className="text-white mb-2">
-        Alarm Video
-      </Typography>
-      {renderVideoSection()}
-    </div>
 
-    {/* Device panel row (full width) */}
-    <div className="bg-[#0D1117] p-3">
-    {alarms.some((alarm) => alarm.alarms?.length > 0) && (
-      <div className="flex flex-col gap-3 ">
-        <Typography variant="label1" className='text-white'>Devices</Typography>
-        <CarouselCustom>
-          {alarms.flatMap((alarm) =>
-            alarm.alarms.map((device) => (
-              <div key={device.id} className="mx-2">
-                {renderDeviceAlarmPanel(device)}
-              </div>
-            ))
-          )}
-        </CarouselCustom>
+      {/* Video panel row (full width) */}
+      <div className='bg-[#0D1117] p-3'>
+        <Typography variant='label1' className='text-white mb-2'>
+          Alarm Video
+        </Typography>
+        {renderVideoSection()}
       </div>
-    )}
-    </div>
 
-    {/* Dashboard row (full width) */}
-    <div className="flex flex-col gap-3 bg-[#161B29] p-3">
-      <Typography variant="label1" className="text-white">
-        Dashboard
-      </Typography>
-      <div className="overflow-y-auto max-h-56 flex flex-col gap-1">
-        {dashboards.length > 0 ? (
-          dashboards.map((item) => (
-            <MenuItem
-              key={item.id}
-              title={item.name}
-              img={item.imageUrl}
-              onClick={() => navigate(`/dashboard/${item.id}`)}
-              tenantCode={tenantCode}
-              data={item}
-            />
-          ))
-        ) : (
-          <Typography variant="body2" className="text-[var(--text-primary)]">
-            No dashboards
-          </Typography>
+      {/* Device panel row (full width) */}
+      <div className='bg-[#0D1117] p-3'>
+        {alarms.some((alarm) => alarm.alarms?.length > 0) && (
+          <div className='flex flex-col gap-3 '>
+            <Typography variant='label1' className='text-white'>
+              Devices
+            </Typography>
+            <CarouselCustom>
+              {alarms.flatMap((alarm) =>
+                alarm.alarms.map((device) => (
+                  <div key={device.id} className='mx-2'>
+                    {renderDeviceAlarmPanel(device)}
+                  </div>
+                ))
+              )}
+            </CarouselCustom>
+          </div>
         )}
       </div>
-    </div>
 
-    {/* Camera row (full width) */}
-    {cameraList?.length > 0 && (
-      <div className="flex flex-col gap-3 bg-[#0D1117] p-3">
-        <Typography variant="label1">Camera</Typography>
-        <CarouselCustom>
-          {cameraList.map((deviceInfo, index) => (
-            <div key={index} className="mx-2">
-              <CameraDetail deviceInfo={deviceInfo} />
-            </div>
-          ))}
-        </CarouselCustom>
+      {/* Dashboard row (full width) */}
+      <div className='flex flex-col gap-3 bg-[#161B29] p-3'>
+        <Typography variant='label1' className='text-white'>
+          Dashboard
+        </Typography>
+        <div className='overflow-y-auto max-h-56 flex flex-col gap-1'>
+          {dashboards.length > 0 ? (
+            dashboards.map((item) => (
+              <MenuItem
+                key={item.id}
+                title={item.name}
+                img={item.imageUrl}
+                onClick={() => navigate(`/dashboard/${item.id}`)}
+                tenantCode={tenantCode}
+                data={item}
+              />
+            ))
+          ) : (
+            <Typography variant='body2' className='text-[var(--text-primary)]'>
+              No dashboards
+            </Typography>
+          )}
+        </div>
       </div>
-    )}
-  </div>
-);
 
-
+      {/* Camera row (full width) */}
+      {cameraList?.length > 0 && (
+        <div className='flex flex-col gap-3 bg-[#0D1117] p-3'>
+          <Typography variant='label1'>Camera</Typography>
+          <CarouselCustom>
+            {cameraList.map((deviceInfo, index) => (
+              <div key={index} className='mx-2'>
+                <CameraDetail deviceInfo={deviceInfo} />
+              </div>
+            ))}
+          </CarouselCustom>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -403,28 +396,17 @@ export default function AlertPopup() {
 
 export function CameraDetail({ deviceInfo }) {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-  const [cameraInfo, setCameraInfo] = useState(null);
-  const videoRef = useRef(null);
+  const [deviceData, setDeviceData] = useState<any>(null);
+  const BASE_URL = 'wss://cloud.innovation.com.vn/live/jsmpeg/';
+
   useEffect(() => {
-    locationService.getCamera(deviceInfo.id).then((res) => {
-      setCameraInfo(res?.data?.result.data);
-    });
-  }, [deviceInfo]);
-  useEffect(() => {
-    if (cameraInfo?.streams && cameraInfo && Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(cameraInfo?.streams[2].hls);
-      hls.attachMedia(videoRef.current);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        videoRef.current.play();
-      });
-    } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-      videoRef.current.src = cameraInfo?.streams[2].hls;
-      videoRef.current.addEventListener('loadedmetadata', () => {
-        videoRef.current.play();
+    // Fetch device details
+    if (deviceInfo.id) {
+      deviceService.getDeviceById(deviceInfo.id).then((res) => {
+        setDeviceData(res?.data?.data);
       });
     }
-  }, [cameraInfo]);
+  }, [deviceInfo]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -433,10 +415,16 @@ export function CameraDetail({ deviceInfo }) {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Try to get WebSocket stream URL - check device data first, then fallback to deviceInfo
+  const deviceName = deviceData?.deviceName || deviceData?.name || deviceInfo.deviceName || deviceInfo.name;
+  const wsUrl = deviceName ? `${BASE_URL}${deviceName}` : null;
+
   const toggleFullscreen = () => {
-    if (videoRef.current) {
+    const container = document.querySelector('.camera-container');
+    if (container) {
       if (!document.fullscreenElement) {
-        videoRef.current.requestFullscreen().catch((err) => {
+        container.requestFullscreen().catch((err) => {
           console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
         });
       } else {
@@ -444,16 +432,25 @@ export function CameraDetail({ deviceInfo }) {
       }
     }
   };
+
   return (
-    <div className=' h-[253px] relative'>
-      <div className='w-full h-full bg-black '>
-        <video ref={videoRef} className='w-full h-full ' />
+    <div className='h-[253px] relative camera-container'>
+      <div className='w-full h-full bg-black'>
+        {wsUrl ? (
+          <JSMpegPlayer url={wsUrl} />
+        ) : (
+          <div className='w-full h-full flex items-center justify-center'>
+            <Typography variant='body2' className='text-white'>
+              No camera stream available
+            </Typography>
+          </div>
+        )}
       </div>
       <div className='bg-[rgba(0,_0,_0,_0.5)] rounded-b-xl px-2 py-1 absolute w-full bottom-0 flex justify-between'>
         <div className='flex items-center gap-2'>
           <div className='w-2 h-2 rounded-full bg-[var(--red-400)]' />
           <Typography variant='label3' color='white'>
-            {deviceInfo.name}
+            {deviceData?.name || deviceInfo.name}
           </Typography>
         </div>
         <div className='flex gap-[10px] items-center'>

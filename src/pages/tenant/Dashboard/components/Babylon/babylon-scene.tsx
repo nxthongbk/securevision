@@ -18,13 +18,7 @@ interface BabylonViewerProps {
   sensitivity?: number; // user slider (0–100)
 }
 
-const BabylonViewer: React.FC<BabylonViewerProps> = ({
-  width,
-  height,
-  editMode,
-  modelUrl,
-  sensitivity = 50
-}) => {
+const BabylonViewer: React.FC<BabylonViewerProps> = ({ width, height, editMode, modelUrl, sensitivity = 50 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -35,14 +29,7 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({
     const scene = new Scene(engine);
 
     // ✅ ArcRotateCamera
-    const camera = new ArcRotateCamera(
-      "camera",
-      Math.PI / 2,
-      Math.PI / 3,
-      10,
-      new Vector3(0, 0, 0),
-      scene
-    );
+    const camera = new ArcRotateCamera('camera', Math.PI / 2, Math.PI / 3, 10, new Vector3(0, 0, 0), scene);
 
     camera.minZ = 0.1;
     camera.maxZ = 10000000;
@@ -58,24 +45,24 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({
     // Higher sensitivityFactor → faster controls
     camera.angularSensibilityX = 2000 / sensitivityFactor; // rotate X
     camera.angularSensibilityY = 2000 / sensitivityFactor; // rotate Y
-    camera.panningSensibility = 50 / sensitivityFactor;  // pan (right-click)
-    camera.wheelPrecision = 10 / sensitivityFactor;        // zoom (scroll)
+    camera.panningSensibility = 50 / sensitivityFactor; // pan (right-click)
+    camera.wheelPrecision = 10 / sensitivityFactor; // zoom (scroll)
 
     // ✅ Add light
-    new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+    new HemisphericLight('light', new Vector3(0, 1, 0), scene);
 
     // ✅ Load model if provided
     if (modelUrl) {
       SceneLoader.Append(
-        "",
+        '',
         modelUrl,
         scene,
-        () => console.log("✅ Model loaded successfully"),
+        () => console.log('✅ Model loaded successfully'),
         null,
         (scene, message, exception) => {
-          console.error("❌ Error loading model:", message, exception, scene);
+          console.error('❌ Error loading model:', message, exception, scene);
         },
-        ".glb"
+        '.glb'
       );
     }
 
@@ -85,8 +72,8 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({
       if (pointerInfo.type === PointerEventTypes.POINTERPICK) {
         const pickResult = pointerInfo.pickInfo;
         if (pickResult?.hit && pickResult.pickedPoint) {
-          const marker = MeshBuilder.CreateBox("marker", { size: 10 }, scene);
-          const mat = new StandardMaterial("markerMat", scene);
+          const marker = MeshBuilder.CreateBox('marker', { size: 10 }, scene);
+          const mat = new StandardMaterial('markerMat', scene);
           mat.diffuseColor = new Color3(1, 0, 0);
           marker.material = mat;
           marker.position.copyFrom(pickResult.pickedPoint);
@@ -99,11 +86,11 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({
 
     // ✅ Handle resize
     const handleResize = () => engine.resize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     // ✅ Cleanup
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
       if (pointerObserver) scene.onPointerObservable.remove(pointerObserver);
       if (!scene.isDisposed) scene.dispose();
       if (!engine.isDisposed) engine.dispose();
@@ -114,9 +101,9 @@ const BabylonViewer: React.FC<BabylonViewerProps> = ({
     <canvas
       ref={canvasRef}
       style={{
-        width: "100%",
-        height: "100%",
-        display: "block",
+        width: '100%',
+        height: '100%',
+        display: 'block'
       }}
     />
   );

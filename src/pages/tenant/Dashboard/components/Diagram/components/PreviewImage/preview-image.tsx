@@ -53,7 +53,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
       queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
       resetState();
     },
-    onError: (err) => console.error('❌ [3D Upload Error]', err),
+    onError: (err) => console.error('❌ [3D Upload Error]', err)
   });
 
   // Reset state helper
@@ -113,7 +113,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
     try {
       if (is3DModel) {
         await uploadBabylonAttribute.mutateAsync(selectedFile, {
-          onError: (err) => console.warn('❌ 3D upload returned error', err),
+          onError: (err) => console.warn('❌ 3D upload returned error', err)
         });
       } else {
         const base64 = await fileToBase64(selectedFile);
@@ -125,7 +125,7 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
         }
 
         await dashboardService.saveEntityAttributes(tenantCode, dashboard?.id, {
-          operationImage: base64,
+          operationImage: base64
         });
         queryClient.invalidateQueries({ queryKey: ['getAttributesMonitoring'] });
       }
@@ -149,8 +149,8 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
   };
 
   return (
-    <Box className="imageUploadContainer">
-      <Box className="previewWrapper">
+    <Box className='imageUploadContainer'>
+      <Box className='previewWrapper'>
         {preview ? (
           <>
             {is3DModel ? (
@@ -158,16 +158,16 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
                 <BabylonViewer width={800} height={400} editMode={false} modelUrl={preview} />
               </Box>
             ) : (
-              <img className="preview" alt="diagram" src={preview} onClick={handleMenuOpen} />
+              <img className='preview' alt='diagram' src={preview} onClick={handleMenuOpen} />
             )}
 
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
-              <Button variant="outlined" onClick={handleCancel} disabled={isSaving}>
+              <Button variant='outlined' onClick={handleCancel} disabled={isSaving}>
                 {t('cancel')}
               </Button>
 
               <Button
-                variant="contained"
+                variant='contained'
                 onClick={handleSave}
                 disabled={isSaving || uploadBabylonAttribute.isPending}
                 sx={{ minWidth: 120 }}
@@ -176,14 +176,12 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
                   <>
                     <CircularProgress
                       size={20}
-                      variant="determinate"
+                      variant='determinate'
                       value={uploadProgress}
-                      color="inherit"
+                      color='inherit'
                       sx={{ mr: 1 }}
                     />
-                    {uploadProgress < 100
-                      ? `${Math.round(uploadProgress)}%`
-                      : t('saving') || 'Saving...'}
+                    {uploadProgress < 100 ? `${Math.round(uploadProgress)}%` : t('saving') || 'Saving...'}
                   </>
                 ) : (
                   t('save')
@@ -199,10 +197,10 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                cursor: 'pointer',
+                cursor: 'pointer'
               }}
             >
-              <Image className="preview" width={150} />
+              <Image className='preview' width={150} />
               <Typography sx={{ textAlign: 'center', mt: 2 }}>{t('upload-file')}</Typography>
             </Box>
 
@@ -214,25 +212,25 @@ const PreviewImage = ({ preview, setPreview, setShowDiagram, dashboard }: Previe
               transformOrigin={{ vertical: 'top', horizontal: 'center' }}
             >
               <MenuItem onClick={handleUploadImageClick}>
-                <ImageIcon size={20} className="mr-2" /> {t('upload image')}
+                <ImageIcon size={20} className='mr-2' /> {t('upload image')}
               </MenuItem>
               <MenuItem onClick={handleUploadModelClick}>
-                <Cube size={20} className="mr-2" /> {t('upload 3D model')}
+                <Cube size={20} className='mr-2' /> {t('upload 3D model')}
               </MenuItem>
             </Menu>
 
             <input
-              type="file"
+              type='file'
               style={{ display: 'none' }}
               ref={imageInputRef}
-              accept="image/*,application/pdf"
+              accept='image/*,application/pdf'
               onChange={handleImageChange}
             />
             <input
-              type="file"
+              type='file'
               style={{ display: 'none' }}
               ref={modelInputRef}
-              accept=".glb,.gltf,.obj,.stl"
+              accept='.glb,.gltf,.obj,.stl'
               onChange={handleModelChange}
             />
           </>

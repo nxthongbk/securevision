@@ -62,21 +62,21 @@ const LocationLog = (props: LocationLogProps) => {
 
   const getBatteryIcon = (percentage: number) => {
     const color = getColor(percentage, 'battery');
-    if (percentage <= 20) return <BatteryLow size={24} weight="bold" color={color} />;
-    if (percentage <= 80) return <BatteryMedium size={24} weight="bold" color={color} />;
-    return <BatteryFull size={24} weight="bold" color={color} />;
+    if (percentage <= 20) return <BatteryLow size={24} weight='bold' color={color} />;
+    if (percentage <= 80) return <BatteryMedium size={24} weight='bold' color={color} />;
+    return <BatteryFull size={24} weight='bold' color={color} />;
   };
 
   const getWifiIcon = (signalStrength: number) => {
     const color = getColor(signalStrength, 'wifi');
-    if (signalStrength <= 15) return <WifiLow size={24} weight="bold" color={color} />;
-    if (signalStrength <= 25) return <WifiMedium size={24} weight="bold" color={color} />;
-    return <WifiHigh size={24} weight="bold" color={color} />;
+    if (signalStrength <= 15) return <WifiLow size={24} weight='bold' color={color} />;
+    if (signalStrength <= 25) return <WifiMedium size={24} weight='bold' color={color} />;
+    return <WifiHigh size={24} weight='bold' color={color} />;
   };
 
   const powerIcon = (value: boolean) => {
     const color = value ? '#46ECD5' : '#B61B00';
-    return <Plug size={24} weight="bold" color={color} />;
+    return <Plug size={24} weight='bold' color={color} />;
   };
 
   // Public folder URLs
@@ -97,7 +97,7 @@ const LocationLog = (props: LocationLogProps) => {
 
     return (
       <div
-        className="flex flex-col gap-1 my-2 w-full flex-none"
+        className='flex flex-col gap-1 my-2 w-full flex-none'
         style={{
           height: '178px',
           backgroundImage: `url(${LogCardSvg})`,
@@ -107,42 +107,38 @@ const LocationLog = (props: LocationLogProps) => {
         }}
       >
         {/* Header */}
-        <div className="flex flex-col px-2 gap-1">
-          <h4 className="text-lg font-semibold text-[#74D4FF] truncate">{locationName}</h4>
-          <p className="text-xs font-medium text-[#74D4FF] truncate">Device ID</p>
-          <p className="text-sm text-white truncate">{deviceId}</p>
-          <p className="text-xs font-medium text-[#74D4FF] truncate">Last Updated</p>
-          <p className="text-sm text-white truncate">{timestamp}</p>
+        <div className='flex flex-col px-2 gap-1'>
+          <h4 className='text-lg font-semibold text-[#74D4FF] truncate'>{locationName}</h4>
+          <p className='text-xs font-medium text-[#74D4FF] truncate'>Device ID</p>
+          <p className='text-sm text-white truncate'>{deviceId}</p>
+          <p className='text-xs font-medium text-[#74D4FF] truncate'>Last Updated</p>
+          <p className='text-sm text-white truncate'>{timestamp}</p>
         </div>
 
         {/* Device info */}
-        <div className="flex flex-row justify-around -gap-x-2 flex-none -mt-2">
+        <div className='flex flex-row justify-around -gap-x-2 flex-none -mt-2'>
           {/* WiFi */}
           <div
-            className="flex items-center justify-center gap-2 p-3 flex-none"
+            className='flex items-center justify-center gap-2 p-3 flex-none'
             style={{
               width: '80px',
               height: '80px',
               backgroundImage: `url(${
-                fa_signal?.value <= 15
-                  ? WifiLowIcon
-                  : fa_signal?.value <= 25
-                  ? WifiMedIcon
-                  : WifiHighIcon
+                fa_signal?.value <= 15 ? WifiLowIcon : fa_signal?.value <= 25 ? WifiMedIcon : WifiHighIcon
               })`,
               backgroundRepeat: 'no-repeat',
               backgroundSize: '100% 100%'
             }}
           >
             {getWifiIcon(fa_signal?.value)}
-            <p className="text-sm truncate" style={{ color: getColor(fa_signal?.value, 'wifi') }}>
+            <p className='text-sm truncate' style={{ color: getColor(fa_signal?.value, 'wifi') }}>
               {fa_signal?.value}
             </p>
           </div>
 
           {/* Power */}
           <div
-            className="flex items-center justify-center gap-2 p-3 flex-none"
+            className='flex items-center justify-center gap-2 p-3 flex-none'
             style={{
               width: '80px',
               height: '80px',
@@ -152,14 +148,14 @@ const LocationLog = (props: LocationLogProps) => {
             }}
           >
             {powerIcon(data_isPower?.value)}
-            <p className="text-sm truncate" style={{ color: data_isPower?.value ? '#46ECD5' : '#B61B00' }}>
+            <p className='text-sm truncate' style={{ color: data_isPower?.value ? '#46ECD5' : '#B61B00' }}>
               {data_isPower?.value ? 'On' : 'Off'}
             </p>
           </div>
 
           {/* Battery */}
           <div
-            className="flex items-center justify-center gap-2 p-3 flex-none"
+            className='flex items-center justify-center gap-2 p-3 flex-none'
             style={{
               width: '80px',
               height: '80px',
@@ -167,15 +163,15 @@ const LocationLog = (props: LocationLogProps) => {
                 data_percentBat?.value <= 20
                   ? BatteryLowIcon
                   : data_percentBat?.value <= 80
-                  ? BatteryMedIcon
-                  : BatteryFullIcon
+                    ? BatteryMedIcon
+                    : BatteryFullIcon
               })`,
               backgroundRepeat: 'no-repeat',
               backgroundSize: '100% 100%'
             }}
           >
             {getBatteryIcon(data_percentBat?.value)}
-            <p className="text-sm truncate" style={{ color: getColor(data_percentBat?.value, 'battery') }}>
+            <p className='text-sm truncate' style={{ color: getColor(data_percentBat?.value, 'battery') }}>
               {`${data_percentBat?.value}`}
             </p>
           </div>
@@ -188,10 +184,10 @@ const LocationLog = (props: LocationLogProps) => {
     const timestamp = FormatTime(log.alarmSocketData.timestamp);
 
     return (
-      <div className="flex flex-col p-2 border rounded-md bg-gray-50 bg-opacity-70 shadow-sm gap-2 my-2">
-        <div className="flex flex-row justify-between items-center">
-          <h4 className="text-lg font-semibold text-red-500">{log.alarmSocketData.locationName}</h4>
-          <p className="text-sm text-gray-500">{timestamp}</p>
+      <div className='flex flex-col p-2 border rounded-md bg-gray-50 bg-opacity-70 shadow-sm gap-2 my-2'>
+        <div className='flex flex-row justify-between items-center'>
+          <h4 className='text-lg font-semibold text-red-500'>{log.alarmSocketData.locationName}</h4>
+          <p className='text-sm text-gray-500'>{timestamp}</p>
         </div>
       </div>
     );

@@ -15,7 +15,7 @@ import { useGetDashboards } from '../../../handleApi';
 
 export default function LocationPopup() {
   const [locationTranslate] = useTranslation('', { keyPrefix: 'locationPage' });
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [alarmTranslate] = useTranslation('', { keyPrefix: 'alarm-page' });
   const { openLocationPopup, setOpenLocationPopup } = useContext(AppContext);
   const [cameraList, setCameraList] = useState([]);
@@ -40,47 +40,57 @@ export default function LocationPopup() {
   const renderBody = () => (
     <Box>
       {/* Tabs */}
-      <Tabs value={tabIndex} onChange={(_, newValue) => setTabIndex(newValue)} sx={{ borderBottom: '1px solid var(--border-color)' }}>
+      <Tabs
+        value={tabIndex}
+        onChange={(_, newValue) => setTabIndex(newValue)}
+        sx={{ borderBottom: '1px solid var(--border-color)' }}
+      >
         <Tab label={t('alarm-page.location')} />
         <Tab label={t('alarm-page.device')} />
-        <Tab label={("Dashboard")} />
+        <Tab label={'Dashboard'} />
       </Tabs>
 
       {/* Location Tab */}
       {tabIndex === 0 && (
-        <Box className="flex flex-col gap-4 p-4">
-          <Box className="bg-[#161B29] p-3">
+        <Box className='flex flex-col gap-4 p-4'>
+          <Box className='bg-[#161B29] p-3'>
             <CommonInfoLocation info={openLocationPopup} />
           </Box>
-          <Box className="bg-[#0D1117] p-3 rounded-md">
-            <Typography variant="label1" className="text-white">{alarmTranslate("warning")}</Typography>
-            <Typography variant="body2" className="text-[var(--text-secondary)]">{alarmTranslate("no-alarm")}</Typography>
+          <Box className='bg-[#0D1117] p-3 rounded-md'>
+            <Typography variant='label1' className='text-white'>
+              {alarmTranslate('warning')}
+            </Typography>
+            <Typography variant='body2' className='text-[var(--text-secondary)]'>
+              {alarmTranslate('no-alarm')}
+            </Typography>
           </Box>
         </Box>
       )}
 
       {/* Devices Tab */}
       {tabIndex === 1 && (
-        <Box className="bg-[#0D1117] p-3">
+        <Box className='bg-[#0D1117] p-3'>
           {cameraList?.length > 0 ? (
             <CarouselCustom>
               {cameraList.map((deviceInfo, index) => (
-                <div key={index} className="mx-2">
+                <div key={index} className='mx-2'>
                   <CameraDetail deviceInfo={deviceInfo} />
                 </div>
               ))}
             </CarouselCustom>
           ) : (
-            <Typography className="text-[var(--text-secondary)]">No devices found</Typography>
+            <Typography className='text-[var(--text-secondary)]'>No devices found</Typography>
           )}
         </Box>
       )}
 
       {/* Dashboards Tab */}
       {tabIndex === 2 && (
-        <Box className="flex flex-col gap-3 bg-[#161B29] p-3">
-          <Typography variant="label1" className="text-white">Dashboard</Typography>
-          <div className="overflow-y-auto max-h-56 flex flex-col gap-1">
+        <Box className='flex flex-col gap-3 bg-[#161B29] p-3'>
+          <Typography variant='label1' className='text-white'>
+            Dashboard
+          </Typography>
+          <div className='overflow-y-auto max-h-56 flex flex-col gap-1'>
             {dashboards.length > 0 ? (
               dashboards.map((item) => (
                 <MenuItem
@@ -93,7 +103,9 @@ export default function LocationPopup() {
                 />
               ))
             ) : (
-              <Typography variant="body2" className="text-[var(--text-secondary)]">No dashboards</Typography>
+              <Typography variant='body2' className='text-[var(--text-secondary)]'>
+                No dashboards
+              </Typography>
             )}
           </div>
         </Box>
