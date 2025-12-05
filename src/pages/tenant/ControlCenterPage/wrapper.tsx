@@ -4,9 +4,7 @@ import MapViewPage from './index';
 import CameraViewPage from './components/Frigate/index';
 
 export default function ControlCenterWrapper() {
-  const [isCameraView, setIsCameraView] = useState(
-    localStorage.getItem('isCameraView') === 'true'
-  );
+  const [isCameraView, setIsCameraView] = useState(localStorage.getItem('isCameraView') === 'true');
 
   const handleToggle = (checked: boolean) => {
     setIsCameraView(checked);

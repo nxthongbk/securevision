@@ -83,8 +83,8 @@ export default function JSMpegPlayer({ url }: JSMpegPlayerProps) {
           }
           playerRef.current.destroy();
         } catch {
-					// ignore
-				}
+          // ignore
+        }
         playerRef.current = null;
       }
     }
@@ -119,8 +119,8 @@ export default function JSMpegPlayer({ url }: JSMpegPlayerProps) {
           window.JSMpeg.Renderer.WebGL = null;
         }
       } catch {
-				// ignore
-			}
+        // ignore
+      }
 
       cleanupPlayer();
 
@@ -181,7 +181,7 @@ export default function JSMpegPlayer({ url }: JSMpegPlayerProps) {
             // setHasError(true);
             setLoading(false);
           }
-        }, 5000);
+        }, 3000);
       } catch (e) {
         console.error('JSMpeg init error:', e);
         setHasError(true);

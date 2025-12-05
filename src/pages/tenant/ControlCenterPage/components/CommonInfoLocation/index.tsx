@@ -33,9 +33,9 @@ export default function CommonInfoLocation({ info }: IProps) {
           <Typography variant='label2' className='w-[26%] text-white'>
             {t('alarm-page.status')}
           </Typography>
-          <Typography variant='body2' className='flex-1 text-white'>
+          <div className='flex-1 flex items-center'>
             <StatusChip status={info?.status} />
-          </Typography>
+          </div>
         </div>
 
         <div className='flex w-full px-4 py-2'>

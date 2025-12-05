@@ -131,6 +131,7 @@ export const useGetLatestTelemetry = (data: { entityType: string; entityId: stri
   return query;
 };
 
+
 export const useGetLatestTelemetrys = (data: { entityType: string; entityIds: string[] }) => {
   const queries =
     data?.entityIds?.map((deviceId) => ({

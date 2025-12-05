@@ -9,7 +9,7 @@ import AvatarTableRow from '~/components/AvatarTableRow';
 import { useTranslation } from 'react-i18next';
 import { translation } from '~/utils/translate';
 import DrawerCustom from '~/components/Drawer/DrawerCustom';
-import { useGetLatestTelemetry } from '~/pages/systemAdmin/SysDevicePage/handleApi';
+import { useGetLatestTelemetry } from '~/pages/tenant/DevicePage/handleApi';
 
 export default function PopupMarker() {
   const { t } = useTranslation();
@@ -56,7 +56,7 @@ export default function PopupMarker() {
       <div className='flex w-full gap-[12px] p-0 tablet:p-4'>
         {renderBuildingImage()}
         <div className='max-w-full tablet:max-w-[172px] mt-[-4px]'>
-          <Typography variant='label2' display='block' className="text-[#36BFFA] !important">
+          <Typography variant='label2' display='block' className='text-[#36BFFA] !important'>
             {openMarkerPopup?.name}
           </Typography>
           <Typography variant='body3'>{openMarkerPopup?.address}</Typography>

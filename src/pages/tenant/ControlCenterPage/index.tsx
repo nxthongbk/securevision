@@ -39,6 +39,7 @@ export default function ControlCenterPage({
   const hasNewAlarmRef = useRef<boolean>(false);
   const mapRef = useRef<MapRef>();
   const timeoutId = useRef<NodeJS.Timeout>();
+  const stompClientRef = useRef<any>(null);
 
   const [keyword, setKeyword] = useState('');
   const keywordDebounce = useDebounce(keyword, 500);
@@ -47,42 +48,59 @@ export default function ControlCenterPage({
   const [logs, setLogs] = useState<ILocationLog[]>([]);
   const logContainerRef = useRef<HTMLDivElement>(null);
 
-  const socket = new SockJS(SOCKET_URL);
-
   const locations = useMemo(() => data?.data?.content || [], [data?.data?.content]);
 
   // 🔌 WebSocket setup
   useEffect(() => {
+    if (!userInfo?.tenant?.id) return;
+
     const topic = '/topic/' + userInfo?.tenant?.id;
     const connectHeaders = {};
-
+    const socket = new SockJS(SOCKET_URL);
     let stompClient = Stomp.over(socket);
+    stompClientRef.current = stompClient;
 
-    if (!stompClient.connected) {
-      stompClient.connect(connectHeaders, () => {
-        stompClient.subscribe(topic, (message) => {
-          const body = JSON.parse(message.body);
-          if (body.hasNewAlarm) {
-            hasNewAlarmRef.current = true;
-            timeoutId.current = setTimeout(() => {
-              queryClient.invalidateQueries({ queryKey: ['locationMap'] });
-            }, 1200);
-          } else {
-            setSocketData(body);
+    const connectToSocket = () => {
+      if (!stompClient.connected) {
+        stompClient.connect(
+          connectHeaders,
+          () => {
+            stompClient.subscribe(topic, (message) => {
+              const body = JSON.parse(message.body);
+              if (body.hasNewAlarm) {
+                hasNewAlarmRef.current = true;
+                if (timeoutId.current) {
+                  clearTimeout(timeoutId.current);
+                }
+                timeoutId.current = setTimeout(() => {
+                  queryClient.invalidateQueries({ queryKey: ['locationMap'] });
+                }, 1200);
+              } else {
+                setSocketData(body);
+              }
+            });
+          },
+          (error) => {
+            console.error('WebSocket connection error:', error);
           }
-        });
-      });
-    }
+        );
+      }
+    };
+
+    connectToSocket();
 
     return () => {
-      clearTimeout(timeoutId.current);
-      if (stompClient.connected) {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
+      if (stompClient && stompClient.connected) {
         stompClient.disconnect(() => {
           stompClient = null;
         });
       }
+      stompClientRef.current = null;
     };
-  }, []);
+  }, [userInfo?.tenant?.id, queryClient]);
 
   // 🔔 Alarm detection and focus on map
   useEffect(() => {
@@ -99,18 +117,18 @@ export default function ControlCenterPage({
         setSocketData(locationsData);
         if (locationData) {
           hasNewAlarmRef.current = false;
-          const longitude = locationData?.location?.longitude
-          const latitude = locationData?.location?.latitude
+          const longitude = locationData?.location?.longitude;
+          const latitude = locationData?.location?.latitude;
           mapRef.current?.easeTo({
-        center: [longitude, latitude],
-        zoom: 18,
-        pitch: 55,
-        bearing: 30,
-        duration: 1500,
-        curve: 1.5,
-        offset: [0, 250],
-        essential: true
-      });
+            center: [longitude, latitude],
+            zoom: 18,
+            pitch: 55,
+            bearing: 30,
+            duration: 1500,
+            curve: 1.5,
+            offset: [0, 250],
+            essential: true
+          });
           setOpenMarkerPopup(locationData);
         }
       }
@@ -121,29 +139,47 @@ export default function ControlCenterPage({
 
   // 🔊 Alarm sound
   useEffect(() => {
-    const alarmSound = new Audio(Sound);
-    alarmSound.loop = true;
+    let alarmSound: HTMLAudioElement | null = null;
+
+    const initializeSound = () => {
+      if (alarmSound) {
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+      }
+      alarmSound = new Audio(Sound);
+      alarmSound.loop = true;
+    };
 
     const checkLocalStorage = () => {
+      if (!alarmSound) initializeSound();
+
       const isBellRingAlarm = localStorage.getItem('isBellRingAlarm') === 'true';
       const newData = locations?.filter((item) => item.status === 'ALARM');
+
       if (isBellRingAlarm && newData.length > 0) {
-        alarmSound.play();
+        alarmSound?.play().catch(console.error);
       } else {
-        alarmSound.pause();
-        alarmSound.currentTime = 2;
+        if (alarmSound) {
+          alarmSound.pause();
+          alarmSound.currentTime = 2;
+        }
       }
     };
 
+    initializeSound();
     checkLocalStorage();
+
     window.addEventListener('storage', checkLocalStorage);
     window.addEventListener('localStorageChange', checkLocalStorage);
 
     return () => {
       window.removeEventListener('storage', checkLocalStorage);
       window.removeEventListener('localStorageChange', checkLocalStorage);
-      alarmSound.pause();
-      alarmSound.currentTime = 0;
+      if (alarmSound) {
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+        alarmSound = null;
+      }
     };
   }, [locations]);
 
@@ -168,50 +204,45 @@ export default function ControlCenterPage({
   }, [logs]);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden relative">
+    <div className='flex flex-col h-screen overflow-hidden relative'>
       {/* Header / search button for mobile */}
-      <div className="block px-6 miniLaptop:hidden z-20 relative">
+      <div className='block px-6 miniLaptop:hidden z-20 relative'>
         <DataGridHeader
           isSearch={false}
           setKeyword={setKeyword}
           btnPopup={
-            <div onClick={handleDialogOpen} className="p-2 rounded-md bg-primary">
-              <ListMagnifyingGlass size={20} color="white" />
+            <div onClick={handleDialogOpen} className='p-2 rounded-md bg-primary'>
+              <ListMagnifyingGlass size={20} color='white' />
             </div>
           }
         />
       </div>
 
       {/* Full-screen map */}
-      <div className="flex-1 relative w-full h-full">
-        <MapRight
-          data={locations}
-          socketData={socketData}
-          mapRef={mapRef}
-          setLogs={setLogs}
-        />
+      <div className='flex-1 relative w-full h-full'>
+        <MapRight data={locations} socketData={socketData} mapRef={mapRef} setLogs={setLogs} />
 
         {/* Left panel with toggle */}
         {!isSmallScreen && (
           <div
-            className="absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-none scrollbar-hide"
+            className='absolute top-[10%] left-4 overflow-auto z-10 backdrop-blur-none scrollbar-hide'
             style={{
               width: '320px',
               height: '80%',
               backgroundColor: '#030912A3',
               boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-              border: '1px solid #36BFFA3D',
+              border: '1px solid #36BFFA3D'
             }}
           >
             {/* 🔘 Toggle control */}
-            <div className="flex items-center justify-between px-4 py-2 border-b border-[#36BFFA3D] bg-[rgba(8,16,26,0.8)]">
-              <Typography variant="label2" className="text-[#36BFFA]">
+            <div className='flex items-center justify-between px-4 py-2 border-b border-[#36BFFA3D] bg-[rgba(8,16,26,0.8)]'>
+              <Typography variant='label2' className='text-[#36BFFA]'>
                 {isCameraView ? 'Camera View' : 'Map View'}
               </Typography>
-              <label className="inline-flex items-center cursor-pointer">
+              <label className='inline-flex items-center cursor-pointer'>
                 <input
-                  type="checkbox"
-                  className="sr-only peer"
+                  type='checkbox'
+                  className='sr-only peer'
                   checked={isCameraView}
                   onChange={(e) => onToggle(e.target.checked)}
                 />
@@ -225,25 +256,25 @@ export default function ControlCenterPage({
 
         {/* Right panel for logs */}
         <div
-          className="absolute top-[10%] right-4 overflow-hidden z-10 backdrop-blur-none"
+          className='absolute top-[10%] right-4 overflow-hidden z-10 backdrop-blur-none'
           style={{
             width: '320px',
             height: '80%',
             backgroundColor: '#030912A3',
             boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-            border: '1px solid #36BFFA3D',
+            border: '1px solid #36BFFA3D'
           }}
         >
-          <div className="flex flex-col h-full">
+          <div className='flex flex-col h-full'>
             {/* Sticky Header */}
-            <div className="sticky top-0 z-10 px-2 py-2 bg-[rgba(8,16,26,0.9)] backdrop-blur">
-              <Typography variant="label2" className="tracking-wide text-[#36BFFA]">
+            <div className='sticky top-0 z-10 px-2 py-2 bg-[rgba(8,16,26,0.9)] backdrop-blur'>
+              <Typography variant='label2' className='tracking-wide text-[#36BFFA]'>
                 {t('device-statistics')}
               </Typography>
             </div>
 
             {/* Scrollable logs */}
-            <div ref={logContainerRef} className="flex-1 overflow-y-auto p-2">
+            <div ref={logContainerRef} className='flex-1 overflow-y-auto p-2'>
               {logs.map((log, index) => (
                 <LocationLog key={index} log={log} />
               ))}
@@ -253,14 +284,14 @@ export default function ControlCenterPage({
       </div>
 
       {/* Mobile dialog */}
-      <Dialog open={isDialogOpen} onClose={handleDialogClose} fullScreen fullWidth className="rounded-md">
-        <div className="flex justify-between">
+      <Dialog open={isDialogOpen} onClose={handleDialogClose} fullScreen fullWidth className='rounded-md'>
+        <div className='flex justify-between'>
           <DialogTitle>{t('list-location')}</DialogTitle>
           <IconButton onClick={handleDialogClose}>
-            <IconPhosphor iconName="X" size={24} />
+            <IconPhosphor iconName='X' size={24} />
           </IconButton>
         </div>
-        <div className="overflow-hidden px-4">
+        <div className='overflow-hidden px-4'>
           <SearchBox setKeyword={setKeyword} />
           <ListBuilding closeDialog={handleDialogClose} data={locations} mapRef={mapRef} />
         </div>
